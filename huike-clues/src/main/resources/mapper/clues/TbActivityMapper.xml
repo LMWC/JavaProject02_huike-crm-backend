@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huike.clues.mapper.TbActivityMapper">
+
+    <resultMap type="TbActivity" id="TbActivityResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="channel"    column="channel"    />
+        <result property="info"    column="info"    />
+        <result property="type"    column="type"    />
+        <result property="discount"    column="discount"    />
+        <result property="vouchers"    column="vouchers"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="beginTime"    column="begin_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="code"    column="code"    />
+    </resultMap>
+
+    <sql id="selectTbActivityVo">
+        select id, name, channel, info, type, discount, vouchers, status, begin_time, end_time,code,create_time from tb_activity
+    </sql>
+
+    <select id="selectTbActivityList" parameterType="TbActivity" resultMap="TbActivityResult">
+        <include refid="selectTbActivityVo"/>
+        <where>
+            <if test="channel != null  and channel != ''"> and channel = #{channel}</if>
+            <if test="code != null  and code != ''"> and code like concat('%', #{code}, '%')</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="info != null  and info != ''"> and info = #{info}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="discount != null "> and discount = #{discount}</if>
+            <if test="vouchers != null "> and vouchers = #{vouchers}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != ''"><!-- 开始创建时间 -->
+                and date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginCreateTime},'%y%m%d')
+            </if>
+            <if test="params.endCreateTime != null and params.endCreateTime != ''"><!--  -->
+                and date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endCreateTime},'%y%m%d')
+            </if>
+            <if test="params.beginTime != null and params.beginTime.length()!= ''"><!-- 活动开始时间 -->
+                and date_format(begin_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime.length()!= ''"><!-- 活动结束时间 -->
+                and date_format(end_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+        ORDER BY `create_time` DESC
+    </select>
+
+    <select id="selectAllCode" resultType="String">
+        select code from tb_activity
+    </select>
+
+<!--    <select id="select" parameterType="TbActivity" resultMap="TbActivityResult">-->
+<!--        <include refid="selectTbActivityVo"/>-->
+<!--        where id = #{id}-->
+<!--    </select>-->
+
+
+    <select id="selectTbActivityById" parameterType="Long" resultMap="TbActivityResult">
+        <include refid="selectTbActivityVo"/>
+        where id = #{id}
+    </select>
+
+
+    <select id="selectTbActivityByCode" parameterType="String" resultMap="TbActivityResult">
+        <include refid="selectTbActivityVo"/>
+        where code = #{code}
+    </select>
+
+
+    <insert id="insertTbActivity" parameterType="TbActivity" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_activity
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="channel != null">channel,</if>
+            <if test="info != null and info != ''">info,</if>
+            <if test="type != null">type,</if>
+            <if test="discount != null">discount,</if>
+            <if test="vouchers != null">vouchers,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="beginTime != null">begin_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="code != null">code,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="channel != null">#{channel},</if>
+            <if test="info != null and info != ''">#{info},</if>
+            <if test="type != null">#{type},</if>
+            <if test="discount != null">#{discount},</if>
+            <if test="vouchers != null">#{vouchers},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="beginTime != null">#{beginTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="code != null">#{code},</if>
+        </trim>
+    </insert>
+
+
+    <select id="getCountByStatus"
+             resultType="java.util.Map">
+        SELECT
+        sum(case when t.`status`='1' THEN 1 ELSE 0 END ) AS toAudit,
+        sum(case when t.`status`='2' THEN 1 ELSE 0 END ) AS pass,
+        sum(case when t.`status`='3' THEN 1 ELSE 0 END ) AS reject,
+        sum(case when t.`status`='4' THEN 1 ELSE 0 END ) AS finish,
+        count(1) AS total
+        from tb_activity t
+        <where>
+            <if test="channel != null  and channel != ''"> and t.channel = #{channel}</if>
+            <if test="name != null  and name != ''"> and t.name like concat('%', #{name}, '%')</if>
+            <if test="info != null  and info != ''"> and t.info = #{info}</if>
+            <if test="type != null  and type != ''"> and t.type = #{type}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <update id="updateTbActivity" parameterType="TbActivity">
+        update tb_activity
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="channel != null">channel = #{channel},</if>
+            <if test="info != null and info != ''">info = #{info},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="discount != null">discount = #{discount},</if>
+            <if test="vouchers != null">vouchers = #{vouchers},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="beginTime != null">begin_time = #{beginTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTbActivityById" parameterType="Long">
+        delete from tb_activity where id = #{id}
+    </delete>
+
+    <delete id="deleteTbActivityByIds" parameterType="Long">
+        delete from tb_activity where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

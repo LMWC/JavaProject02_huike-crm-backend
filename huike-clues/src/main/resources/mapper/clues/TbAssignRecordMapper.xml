@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huike.clues.mapper.TbAssignRecordMapper">
+    
+    <resultMap type="TbAssignRecord" id="TbAssignRecordResult">
+        <result property="id"    column="id"    />
+        <result property="assignId"    column="assign_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="latest"    column="latest"    />
+        <result property="type"    column="type"    />
+    </resultMap>
+
+    <sql id="selectTbAssignRecordVo">
+        select id, assign_id, user_id, user_name, dept_id, create_time, create_by,latest, type from tb_assign_record
+    </sql>
+
+    <select id="selectAssignRecordList" parameterType="TbAssignRecord" resultMap="TbAssignRecordResult">
+        <include refid="selectTbAssignRecordVo"/>
+        <where>  
+            <if test="assignId != null "> and assign_id = #{assignId}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+            <if test="deptId != null "> and dept_id = #{deptId}</if>
+            <if test="latest != null  and latest != ''"> and latest = #{latest}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != ''"><!-- 开始创建时间 -->
+                and date_format(clue.create_time,'%y%m%d') &gt;= date_format(#{params.beginCreateTime},'%y%m%d')
+            </if>
+            <if test="params.endCreateTime != null and params.endCreateTime != ''"><!--  -->
+                and date_format(clue.create_time,'%y%m%d') &lt;= date_format(#{params.endCreateTime},'%y%m%d')
+            </if>
+        </where>
+    </select>
+    
+    <select id="selectAssignRecordByAssignId" resultMap="TbAssignRecordResult">
+        <include refid="selectTbAssignRecordVo"/>
+        where assign_id = #{assignId} and type = #{type} and latest='1' ORDER BY create_time DESC LIMIT 1
+    </select>
+
+
+    <select id="selectAssignRecordById" parameterType="Long" resultMap="TbAssignRecordResult">
+        <include refid="selectTbAssignRecordVo"/>
+        where id = #{id}
+    </select>
+
+
+        
+    <insert id="insertAssignRecord" parameterType="TbAssignRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_assign_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="assignId != null">assign_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="userName != null">user_name,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="latest != null">latest,</if>
+            <if test="type != null">type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="assignId != null">#{assignId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="userName != null">#{userName},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="latest != null">#{latest},</if>
+            <if test="type != null">#{type},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAssignRecord" parameterType="TbAssignRecord">
+        update tb_assign_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="assignId != null">assign_id = #{assignId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="latest != null">latest = #{latest},</if>
+            <if test="type != null">type = #{type},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAssignRecordById" parameterType="Long">
+        delete from tb_assign_record where id = #{id}
+    </delete>
+
+    <delete id="deleteAssignRecordByIds" parameterType="String">
+        delete from tb_assign_record where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+   <update id="updateLatest">
+       update tb_assign_record
+           set latest='0'
+          where assign_id = #{assignId} and type = #{type}
+   </update>
+
+    <update id="updateStatus">
+        update tb_assign_record set  status=#{status}
+        where assign_id = #{assignId} and type = #{type}
+    </update>
+
+
+    <select id="countAssignCluesByUser" resultType="int">
+       select count(1) from tb_assign_record r
+       left join tb_clue c
+       on r.assign_id = c.id
+       where r.latest='1' and r.user_id = #{userId} and r.type='0' and c.status in('1','2')
+    </select>
+
+    <select id="countAssignBusinessByUser" resultType="int">
+        select count(1) from tb_assign_record r
+            left join tb_business b
+            on r.assign_id = b.id
+           where r.latest='1' and r.user_id = #{userId} and r.type='1' and b.status in('1','2')
+    </select>
+
+</mapper>

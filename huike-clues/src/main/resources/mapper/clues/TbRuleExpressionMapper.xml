@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huike.clues.mapper.TbRuleExpressionMapper">
+
+    <resultMap type="TbRuleExpression" id="TbRuleExpressionResult">
+        <result property="id"    column="id"    />
+        <result property="ruleKey"    column="rule_key"    />
+        <result property="expression"    column="expression"    />
+        <result property="ruleValue"    column="rule_value"    />
+        <result property="number"    column="number"    />
+        <result property="ruleId"    column="rule_id"    />
+    </resultMap>
+
+    <sql id="selectTbRuleExpressionVo">
+        select id, rule_key, expression, rule_value, number, rule_id from tb_rule_expression
+    </sql>
+
+    <select id="selectTbRuleExpressionList" parameterType="TbRuleExpression" resultMap="TbRuleExpressionResult">
+        <include refid="selectTbRuleExpressionVo"/>
+        <where>
+            <if test="ruleKey != null  and ruleKey != ''"> and rule_key = #{ruleKey}</if>
+            <if test="expression != null  and expression != ''"> and expression = #{expression}</if>
+            <if test="ruleValue != null  and ruleValue != ''"> and rule_value = #{ruleValue}</if>
+            <if test="number != null "> and number = #{number}</if>
+            <if test="ruleId != null "> and rule_id = #{ruleId}</if>
+        </where>
+    </select>
+
+    <insert id="insertBatch">
+        INSERT INTO tb_rule_expression(rule_key,expression,rule_value,rule_id,number) values
+        <foreach collection ="list" item="rule" separator =",">
+            (#{rule.ruleKey}, #{rule.expression}, #{rule.ruleValue}, #{rule.ruleId}, #{rule.number})
+        </foreach >
+    </insert>
+
+    <select id="selectTbRuleExpressionById" parameterType="Long" resultMap="TbRuleExpressionResult">
+        <include refid="selectTbRuleExpressionVo"/>
+        where id = #{id}
+    </select>
+
+
+    <select id="selectTbRuleExpressionByRuleId" parameterType="Long" resultMap="TbRuleExpressionResult">
+        <include refid="selectTbRuleExpressionVo"/>
+        where rule_id = #{ruleId}
+    </select>
+
+    <insert id="insertTbRuleExpression" parameterType="TbRuleExpression" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_rule_expression
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ruleKey != null">rule_key,</if>
+            <if test="expression != null">expression,</if>
+            <if test="ruleValue != null">rule_value,</if>
+            <if test="number != null">number,</if>
+            <if test="ruleId != null">rule_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ruleKey != null">#{ruleKey},</if>
+            <if test="expression != null">#{expression},</if>
+            <if test="ruleValue != null">#{ruleValue},</if>
+            <if test="number != null">#{number},</if>
+            <if test="ruleId != null">#{ruleId},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTbRuleExpression" parameterType="TbRuleExpression">
+        update tb_rule_expression
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ruleKey != null">rule_key = #{ruleKey},</if>
+            <if test="expression != null">expression = #{expression},</if>
+            <if test="ruleValue != null">rule_value = #{ruleValue},</if>
+            <if test="number != null">number = #{number},</if>
+            <if test="ruleId != null">rule_id = #{ruleId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTbRuleExpressionById" parameterType="Long">
+        delete from tb_rule_expression where id = #{id}
+    </delete>
+
+    <delete id="deleteTbRuleExpressionByIds" parameterType="String">
+        delete from tb_rule_expression where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <delete id="deleteTbRuleExpressionByRuleIds" parameterType="String">
+        delete from tb_rule_expression where rule_id in
+        <foreach item="ruleId" collection="array" open="(" separator="," close=")">
+            #{ruleId}
+        </foreach>
+    </delete>
+</mapper>

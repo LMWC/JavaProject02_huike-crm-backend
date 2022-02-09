@@ -1,0 +1,125 @@
+.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background: #2b303b;
+}
+.login-box {
+  width: 886px;
+  height: 426px;
+  border-radius: 8px;
+  display: flex;
+}
+.login-box .login-l-img {
+  width: 533px;
+  height: 426px;
+}
+.title {
+  margin: 0px auto 30px auto;
+  text-align: center;
+  color: #707070;
+}
+.login-form {
+  background: #ffffff;
+  width: 353px;
+  padding: 62px 72px 0 66px;
+  box-sizing: border-box;
+  border-radius: 0px 8px 8px 0px;
+}
+.login-form .el-form-item {
+  margin-bottom: 30px;
+}
+.login-form .el-form-item.is-error .el-input__inner {
+  border: 0 !important;
+  border-bottom: 1px solid #fd7065 !important;
+  background: #fff !important;
+}
+.login-form .input-icon {
+  height: 32px;
+  width: 18px;
+  margin-left: -2px;
+}
+.login-form .el-input__inner {
+  border: 0;
+  border-bottom: 1px solid #e9e9e8;
+  border-radius: 0;
+  font-size: 12px;
+  font-weight: 400;
+  color: #333333;
+  height: 32px;
+  line-height: 32px;
+}
+.login-form .el-input__prefix {
+  left: 0;
+}
+.login-form .el-input--prefix .el-input__inner {
+  padding-left: 26px;
+}
+.login-form .el-input__inner::placeholder {
+  color: #aeb5c4;
+}
+.login-form .el-form-item--medium .el-form-item__content {
+  line-height: 32px;
+}
+.login-form .el-input--medium .el-input__icon {
+  line-height: 32px;
+}
+.login-tip {
+  font-size: 13px;
+  text-align: center;
+  color: #bfbfbf;
+}
+.login-code {
+  width: 40%;
+  height: 32px;
+  float: right;
+}
+.login-code img {
+  cursor: pointer;
+  vertical-align: middle;
+}
+.el-login-footer {
+  height: 40px;
+  line-height: 40px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  font-family: Arial;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+.login-code-img {
+  height: 32px;
+}
+.login-btn {
+  border-radius: 17px;
+  padding: 11px 20px !important;
+  margin-top: 10px;
+  font-weight: 500;
+  font-size: 12px;
+  border: 0;
+}
+.login-btn:hover, .login-btn:focus {
+  background: #09a57a;
+  color: #ffffff;
+}
+.login-form-title {
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 40px;
+}
+.login-form-title .logo {
+  width: 33px;
+  height: 36px;
+}
+.login-form-title .title-label {
+  font-weight: 500;
+  font-size: 20px;
+  color: #333333;
+  margin-left: 10px;
+}

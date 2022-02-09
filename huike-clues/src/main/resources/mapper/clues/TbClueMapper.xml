@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huike.clues.mapper.TbClueMapper">
+
+    <resultMap type="TbClue" id="TbClueResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="phone"    column="phone"    />
+        <result property="channel"    column="channel"    />
+        <result property="activityId"    column="activity_id"    />
+        <result property="sex"    column="sex"    />
+        <result property="age"    column="age"    />
+        <result property="weixin"    column="weixin"    />
+        <result property="qq"    column="qq"    />
+        <result property="level"    column="level"    />
+        <result property="subject"    column="subject"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="falseCount"    column="false_count"    />
+        <result property="nextTime"    column="next_time"    />
+        <result property="transfer"    column="transfer"    />
+    </resultMap>
+
+    <sql id="selectTbClueVo">
+        select id, name, phone, channel, activity_id, sex, age, weixin, qq, level, subject, status, create_time,
+               create_by,false_count, next_time,transfer from tb_clue
+    </sql>
+
+    <select id="selectTbCluePoll" parameterType="TbClue" resultMap="TbClueResult">
+        <include refid="selectTbClueVo"/>
+        <where>
+            <if test="id != null  and id != ''"> and id = #{id}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="channel != null  and channel != ''"> and channel = #{channel}</if>
+            <if test="activityId != null  and activityId != ''"> and activity_id = #{activityId}</if>
+            <if test="sex != null  and sex != ''"> and sex = #{sex}</if>
+            <if test="age != null "> and age = #{age}</if>
+            <if test="weixin != null  and weixin != ''"> and weixin = #{weixin}</if>
+            <if test="qq != null  and qq != ''"> and qq = #{qq}</if>
+            <if test="level != null  and level != ''"> and level = #{level}</if>
+            <if test="subject != null  and subject != ''"> and subject = #{subject}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != ''"><!-- 开始创建时间 -->
+                and date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginCreateTime},'%y%m%d')
+            </if>
+            <if test="params.endCreateTime != null and params.endCreateTime != ''"><!--  -->
+                and date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endCreateTime},'%y%m%d')
+            </if>
+            <if test="nextTime != null "> and next_time = #{nextTime}</if>
+            and status in ('3','4')
+        </where>
+        order by create_time
+    </select>
+
+
+    <resultMap type="TbClue" id="TbClueAssignResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="phone"    column="phone"    />
+        <result property="channel"    column="channel"    />
+        <result property="activityId"    column="activity_id"    />
+        <result property="sex"    column="sex"    />
+        <result property="age"    column="age"    />
+        <result property="weixin"    column="weixin"    />
+        <result property="qq"    column="qq"    />
+        <result property="level"    column="level"    />
+        <result property="subject"    column="subject"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="falseCount"    column="false_count"    />
+        <result property="nextTime"    column="next_time"    />
+        <result property="assignBy"    column="assign_by"    />
+        <result property="owner"    column="owner"    />
+        <result property="ownerTime"    column="owner_time"    />
+    </resultMap>
+
+
+    <sql id="selectTbClueAssignVo">
+        select clue.id, clue.name, clue.phone, clue.channel, clue.activity_id, clue.sex, clue.age, clue.weixin, clue.qq,
+               clue.level, clue.subject, clue.status, clue.create_time,
+               clue.create_by, clue.next_time,r.create_by as assign_by, r.user_name as owner,r.create_time as owner_time from tb_clue clue
+            left join tb_assign_record r on clue.id=r.assign_id
+    </sql>
+
+
+    <select id="selectTbClueList" parameterType="TbClue" resultMap="TbClueAssignResult">
+        <include refid="selectTbClueAssignVo"/>
+        <where>
+            <if test="id != null  and id != ''"> and clue.id like concat('%', #{id}, '%')</if>
+            <if test="name != null  and name != ''"> and clue.name like concat('%', #{name}, '%')</if>
+            <if test="phone != null  and phone != ''"> and clue.phone like concat('%', #{phone}, '%')</if>
+            <if test="channel != null  and channel != ''"> and clue.channel = #{channel}</if>
+            <if test="activityId != null  and activityId != ''"> and clue.activity_id = #{activityId}</if>
+            <if test="sex != null  and sex != ''"> and clue.sex = #{sex}</if>
+            <if test="age != null "> and clue.age = #{age}</if>
+            <if test="weixin != null  and weixin != ''"> and clue.weixin = #{weixin}</if>
+            <if test="qq != null  and qq != ''"> and clue.qq = #{qq}</if>
+            <if test="level != null  and level != ''"> and clue.level = #{level}</if>
+            <if test="subject != null  and subject != ''"> and clue.subject = #{subject}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != ''"><!-- 开始创建时间 -->
+                and date_format(clue.create_time,'%y%m%d') &gt;= date_format(#{params.beginCreateTime},'%y%m%d')
+            </if>
+            <if test="params.endCreateTime != null and params.endCreateTime != ''"><!--  -->
+                and date_format(clue.create_time,'%y%m%d') &lt;= date_format(#{params.endCreateTime},'%y%m%d')
+            </if>
+            <if test="nextTime != null "> and clue.next_time = #{nextTime}</if>
+            <if test="owner != null  and owner != ''"> and r.user_name like concat('%', #{owner}, '%')</if>
+            and r.latest = '1' and r.type='0' 
+
+            <!-- 线索状态没有被查询，这里去掉状态转而添加if -->
+			<if test="status != null and status !=''"> and clue.status = #{status}</if>
+			<if test="status == null or status == ''"> and clue.status in ('1','2')</if>
+            <!-- and clue.status in ('1','2') -->
+            
+        </where>
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+        order by clue.create_time desc
+    </select>
+
+    <resultMap type="com.huike.clues.domain.vo.ClueReportVo" id="clueReport">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="owner"    column="owner"    />
+        <result property="phone"    column="phone"    />
+        <result property="channel"    column="channel"    />
+        <result property="code"    column="code"    />
+        <result property="info"    column="info"    />
+        <result property="clueStatus"    column="clue_status"    />
+        <result property="clueCreateTime"    column="clue_create_time"    />
+        <result property="businessCreateTime"    column="business_create_time"    />
+        <result property="businessStatus"    column="business_status"    />
+        <result property="contractCreateTime"    column="contract_create_time"    />
+        <result property="order"    column="contract_order"    />
+        <result property="deptName"    column="deptName"    />
+    </resultMap>
+
+
+
+    <select id="selectTbClueForReport" parameterType="TbClue" resultMap="clueReport">
+        select clue.id, clue.name, clue.phone, clue.channel, clue.activity_id, activity.code as code, activity.name as info,clue.status as clue_status, clue.create_time as clue_create_time,
+        r.user_name as owner,b.create_time as business_create_time,b.`status` as business_status,c.create_time contract_create_time,c.contract_order,dept.`dept_name` as deptName from tb_clue clue
+        left join  tb_activity activity on activity.id = clue.activity_id
+        left join tb_business b on clue.id=b.clue_id
+        left join tb_contract c on b.id=c.business_id
+        left join tb_assign_record r on clue.id=r.assign_id
+        and r.latest = '1' and r.type='0'
+        LEFT JOIN `sys_dept` dept ON dept.`dept_id` = r.`dept_id`
+        <where>
+            <if test="id != null  and id != ''"> and clue.id = #{id}</if>
+            <if test="name != null  and name != ''"> and clue.name like concat('%', #{name}, '%')</if>
+            <if test="phone != null  and phone != ''"> and clue.phone = #{phone}</if>
+            <if test="channel != null  and channel != ''"> and clue.channel = #{channel}</if>
+            <if test="activityId != null  and activityId != ''"> and clue.activity_id = #{activityId}</if>
+            <if test="sex != null  and sex != ''"> and clue.sex = #{sex}</if>
+            <if test="age != null "> and clue.age = #{age}</if>
+            <if test="weixin != null  and weixin != ''"> and clue.weixin = #{weixin}</if>
+            <if test="qq != null  and qq != ''"> and clue.qq = #{qq}</if>
+            <if test="level != null  and level != ''"> and clue.level = #{level}</if>
+            <if test="subject != null  and subject != ''"> and clue.subject = #{subject}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != ''"><!-- 开始创建时间 -->
+                and date_format(clue.create_time,'%y%m%d') &gt;= date_format(#{params.beginCreateTime},'%y%m%d')
+            </if>
+            <if test="params.endCreateTime != null and params.endCreateTime != ''"><!--  -->
+                and date_format(clue.create_time,'%y%m%d') &lt;= date_format(#{params.endCreateTime},'%y%m%d')
+            </if>
+            <if test="nextTime != null "> and clue.next_time = #{nextTime}</if>
+            <if test="owner != null  and owner != ''"> and r.user_name like concat('%', #{owner}, '%')</if>
+            <if test="deptIds != null ">
+				 r.`dept_id` IN 
+				<foreach item="id" index="index" collection="deptIds"  open="(" separator="," close=")">  
+				         #{id}               
+				 </foreach>
+            </if>
+        </where>
+        order by clue.create_time desc
+    </select>
+
+
+
+
+
+    <!--    <select id="selectTbClueById" parameterType="Long" resultMap="TbClueAssignResult">-->
+<!--        <include refid="selectTbClueAssignVo"/>-->
+<!--        where clue.id = #{id}  and r.latest = '1'-->
+<!--    </select>-->
+
+    <select id="selectTbClueById" parameterType="Long" resultMap="TbClueResult">
+        <include refid="selectTbClueVo"/>
+        where id = #{id}
+    </select>
+
+
+    <select id="countAllClues" resultType="int">
+       select count(id) from tb_clue
+        <where>
+            <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
+                and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
+            </if>
+            <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
+                and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
+            </if>
+        </where>
+    </select>
+
+    <select id="effectiveCluesNums" resultType="int">
+        select count(id) from tb_clue where status in ('1','2','5','6','7')
+            <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
+                and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
+            </if>
+            <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
+                and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
+            </if>
+    </select>
+
+    <select id="selectClueByIds" parameterType="String" resultMap="TbClueResult">
+        <include refid="selectTbClueVo"/>
+        where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+
+    <select id="selectTbClueByPhone" parameterType="String" resultMap="TbClueResult">
+        <include refid="selectTbClueVo"/>
+        where phone = #{phone}
+    </select>
+
+    <insert id="insertTbClue" parameterType="TbClue" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_clue
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="phone != null and phone != ''">phone,</if>
+            <if test="channel != null and channel != ''">channel,</if>
+            <if test="activityId != null">activity_id,</if>
+            <if test="sex != null">sex,</if>
+            <if test="age != null">age,</if>
+            <if test="weixin != null">weixin,</if>
+            <if test="qq != null">qq,</if>
+            <if test="level != null">level,</if>
+            <if test="subject != null">subject,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="assignBy != null">assign_by,</if>
+            <if test="owner != null">owner,</if>
+            <if test="assignTime != null">assign_time,</if>
+            <if test="falseCount != null">false_count,</if>
+            <if test="nextTime != null">next_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="phone != null and phone != ''">#{phone},</if>
+            <if test="channel != null and channel != ''">#{channel},</if>
+            <if test="activityId != null">#{activityId},</if>
+            <if test="sex != null">#{sex},</if>
+            <if test="age != null">#{age},</if>
+            <if test="weixin != null">#{weixin},</if>
+            <if test="qq != null">#{qq},</if>
+            <if test="level != null">#{level},</if>
+            <if test="subject != null">#{subject},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="assignBy != null">#{assignBy},</if>
+            <if test="owner != null">#{owner},</if>
+            <if test="assignTime != null">#{assignTime},</if>
+            <if test="falseCount != null">#{falseCount},</if>
+            <if test="nextTime != null">#{nextTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTbClue" parameterType="TbClue">
+        update tb_clue
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="phone != null and phone != ''">phone = #{phone},</if>
+            <if test="channel != null and channel != ''">channel = #{channel},</if>
+            <if test="activityId != null">activity_id = #{activityId},</if>
+            <if test="sex != null">sex = #{sex},</if>
+            <if test="age != null">age = #{age},</if>
+            <if test="weixin != null">weixin = #{weixin},</if>
+            <if test="qq != null">qq = #{qq},</if>
+            <if test="level != null">level = #{level},</if>
+            <if test="subject != null">subject = #{subject},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="owner != null">owner = #{owner},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="assignBy != null">assign_by = #{assignBy},</if>
+            <if test="assignTime != null">assign_time = #{assignTime},</if>
+            <if test="falseCount != null">false_count = #{falseCount},</if>
+            <if test="nextTime != null">next_time = #{nextTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="resetNextTimeAndStatus">
+        update tb_clue set next_time=null, status=#{status} where id = #{id}
+    </update>
+
+    <update id="setTransfer">
+        update tb_clue set next_time=null, status=#{status}, transfer='1' where id = #{id}
+    </update>
+
+    <delete id="deleteTbClueById" parameterType="Long">
+        delete from tb_clue where id = #{id}
+    </delete>
+
+    <delete id="deleteTbClueByIds" parameterType="String">
+        delete from tb_clue where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <select id="cluesStatistics"
+            resultType="java.util.Map">
+        SELECT count(1) as num,DATE_FORMAT(create_time,'%Y-%m-%d') dd from tb_clue
+        <where>
+        <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
+            and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
+        </if>
+        <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
+            and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
+        </if>
+        </where>
+        GROUP BY dd;
+    </select>
+
+
+    <select id="countByActivity" parameterType="TbClue"  resultType="java.util.Map">
+        SELECT
+        sum(case when t.`status`='4' THEN 1 ELSE 0 END ) AS falseClues,
+        (SELECT COUNT(b.id) AS total FROM `tb_clue` a LEFT JOIN `tb_business` b ON a.phone = b.phone WHERE a.activity_id=#{activityId} ) AS toBusiness,
+        count(1) AS total
+        from tb_clue t
+        where channel=#{channel} and t.activity_id=#{activityId}
+        <if test="params.beginCreateTime != null and params.beginCreateTime != ''"><!-- 开始创建时间 -->
+            and date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginCreateTime},'%y%m%d')
+        </if>
+        <if test="params.endCreateTime != null and params.endCreateTime != ''"><!--  -->
+            and date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endCreateTime},'%y%m%d')
+        </if>
+    </select>
+
+
+    <select id="countAllContractByUser" parameterType="com.huike.clues.domain.vo.IndexStatisticsVo"  resultType="java.util.Map">
+        select clue.create_by, r.dept_id, count(clue.id) as num from tb_clue clue
+            left join tb_assign_record r
+            on r.assign_id = clue.id
+            and r.latest='1' and r.type ='0'
+            <if test="indexVo.beginCreateTime != null and indexVo.beginCreateTime != ''"><!-- 开始创建时间 -->
+            	where r.`create_time` BETWEEN #{indexVo.beginCreateTime} AND #{indexVo.endCreateTime} 
+            </if>
+        GROUP BY clue.create_by limit 10
+    </select>
+	
+	<update id="updateClueEndTimeById">
+        update tb_clue set end_time=#{endTime},next_time = null where id = #{id}
+    </update>
+    
+    <select id="countAllClueByUser"   resultType="java.util.Map">
+        SELECT DISTINCT 
+		  (a.user_name) AS create_by,
+		  COUNT(DISTINCT(a.assign_id)) AS num,
+		  b.`dept_id` AS dept_id
+		FROM
+		  `tb_assign_record` a 
+		  LEFT JOIN `sys_user` b
+		  ON a.`user_name` = b.`user_name`
+		  LEFT JOIN `tb_business` c 
+		  ON  a.`assign_id` = c.`clue_id`
+		WHERE a.`type` = 0 
+		<if test="indexVo.beginCreateTime != null and indexVo.beginCreateTime != ''"><!-- 开始创建时间 -->
+		  AND a.create_time BETWEEN #{indexVo.beginCreateTime} AND #{indexVo.endCreateTime} 
+		</if>
+		AND c.`id` IS NOT NULL
+		GROUP BY a.user_name 
+		ORDER BY a.create_time DESC 
+    </select>
+    
+    <select id="getcontractsBasicInfo"   resultType="java.util.Map">
+		    SELECT 
+			  IFNULL(COUNT(id), 0) AS cluesNum, <!-- 线索数量 -->
+			  IFNULL(
+			    (SELECT 
+			      COUNT(DISTINCT (id)) 
+			    FROM
+			      `tb_business` 
+			    WHERE id IN 
+			      (SELECT 
+			        assign_id 
+			      FROM
+			        `tb_assign_record` 
+			      WHERE `create_time` BETWEEN #{indexVo.beginCreateTime} 
+			        AND #{indexVo.endCreateTime} 
+			        AND `type` = 1 
+			        AND `latest` = 1 
+			        AND `user_name` = #{username}) AND `status` IN (1,2)),
+			    0
+			  ) AS businessNum, <!-- 商机数量 -->
+			  IFNULL(
+			    (SELECT 
+			      COUNT(DISTINCT (id)) 
+			    FROM
+			      `tb_contract` 
+			    WHERE `create_time` BETWEEN #{indexVo.beginCreateTime} 
+			      AND #{indexVo.endCreateTime} 
+			      AND create_by = #{username} 
+			      AND `status` = 4),
+			    0
+			  ) AS contractNum, <!-- 客户数量 -->
+			  IFNULL(
+			    (SELECT 
+			      CAST(
+			        SUM(h.`contract_order`) AS DECIMAL (30, 0)
+			      ) 
+			    FROM
+			      `tb_contract` h 
+			    WHERE h.create_by = #{username} 
+			      AND h.create_time BETWEEN #{indexVo.beginCreateTime} 
+			      AND #{indexVo.endCreateTime}),
+			    0
+			  ) AS salesAmount, <!-- 销售金额 -->
+			  IFNULL(
+			    (SELECT 
+			      COUNT(DISTINCT (id)) 
+			    FROM
+			      `tb_clue` 
+			    WHERE id IN 
+			      (SELECT 
+			        assign_id 
+			      FROM
+			        `tb_assign_record` 
+			      WHERE user_name = #{username} 
+			        AND DATE_FORMAT(create_time, '%Y-%m-%d') = #{now} 
+			        AND latest = 1 
+			        AND `type` = 0)),
+			    0
+			  ) AS todayCluesNum, <!-- 今日新增线索 -->
+			  IFNULL(
+			    (SELECT 
+			      COUNT(DISTINCT (id)) 
+			    FROM
+			      `tb_business` 
+			    WHERE id IN 
+			      (SELECT 
+			        assign_id 
+			      FROM
+			        `tb_assign_record` 
+			      WHERE user_name = #{username} 
+			        AND DATE_FORMAT(create_time, '%Y-%m-%d') = #{now} 
+			        AND latest = 1 
+			        AND `type` = 1)),
+			    0
+			  ) AS todayBusinessNum, <!-- 今日新增商机数量 -->
+			  IFNULL(
+			    (SELECT 
+			      COUNT(id) 
+			    FROM
+			      `tb_contract` 
+			    WHERE create_by = #{username} 
+			      AND DATE_FORMAT(create_time, '%Y-%m-%d') = #{now} 
+			      AND `status` = 4),
+			    0
+			  ) AS todayContractNum, <!-- 今日新增客户数 -->
+			  IFNULL(
+			    (SELECT 
+			      CAST(
+			        SUM(`contract_order`) AS DECIMAL (30, 0)
+			      ) 
+			    FROM
+			      `tb_contract` 
+			    WHERE create_by = #{username} 
+			      AND DATE_FORMAT(create_time, '%Y-%m-%d') = #{now}),
+			    0
+			  ) AS todaySalesAmount, <!-- 今日销售额 -->
+			  IFNULL(
+			    (SELECT 
+			      COUNT(DISTINCT (id)) 
+			    FROM
+			      `tb_clue` 
+			    WHERE id IN 
+			      (SELECT 
+			        assign_id 
+			      FROM
+			        `tb_assign_record` 
+			      WHERE user_name = #{username} 
+			        AND create_time BETWEEN #{indexVo.beginCreateTime} 
+			        AND #{indexVo.endCreateTime} 
+			        AND latest = 1 
+			        AND `type` = 0) 
+			        AND `status` = 1),
+			    0
+			  ) AS tofollowedCluesNum, <!-- 待跟进线索 -->
+			  IFNULL(
+			    (SELECT 
+			      COUNT(DISTINCT (id)) 
+			    FROM
+			      `tb_business` 
+			    WHERE id IN 
+			      (SELECT 
+			        assign_id 
+			      FROM
+			        `tb_assign_record` 
+			      WHERE user_name = #{username} 
+			        AND create_time BETWEEN #{indexVo.beginCreateTime} 
+			        AND #{indexVo.endCreateTime} 
+			        AND latest = 1 
+			        AND `type` = 1) 
+			        AND `status` = 1),
+			    0
+			  ) AS tofollowedBusinessNum <!-- 待跟进商机 -->
+			  <if test="username == 'admin'">
+			  	,IFNULL(
+			    (SELECT 
+			      COUNT(DISTINCT (id)) 
+			    FROM
+			      `tb_clue` 
+			    WHERE id NOT IN 
+			      (SELECT 
+			        assign_id 
+			      FROM
+			        `tb_assign_record` 
+			      WHERE create_time BETWEEN #{indexVo.beginCreateTime} 
+			        AND #{indexVo.endCreateTime} 
+			        AND latest = 1 
+			        AND `type` = 0) 
+			      AND create_time BETWEEN #{indexVo.beginCreateTime} 
+			      AND #{indexVo.endCreateTime}),
+			    0
+			  ) AS toallocatedCluesNum, <!-- 待分配线索 -->
+			  IFNULL(
+			    (SELECT 
+			      COUNT(DISTINCT (id)) 
+			    FROM
+			      `tb_business` 
+			    WHERE id NOT IN 
+			      (SELECT 
+			        assign_id 
+			      FROM
+			        `tb_assign_record` 
+			      WHERE create_time BETWEEN #{indexVo.beginCreateTime} 
+			        AND #{indexVo.endCreateTime} 
+			        AND latest = 1 
+			        AND `type` = 1) 
+			      AND create_time BETWEEN #{indexVo.beginCreateTime} 
+			      AND #{indexVo.endCreateTime}),
+			    0
+			  ) AS toallocatedBusinessNum <!-- 待分配商机 -->
+			  </if>
+			FROM
+			  `tb_clue` 
+			WHERE id IN 
+			  (SELECT 
+			    assign_id 
+			  FROM
+			    `tb_assign_record` 
+			  WHERE `create_time` BETWEEN #{indexVo.beginCreateTime} 
+			    AND #{indexVo.endCreateTime} 
+			    AND `type` = 0 
+			    AND `latest` = 1 
+			    AND `user_name` = #{username}) 
+			    AND `status` IN (1,2)
+    </select>
+    
+    <delete id="removeClueByFalseClue">
+    	DELETE FROM `tb_clue` WHERE id = #{id}
+    </delete>
+</mapper>

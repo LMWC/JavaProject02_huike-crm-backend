@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>汇客CRM管理系统</title>
+    <link rel="shortcut icon" href="../../favicon.ico" />
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../../plugins/element-ui/index.css" />
+    <link rel="stylesheet" href="../../styles/transition.css" />
+    <link rel="stylesheet" href="../../styles/element-ui.css" />
+    <link rel="stylesheet" href="../../styles/iconfont/iconfont.css" />
+    <link rel="stylesheet" href="../../styles/common.css" />
+    <link rel="stylesheet" href="../../styles/index.css" />
+    <link rel="stylesheet" href="../../styles/page.css" />
+    <style>
+      .app-container {
+        min-height: 618px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="app-container customer-page-box" id="activity-app">
+      <el-form ref="queryForm" class="cus-search-box" :model="queryParams">
+        <el-form-item label="活动编号" prop="code">
+          <el-input
+            v-model="queryParams.code"
+            placeholder="请输入活动编号"
+            clearable
+            @keyup.enter.native="searchHandle"
+          />
+        </el-form-item>
+        <el-form-item label="渠道来源" prop="channel">
+          <el-select v-model="queryParams.channel" placeholder="请选择渠道来源" clearable>
+            <el-option
+              v-for="dict in channelOptions"
+              :key="dict.dictValue"
+              :label="dict.dictLabel"
+              :value="dict.dictValue"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="活动状态" prop="status">
+          <el-select
+            v-model="queryParams.status"
+            placeholder="请选择活动状态"
+            clearable
+            :disabled="activeName!=='tabs1'"
+          >
+            <el-option
+              v-for="dict in statusOptions"
+              :key="dict.dictValue"
+              :label="dict.dictLabel"
+              :value="dict.dictValue"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="创建时间">
+          <el-date-picker
+            v-model="createTime"
+            clearable
+            type="daterange"
+            align="right"
+            unlink-panels
+            value-format="yyyy-MM-dd"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+          />
+        </el-form-item>
+        <el-form-item label="活动日期">
+          <el-date-picker
+            v-model="activityTime"
+            clearable
+            type="daterange"
+            align="right"
+            unlink-panels
+            value-format="yyyy-MM-dd"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+          />
+        </el-form-item>
+        <el-form-item class="search-btn wp-75">
+          <el-button class="cus-search-btn" type="primary" @click="searchHandle">搜索</el-button>
+          <el-button class="cus-reset-btn" @click="resetQuery">重置</el-button>
+        </el-form-item>
+      </el-form>
+
+      <div class="tabs-list-box">
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+          <el-tab-pane :label="'全部('+totalCount.total+')'" name="tabs1"></el-tab-pane>
+          <el-tab-pane :label="'待审核('+totalCount.toAudit+')'" name="1"></el-tab-pane>
+          <el-tab-pane :label="'已通过('+totalCount.pass+')'" name="2"></el-tab-pane>
+          <el-tab-pane :label="'已驳回('+totalCount.reject+')'" name="3"></el-tab-pane>
+          <el-tab-pane :label="'已结束('+totalCount.finish+')'" name="4"></el-tab-pane>
+        </el-tabs>
+      </div>
+
+      <div class="cus-btn-box">
+        <div class="cus-btn-con">
+          <el-button class="primary-btn" @click="addOrUpdateHandle()">添加活动</el-button>
+        </div>
+      </div>
+
+      <div v-loading="dataListLoading" :class="{ 'loading-box': dataListLoading }">
+        <div v-show="dataList && dataList.length > 0">
+          <el-table
+            ref="table"
+            stripe
+            class="cus-table-box"
+            :data="dataList"
+            @sort-change="dataListSortChangeHandle"
+            @filter-change="childrenFilterChange"
+          >
+            <!-- <el-table-column type="selection" width="62" align="center" /> -->
+            <el-table-column label="序号" align="center" type="index" width="75"></el-table-column>
+            <el-table-column label="活动编号" align="center" prop="code"></el-table-column>
+            <el-table-column
+              label="渠道来源"
+              align="center"
+              prop="channel"
+              :formatter="channelFormat"
+              min-width="100"
+            ></el-table-column>
+            <el-table-column label="活动名称" align="center" prop="name" min-width="100"></el-table-column>
+            <el-table-column
+              label="活动简介"
+              align="center"
+              prop="info"
+              min-width="100"
+              show-overflow-tooltip
+            ></el-table-column>
+            <el-table-column label="活动明细" align="center" min-width="150">
+              <template slot-scope="scope">
+                <span
+                  >{{ typeFormat(scope.row) }}/{{ scope.row.type==1?scope.row.discount+'折':scope.row.vouchers+'元'
+                  }}</span
+                >
+              </template>
+            </el-table-column>
+            <el-table-column label="开始时间" align="center" prop="beginTime" min-width="140" sortable>
+              <template slot-scope="scope">
+                <span>{{ parseTime(scope.row.beginTime, '{y}-{m}-{d} {h}:{i}') }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="结束时间" align="center" prop="endTime" min-width="140" sortable>
+              <template slot-scope="scope">
+                <span>{{ parseTime(scope.row.endTime, '{y}-{m}-{d} {h}:{i}') }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              v-if="activeName=='tabs1'"
+              key="status"
+              label="状态"
+              min-width="100"
+              align="center"
+              prop="status"
+              :formatter="statusFormat"
+              :filter-multiple="false"
+              :filters="statusFiltersOptions"
+              :filter-method="filterStatus"
+              column-key="status"
+              filter-placement="bottom-end"
+            ></el-table-column>
+            <el-table-column
+              v-if="activeName!='tabs1'"
+              key="status1"
+              label="状态"
+              min-width="100"
+              align="center"
+              prop="status"
+              :formatter="statusFormat"
+            ></el-table-column>
+            <el-table-column
+              v-if="activeName!=2 && activeName!=4"
+              fixed="right"
+              label="操作"
+              align="center"
+              class-name="small-padding fixed-width"
+              min-width="120"
+            >
+              <template slot-scope="scope">
+                <el-button v-if="scope.row.status==3" size="mini" type="text" @click="addOrUpdateHandle(scope.row.id)"
+                  >修改</el-button
+                >
+                <el-button
+                  v-if="scope.row.status==3"
+                  class="del-text"
+                  size="mini"
+                  type="text"
+                  @click="handleDelete(scope.row.id)"
+                  >删除</el-button
+                >
+                <el-button v-if="scope.row.status==1" size="mini" type="text" @click="passHandle(scope.row.id)"
+                  >通过</el-button
+                >
+                <el-button
+                  v-if="scope.row.status==1"
+                  class="del-text"
+                  size="mini"
+                  type="text"
+                  @click="rejectHandle(scope.row.id)"
+                  >驳回</el-button
+                >
+              </template>
+            </el-table-column>
+          </el-table>
+          <!-- 分页 -->
+          <div v-show="total > 0" class="pagination-container">
+            <el-pagination
+              :background="false"
+              :current-page.sync="pageNum"
+              :page-size.sync="pageSize"
+              layout="total, sizes, prev, pager, next, jumper"
+              :page-sizes="[10, 20, 30, 50]"
+              :total="total"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+            ></el-pagination>
+          </div>
+        </div>
+        <!-- 空数据 -->
+        <div
+          class="empty-box table-empty-box"
+          v-show="(!dataList || dataList.length <= 0) && !dataListLoading"
+          style="height: calc(100vh - 66px - 215px - 83px)"
+        >
+          <img class="icon" src="../../images/icon-empty.png" />
+          <span class="label">暂无内容</span>
+        </div>
+      </div>
+
+      <!-- 弹窗, 新增 / 修改 -->
+      <!-- 添加或修改线索管理对话框 -->
+      <el-dialog
+        :title="!form.id ? '添加活动' : '修改活动'"
+        :visible.sync="visible"
+        width="618px"
+        append-to-body
+        :close-on-click-modal="false"
+      >
+        <el-form ref="form" class="cus-search-box cus-dialog-form-box" :model="form" :rules="rules">
+          <el-form-item label="渠道来源" prop="channel">
+            <el-select v-model="form.channel" placeholder="请选择渠道来源">
+              <el-option
+                v-for="dict in channelOptions"
+                :key="dict.dictValue"
+                :label="dict.dictLabel"
+                :value="dict.dictValue"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="活动名称" prop="name">
+            <el-input v-model="form.name" placeholder="请输入活动名称" maxlength="10" />
+          </el-form-item>
+          <el-form-item label="活动日期" prop="activityTime" class="wp-100">
+            <el-date-picker
+              v-model="form.activityTime"
+              clearable
+              type="datetimerange"
+              align="right"
+              unlink-panels
+              value-format="yyyy-MM-dd HH:mm"
+              format="yyyy-MM-dd HH:mm"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              :default-time="['00:00:00', '23:59:59']"
+              :picker-options="pickerOptions"
+            />
+          </el-form-item>
+          <el-form-item label="活动简介" prop="info">
+            <el-input v-model="form.info" placeholder="请输入活动简介" maxlength="30" />
+          </el-form-item>
+          <el-form-item label="活动类型" prop="type">
+            <el-select v-model="form.type" placeholder="请选择活动类型" @change="typeChangeHandle">
+              <el-option
+                v-for="dict in typeOptions"
+                :key="dict.dictValue"
+                :label="dict.dictLabel"
+                :value="dict.dictValue"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item v-if="form.type==1" label="课程折扣" prop="discount">
+            <el-input-number
+              v-model="form.discount"
+              :min="0.1"
+              :precision="1"
+              :step="0.1"
+              :max="9.9"
+              placeholder="请输入课程课程折扣"
+              controls-position="right"
+            />
+          </el-form-item>
+          <el-form-item v-if="form.type==2" label="代金券" prop="vouchers">
+            <el-input-number
+              v-model="form.vouchers"
+              :step="1"
+              :precision="0"
+              :min="1"
+              :max="9999"
+              placeholder="请输入代金券"
+              controls-position="right"
+            />
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button class="cus-reset-btn" @click="visible = false">取 消</el-button>
+          <el-button class="cus-search-btn" @click="submitForm">确 定</el-button>
+        </div>
+      </el-dialog>
+    </div>
+
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="../../plugins/vue/vue.js"></script>
+    <!-- 引入组件库 -->
+    <script src="../../plugins/element-ui/index.js"></script>
+    <!-- 引入axios -->
+    <script src="../../plugins/axios/axios.min.js"></script>
+    <script src="../../js/request.js"></script>
+    <script src="../../api/activity/activity.js"></script>
+    <script src="../../api/system/dict/data.js"></script>
+    <script src="../../js/common.js"></script>
+    <script src="../../js/validate.js"></script>
+
+    <script>
+      new Vue({
+        el: '#activity-app',
+        data() {
+          return {
+            dataListLoading: false,
+            dataList: [], // 列表数据
+            pageNum: 1, // 当前页码
+            pageSize: 10, // 每页数
+            total: 0, // 总条数
+            order: null, // 排序，asc／desc
+            orderField: null, // 排序，字段
+            ids: [],
+            dataListSelections: [],
+            single: true, // 非单个禁用
+            multiple: true, // 非多个禁用
+            activeName: 'tabs1',
+            // 渠道来源字典
+            channelOptions: [],
+            // 活动类型字典
+            typeOptions: [],
+            // 状态字典
+            statusOptions: [],
+            statusFiltersOptions: [],
+            createTime: '',
+            activityTime: '',
+            // 查询参数
+            queryParams: {
+              code: null,
+              channel: null,
+              status: null,
+              beginCreateTime: '',
+              endCreateTime: '',
+              beginTime: '',
+              endTime: '',
+            },
+            totalCount: {
+              finish: 0,
+              pass: 0,
+              reject: 0,
+              toAudit: 0,
+              total: 0,
+            },
+            visible: false,
+            // 表单参数
+            form: {
+              id: null,
+              channel: null,
+              name: null,
+              info: null,
+              type: null,
+              discount: undefined,
+              vouchers: undefined,
+              beginTime: '',
+              status: null,
+              endTime: '',
+              activityTime: null,
+            },
+            pickerOptions: {
+              disabledDate(time) {
+                return time.getTime() < Date.now() - 8.64e7 // 禁用以前的日期，今天不禁用
+                // return date.getTime() <= Date.now();    //禁用今天以及以前的日期
+              },
+            },
+          }
+        },
+        computed: {
+          rules() {
+            return {
+              channel: [{ required: true, message: '渠道来源不能为空', trigger: 'change' }],
+              name: [{ required: true, message: '活动名称不能为空', trigger: 'blur' }],
+              info: [{ required: true, message: '活动简介不能为空', trigger: 'blur' }],
+              type: [{ required: true, message: '活动类型不能为空', trigger: 'change' }],
+              discount: [{ required: true, message: '课程折扣不能为空', trigger: 'blur' }],
+              vouchers: [{ required: true, message: '代金券不能为空', trigger: 'blur' }],
+              beginTime: [{ required: true, message: '开始时间不能为空', trigger: 'change' }],
+              endTime: [{ required: true, message: '结束时间不能为空', trigger: 'change' }],
+              activityTime: [{ required: true, message: '活动时间不能为空', trigger: 'blur' }],
+            }
+          },
+        },
+        watch: {
+          createTime(val) {
+            console.log(val)
+            if (val && val.length >= 2) {
+              this.queryParams.beginCreateTime = val[0]
+              this.queryParams.endCreateTime = val[1]
+            } else {
+              this.queryParams.beginCreateTime = ''
+              this.queryParams.endCreateTime = ''
+            }
+          },
+          activityTime(val) {
+            console.log(val)
+            if (val && val.length >= 2) {
+              this.queryParams.beginTime = val[0]
+              this.queryParams.endTime = val[1]
+            } else {
+              this.queryParams.beginTime = ''
+              this.queryParams.endTime = ''
+            }
+          },
+        },
+        created() {
+          getDicts('clues_item').then((response) => {
+            this.channelOptions = response.data
+          })
+          getDicts('channel_type').then((response) => {
+            this.typeOptions = response.data
+          })
+          getDicts('activity_status').then((response) => {
+            this.statusOptions = response.data
+            const statusFiltersOptions = [
+              {
+                dictLabel: '全部',
+                dictValue: '',
+              },
+            ]
+            statusFiltersOptions.push(...response.data)
+            statusFiltersOptions.forEach((item) => {
+              item.text = item.dictLabel
+              item.value = item.dictValue
+            })
+            this.statusFiltersOptions = statusFiltersOptions
+          })
+          this.getList()
+        },
+        methods: {
+          // 获取列表数据
+          getList() {
+            this.dataListLoading = true
+            listActivity({
+              order: this.order,
+              orderField: this.orderField,
+              pageNum: this.pageNum,
+              pageSize: this.pageSize,
+              ...this.queryParams,
+            })
+              .then((res) => {
+                this.dataListLoading = false
+                if (res.code !== 200) {
+                  this.dataList = []
+                  this.total = 0
+                  return this.$message.error(res.msg)
+                }
+                this.dataList = res.rows
+                this.total = res.total
+                this.totalCount = {
+                  ...this.totalCount,
+                  ...res.params,
+                }
+                console.log('-=-=-res=-=-=-=', this.dataList)
+              })
+              .catch(() => {
+                this.dataListLoading = false
+              })
+          },
+          // 排序
+          dataListSortChangeHandle(data) {
+            if (!data.order || !data.prop) {
+              this.order = ''
+              this.orderField = ''
+              return false
+            }
+            this.order = data.order.replace(/ending$/, '')
+            this.orderField = data.prop.replace(/([A-Z])/g, '_$1').toLowerCase()
+            this.getList()
+          },
+          /** 搜索按钮操作 */
+          handleQuery() {
+            this.pageNum = 1
+            this.getList()
+          },
+          // 渠道来源字典翻译
+          channelFormat(row) {
+            return selectDictLabel(this.channelOptions, row.channel)
+          },
+          // 活动类型字典翻译
+          typeFormat(row) {
+            return selectDictLabel(this.typeOptions, row.type)
+          },
+          // 状态字典翻译
+          statusFormat(row) {
+            return selectDictLabel(this.statusOptions, row.status)
+          },
+          /** 重置按钮操作 */
+          resetQuery() {
+            this.$refs['queryForm'].resetFields()
+            this.createTime = null
+            this.queryParams.beginCreateTime = ''
+            this.queryParams.endCreateTime = ''
+            this.activityTime = null
+            this.queryParams.beginTime = ''
+            this.queryParams.endTime = ''
+            this.$refs.table.clearFilter('status')
+            this.handleQuery()
+          },
+          // 分页
+          handleSizeChange(val) {
+            this.pageSize = val
+            this.getList()
+          },
+          // 分页
+          handleCurrentChange(val) {
+            this.pageNum = val
+            this.getList()
+          },
+          // 多选框选中数据
+          handleSelectionChange(selection) {
+            this.dataListSelections = selection
+            this.ids = selection.map((item) => item.id)
+            this.single = selection.length !== 1
+            this.multiple = !selection.length
+          },
+          // 筛选
+          childrenFilterChange (filterItem) {
+            const key = Object.keys(filterItem)[0]
+            const val = Object.values(filterItem)[0][0] ? Object.values(filterItem)[0][0] : ''
+            this.queryParams[key] = val
+            this.handleQuery()
+          },
+          // 设置筛选项
+          setDefaultFilter (col, val) {
+            const column = this.$refs.table.columns[col]
+            column.filteredValue = [val]
+            this.$refs.table.store.commit('filterChange', {
+              column,
+              values: column.filteredValue,
+              silent: true
+            })
+          },
+          // 通过
+          async passHandle(id) {
+            this.$confirm('确认通过？', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning',
+            })
+              .then(async () => {
+                const res = await passActivity(id)
+                if (res.code !== 200) {
+                  return this.$message.error(res.msg)
+                }
+                this.$message.success('操作成功')
+                this.handleQuery()
+              })
+              .catch(() => {})
+          },
+          // 驳回
+          async rejectHandle(id) {
+            this.$confirm('确认通过驳回？', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning',
+            })
+              .then(async () => {
+                const res = await rejectActivity(id)
+                if (res.code !== 200) {
+                  return this.$message.error(res.msg)
+                }
+                this.$message.success('操作成功')
+                this.handleQuery()
+              })
+              .catch(() => {})
+          },
+          handleClick() {
+            if (this.activeName === 'tabs1') {
+              this.queryParams.status = null
+            } else {
+              this.queryParams.status = this.activeName
+            }
+            this.handleQuery()
+          },
+          searchHandle() {
+            if (this.activeName === 'tabs1') {
+              this.setDefaultFilter(8, this.queryParams.status)
+            }
+            this.handleQuery()
+          },
+          filterStatus() {
+            return true
+          },
+          // 删除
+          handleDelete(id) {
+            const ids = id || this.ids
+            if (!ids && this.dataListSelections.length <= 0) {
+              return this.$message({
+                message: '请选择至少一条数据',
+                type: 'warning',
+                duration: 500,
+              })
+            }
+            this.$confirm('确定将选择数据删除?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning',
+            })
+              .then(() => {
+                return delActivity(ids)
+              })
+              .then((res) => {
+                if (res.code !== 200) {
+                  return this.$message.error(res.msg)
+                }
+                this.getList()
+                this.$message.success('删除成功')
+              })
+              .catch(() => {})
+          },
+          // 新增 / 修改
+          addOrUpdateHandle(id) {
+            this.form.id = id
+            this.formInit()
+          },
+          // 新增/修改弹框初始化
+          formInit() {
+            this.visible = true
+            this.$nextTick(() => {
+              this.$refs.form.resetFields()
+              if (this.form.id) {
+                this.getInfo()
+              }
+            })
+          },
+          // 获取信息
+          getInfo() {
+            getActivity(this.form.id)
+              .then((res) => {
+                if (res.code !== 200) {
+                  return this.$message.error(res.msg)
+                }
+                this.form = {
+                  ...this.form,
+                  ...res.data,
+                }
+                this.form.activityTime = [this.form.beginTime, this.form.endTime]
+              })
+              .catch(() => {})
+          },
+          typeChangeHandle() {
+            this.form.vouchers = undefined
+            this.form.discount = undefined
+          },
+          /** 提交按钮 */
+          async submitForm() {
+            this.$refs.form.validate(async (valid) => {
+              if (valid) {
+                this.form.beginTime = this.form.activityTime[0]
+                this.form.endTime = this.form.activityTime[1]
+                const res = await (this.form.id ? updateActivity : addActivity)(this.form)
+                if (res.code !== 200) {
+                  return this.$message.error(res.msg)
+                }
+                this.$message.success('操作成功')
+                this.visible = false
+                this.$emit('refreshDataList')
+              }
+            })
+          },
+          parseTime(time, pattern){
+            return parseTime(time, pattern)
+          }
+        },
+      })
+    </script>
+  </body>
+</html>

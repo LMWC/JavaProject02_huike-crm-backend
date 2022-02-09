@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huike.contract.mapper.TbContractMapper">
+
+    <resultMap type="TbContract" id="TbContractResult">
+        <result property="id"    column="id"    />
+        <result property="contractNo"    column="contract_no"    />
+        <result property="phone"    column="phone"    />
+        <result property="name"    column="name"    />
+        <result property="subject"    column="subject"    />
+        <result property="channel"    column="channel"    />
+        <result property="courseId"    column="course_id"    />
+        <result property="activityId"    column="activity_id"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="order"    column="contract_order"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="discountType"    column="discount_type"    />
+        <result property="coursePrice"    column="course_price"    />
+        <result property="businessId"    column="business_id"    />
+    </resultMap>
+
+    <sql id="selectTbContractVo">
+        select id, contract_no, phone, name, subject, channel, course_id, activity_id, status, create_by, dept_id,create_time, contract_order, file_name, discount_type, course_price,business_id,dept_id from tb_contract
+    </sql>
+
+    <select id="selectTbContractList" parameterType="TbContract" resultMap="TbContractResult">
+        <include refid="selectTbContractVo"/>
+        <where>
+            <if test="contractNo != null  and contractNo != ''"> and contract_no like concat('%', #{contractNo}, '%')</if>
+            <if test="channel != null and channel != ''">channel = #{channel}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="subject != null and subject != ''"> and subject = #{subject}</if>
+            <if test="courseId != null and courseId != ''"> and course_id = #{courseId}</if>
+            <if test="activityId != null and activityId != ''"> and activity_id = #{activityId}</if>
+            <if test="deptId != null and deptId != ''"> and dept_id = #{deptId}</if>
+            <if test="createBy != null and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != ''"><!-- 开始创建时间 -->
+                and date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginCreateTime},'%y%m%d')
+            </if>
+            <if test="params.endCreateTime != null and params.endCreateTime != ''"><!--  -->
+                and date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endCreateTime},'%y%m%d')
+            </if>
+        </where>
+        ORDER BY `create_time` DESC
+    </select>
+
+
+
+
+    <select id="selectTbContractById" parameterType="Long" resultMap="TbContractResult">
+        <include refid="selectTbContractVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTbContract" parameterType="TbContract">
+        insert into tb_contract
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="contractNo != null">contract_no,</if>
+            <if test="phone != null">phone,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="subject != null">subject,</if>
+            <if test="channel != null">channel,</if>
+            <if test="courseId != null">course_id,</if>
+            <if test="activityId != null">activity_id,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="order != null">contract_order,</if>
+            <if test="fileName != null">file_name,</if>
+            <if test="discountType != null">discount_type,</if>
+            <if test="coursePrice != null">course_price,</if>
+            <if test="businessId != null">business_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="contractNo != null">#{contractNo},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="subject != null">#{subject},</if>
+            <if test="channel != null">#{channel},</if>
+            <if test="courseId != null">#{courseId},</if>
+            <if test="activityId != null">#{activityId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="order != null">#{order},</if>
+            <if test="fileName != null">#{fileName},</if>
+            <if test="discountType != null">#{discountType},</if>
+            <if test="coursePrice != null">#{coursePrice},</if>
+            <if test="businessId != null">#{businessId},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTbContract" parameterType="TbContract">
+        update tb_contract
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="contractNo != null">contract_no = #{contractNo},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="subject != null">subject = #{subject},</if>
+            <if test="channel != null">channel = #{channel},</if>
+            <if test="courseId != null">course_id = #{courseId},</if>
+            <if test="activityId != null">activity_id = #{activityId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="order != null">contract_order = #{order},</if>
+            <if test="fileName != null">file_name = #{fileName},</if>
+            <if test="discountType != null">discount_type = #{discountType},</if>
+            <if test="coursePrice != null">course_price = #{coursePrice},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTbContractById" parameterType="Long">
+        delete from tb_contract where id = #{id}
+    </delete>
+
+    <delete id="deleteTbContractByIds" parameterType="String">
+        delete from tb_contract where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <!--合同统计-->
+    <select id="contractStatistics"
+            resultType="java.util.Map">
+        SELECT count(1) as num,DATE_FORMAT(create_time,'%Y-%m-%d') dd from tb_contract
+        <where>
+        <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
+            and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
+        </if>
+        <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
+            and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
+        </if>
+        </where>
+        GROUP BY dd;
+    </select>
+
+    <select id="contractStatisticsByUser"  parameterType="com.huike.clues.domain.vo.IndexStatisticsVo"
+            resultType="java.util.Map">
+        select c.create_by, c.dept_id, count(c.id) as num,ROUND(sum(c.contract_order),2) as amount from tb_contract c
+        <where>
+            <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
+                and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
+            </if>
+            <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
+                and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
+            </if>
+<!--            <if test="deptId != null and deptId != ''">-->
+<!--                and dept_id = #{deptId}-->
+<!--            </if>-->
+            GROUP BY c.create_by,c.dept_id LIMIT 10
+        </where>
+    </select>
+
+    <!--合同统计-->
+    <select id="contractNumsFromBusiness"
+            resultType="int">
+     select count(id) from tb_contract where business_id is not null
+            <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
+                and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
+            </if>
+            <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
+                and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
+            </if>
+    </select>
+
+
+    <!--销售统计日期统计-->
+    <select id="salesStatistics"
+            resultType="java.util.Map">
+        SELECT ROUND(sum(contract_order),2) as sales, DATE_FORMAT(create_time,'%Y-%m-%d') dd from tb_contract
+        <where>
+        <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
+            and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
+        </if>
+        <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
+            and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
+        </if>
+        </where>
+        GROUP BY dd;
+    </select>
+
+    <!--学科统计-->
+    <select id="subjectStatistics"
+            resultType="java.util.Map">
+        SELECT count(1) as num,subject from tb_contract
+        <where>
+        <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
+            and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
+        </if>
+        <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
+            and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
+        </if>
+        </where>
+        GROUP BY subject;
+    </select>
+
+
+    <select id="chanelStatistics"
+            resultType="java.util.Map">
+        SELECT count(1) as num, channel from tb_contract
+        <where>
+        <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
+            and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
+        </if>
+        <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
+            and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
+        </if>
+        </where>
+        GROUP BY channel;
+    </select>
+
+    <select id="activityStatistics"
+            resultType="java.util.Map">
+        SELECT count(1) as num,activity_id from tb_contract
+        <where>
+        <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
+            and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
+        </if>
+        <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
+            and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
+        </if>
+        </where>
+        GROUP BY activity_id;
+    </select>
+
+
+
+    <select id="deptStatistics"
+             resultType="java.util.Map">
+        select dept_id, count(id) as num, round(SUM(contract_order),2) as total_amount from tb_contract
+        <where>
+            <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
+                and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
+            </if>
+            <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
+                and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
+            </if>
+        </where>
+        group by dept_id
+        order by total_amount desc
+    </select>
+
+    <select id="channelStatistics"
+            resultType="java.util.Map">
+        select channel, count(id) as num, round(SUM(contract_order),2) as total_amount from tb_contract
+        <where>
+            <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
+                and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
+            </if>
+            <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
+                and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
+            </if>
+        </where>
+        group by channel
+        order by total_amount desc
+    </select>
+
+    <select id="ownerShipStatistics"
+            resultType="java.util.Map">
+        select create_by, count(id) as num, round(SUM(contract_order),2) as total_amount from tb_contract
+        <where>
+            <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
+                and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
+            </if>
+            <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
+                and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
+            </if>
+        </where>
+        group by create_by
+        order by total_amount desc
+    </select>
+
+
+    <select id="countByActivity"  parameterType="TbContract"  resultType="java.util.Map">
+        select count(1) as customersNum, sum(contract_order) as amount, sum(course_price-contract_order) as cost from tb_contract
+        where channel=#{channel} and activity_id=#{activityId}
+        <if test="params.beginCreateTime != null and params.beginCreateTime != ''"><!-- 开始创建时间 -->
+            and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{params.beginCreateTime},'%y-%m-%d')
+        </if>
+        <if test="params.endCreateTime != null and params.endCreateTime != ''"><!--  -->
+            and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{params.endCreateTime},'%y-%m-%d')
+        </if>
+    </select>
+
+
+<!--    <select id="countAllContract" resultType="int">-->
+<!--        select count(id) as num from tb_contract-->
+<!--        <where>-->
+<!--            <if test="beginCreateTime != null and beginCreateTime != ''">&lt;!&ndash; 开始创建时间 &ndash;&gt;-->
+<!--                and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')-->
+<!--            </if>-->
+<!--            <if test="endCreateTime != null and endCreateTime != ''">&lt;!&ndash;  &ndash;&gt;-->
+<!--                and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')-->
+<!--            </if>-->
+<!--        </where>-->
+<!--    </select>-->
+
+
+<!--    <select id="countAllContractByUser" resultType="java.util.Map">-->
+<!--        select clue.create_by, clue.dept_id, count(clue.id) as num from tb_clue clue where clue.status='5'-->
+<!--        <where>-->
+<!--            <if test="beginCreateTime != null and beginCreateTime != ''">&lt;!&ndash; 开始创建时间 &ndash;&gt;-->
+<!--                and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')-->
+<!--            </if>-->
+<!--            <if test="endCreateTime != null and endCreateTime != ''">&lt;!&ndash;  &ndash;&gt;-->
+<!--                and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')-->
+<!--            </if>-->
+<!--            <if test="deptIds != null and deptIds != ''">-->
+<!--                and dept_id in-->
+<!--                <foreach item="id" collection="array" open="(" separator="," close=")">-->
+<!--                    #{id}-->
+<!--                </foreach>-->
+<!--            </if>-->
+<!--        </where>-->
+<!--        GROUP BY clue.create_by,clue.dept_id-->
+<!--    </select>-->
+
+
+</mapper>

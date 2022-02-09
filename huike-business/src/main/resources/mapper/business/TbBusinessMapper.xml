@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huike.business.mapper.TbBusinessMapper">
+
+
+    <resultMap type="TbBusiness" id="TbBusinessResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="phone"    column="phone"    />
+        <result property="channel"    column="channel"    />
+        <result property="activityId"    column="activity_id"    />
+        <result property="provinces"    column="provinces"    />
+        <result property="city"    column="city"    />
+        <result property="sex"    column="sex"    />
+        <result property="age"    column="age"    />
+        <result property="weixin"    column="weixin"    />
+        <result property="qq"    column="qq"    />
+        <result property="level"    column="level"    />
+        <result property="subject"    column="subject"    />
+        <result property="courseId"    column="course_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="occupation"    column="occupation"    />
+        <result property="education"    column="education"    />
+        <result property="job"    column="job"    />
+        <result property="salary"    column="salary"    />
+        <result property="major"    column="major"    />
+        <result property="expectedSalary"    column="expected_salary"    />
+        <result property="reasons"    column="reasons"    />
+        <result property="plan"    column="plan"    />
+        <result property="planTime"    column="plan_time"    />
+        <result property="otherIntention"    column="other_intention"    />
+        <result property="nextTime"    column="next_time"    />
+        <result property="status"    column="status"    />
+        <result property="clue_id"    column="clueId"    />
+    </resultMap>
+
+    <resultMap type="TbBusiness" id="TbBusinessAssignResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="phone"    column="phone"    />
+        <result property="channel"    column="channel"    />
+        <result property="activityId"    column="activity_id"    />
+        <result property="provinces"    column="provinces"    />
+        <result property="city"    column="city"    />
+        <result property="sex"    column="sex"    />
+        <result property="age"    column="age"    />
+        <result property="weixin"    column="weixin"    />
+        <result property="qq"    column="qq"    />
+        <result property="level"    column="level"    />
+        <result property="subject"    column="subject"    />
+        <result property="courseId"    column="course_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="occupation"    column="occupation"    />
+        <result property="education"    column="education"    />
+        <result property="job"    column="job"    />
+        <result property="salary"    column="salary"    />
+        <result property="major"    column="major"    />
+        <result property="expectedSalary"    column="expected_salary"    />
+        <result property="reasons"    column="reasons"    />
+        <result property="plan"    column="plan"    />
+        <result property="planTime"    column="plan_time"    />
+        <result property="otherIntention"    column="other_intention"    />
+        <result property="nextTime"    column="next_time"    />
+        <result property="status"    column="status"    />
+        <result property="assignBy"    column="assign_by"    />
+        <result property="owner"    column="owner"    />
+        <result property="ownerTime"    column="owner_time"    />
+        <result property="clue_id"    column="clueId"    />
+    </resultMap>
+
+
+
+
+    <sql id="selectTbBusinessVo">
+        select id, name, phone, channel, activity_id, provinces, city, sex, age, weixin, qq, level, subject, course_id, create_by, create_time, occupation, education, job, salary, major,
+               expected_salary, reasons, plan, plan_time, other_intention, next_time, status from tb_business
+    </sql>
+
+    <sql id="selectTbBusinesAssignVo">
+        select b.id, b.name, b.phone, b.channel, b.activity_id, b.provinces, b.city, b.sex, b.age, b.weixin, b.qq, b.level, b.subject,
+               b.course_id, b.create_by, b.create_time, b.occupation, b.education, b.job, b.salary, b.major,
+               b.expected_salary, b.reasons, b.plan, b.plan_time, b.other_intention, b.next_time, b.status,
+               r.create_by as assign_by, r.user_name as owner,r.create_time as owner_time from tb_business b
+             left join tb_assign_record r on b.id=r.assign_id
+    </sql>
+
+
+    <select id="selectTbBusinessPool" parameterType="TbBusiness" resultMap="TbBusinessResult">
+        <include refid="selectTbBusinessVo"/>
+        <where>
+            <if test="id != null  and id != ''"> and id = #{id}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="channel != null  and channel != ''"> and channel = #{channel}</if>
+            <if test="activityId != null "> and activity_id = #{activityId}</if>
+            <if test="provinces != null  and provinces != ''"> and provinces = #{provinces}</if>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="sex != null  and sex != ''"> and sex = #{sex}</if>
+            <if test="age != null "> and age = #{age}</if>
+            <if test="weixin != null  and weixin != ''"> and weixin = #{weixin}</if>
+            <if test="qq != null  and qq != ''"> and qq = #{qq}</if>
+            <if test="level != null  and level != ''"> and level = #{level}</if>
+            <if test="subject != null  and subject != ''"> and subject = #{subject}</if>
+            <if test="courseId != null "> and course_id = #{courseId}</if>
+            <if test="occupation != null  and occupation != ''"> and occupation = #{occupation}</if>
+            <if test="education != null  and education != ''"> and education = #{education}</if>
+            <if test="job != null  and job != ''"> and job = #{job}</if>
+            <if test="salary != null  and salary != ''"> and salary = #{salary}</if>
+            <if test="major != null  and major != ''"> and major = #{major}</if>
+            <if test="expectedSalary != null  and expectedSalary != ''"> and expected_salary = #{expectedSalary}</if>
+            <if test="reasons != null  and reasons != ''"> and reasons = #{reasons}</if>
+            <if test="plan != null  and plan != ''"> and plan = #{plan}</if>
+            <if test="planTime != null "> and plan_time = #{planTime}</if>
+            <if test="otherIntention != null  and otherIntention != ''"> and other_intention = #{otherIntention}</if>
+            <if test="nextTime != null "> and next_time = #{nextTime}</if>
+            <if test="beginCreateTime != null"> and create_time BETWEEN #{beginCreateTime} AND #{endCreateTime}</if>
+             and status = '3'
+        </where>
+    </select>
+
+    <select id="selectTbBusinessList" parameterType="TbBusiness" resultMap="TbBusinessAssignResult">
+        <include refid="selectTbBusinesAssignVo"/>
+        <where>
+            <if test="id != null  and id != ''"> and b.id like concat('%', #{id}, '%')</if>
+            <if test="name != null  and name != ''"> and b.name like concat('%', #{name}, '%')</if>
+            <if test="phone != null  and phone != ''"> and b.phone like concat('%', #{phone}, '%')</if>
+            <if test="channel != null  and channel != ''"> and b.channel = #{channel}</if>
+            <if test="activityId != null "> and b.activity_id = #{activityId}</if>
+            <if test="provinces != null  and provinces != ''"> and b.provinces = #{provinces}</if>
+            <if test="city != null  and city != ''"> and b.city = #{city}</if>
+            <if test="sex != null  and sex != ''"> and b.sex = #{sex}</if>
+            <if test="age != null "> and b.age = #{age}</if>
+            <if test="weixin != null  and weixin != ''"> and b.weixin = #{weixin}</if>
+            <if test="qq != null  and qq != ''"> and b.qq = #{qq}</if>
+            <if test="level != null  and level != ''"> and b.level = #{level}</if>
+            <if test="subject != null  and subject != ''"> and b.subject = #{subject}</if>
+            <if test="courseId != null "> and b.course_id = #{courseId}</if>
+            <if test="occupation != null  and occupation != ''"> and b.occupation = #{occupation}</if>
+            <if test="education != null  and education != ''"> and b.education = #{education}</if>
+            <if test="job != null  and job != ''"> and b.job = #{job}</if>
+            <if test="salary != null  and salary != ''"> and b.salary = #{salary}</if>
+            <if test="major != null  and major != ''"> and b.major = #{major}</if>
+            <if test="expectedSalary != null  and expectedSalary != ''"> and b.expected_salary = #{expectedSalary}</if>
+            <if test="reasons != null  and reasons != ''"> and b.reasons = #{reasons}</if>
+            <if test="plan != null  and plan != ''"> and b.plan = #{plan}</if>
+            <if test="planTime != null "> and b.plan_time = #{planTime}</if>
+            <if test="otherIntention != null  and otherIntention != ''"> and b.other_intention = #{otherIntention}</if>
+            <if test="nextTime != null "> and b.next_time = #{nextTime}</if>
+            <if test="beginCreateTime != null"> and b.create_time BETWEEN #{beginCreateTime} AND #{endCreateTime}</if>
+            <if test="status != null and status != ''"> and b.status = #{status}</if>
+            <if test="status == null or status == ''"> and b.status in ('1','2')</if>
+            and r.latest = '1' and r.type='1' 
+        </where>
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+        ORDER BY b.`create_time` DESC
+    </select>
+
+    <select id="selectTbBusinessById" parameterType="Long" resultMap="TbBusinessResult">
+        <include refid="selectTbBusinessVo"/>
+        where id = #{id}
+    </select>
+
+
+    <select id="businessNumsFromClue"  resultType="int">
+       select count(id) from tb_business where clue_id is not null AND `status` IN (1,2,4,7)
+       <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
+                and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
+       </if>
+        <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
+                and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
+        </if>
+    </select>
+
+
+    <select id="countAllBusinessForIndex" resultType="int" parameterType="com.huike.clues.domain.vo.IndexStatisticsVo">
+        select count(1) from tb_assign_record r where r.latest='1' and r.type='1'
+        <where>
+            <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
+                and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
+            </if>
+            <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
+                and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
+            </if>
+        </where>
+        ${params.dataScope}
+    </select>
+        
+    <insert id="insertTbBusiness" parameterType="TbBusiness" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_business
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="phone != null">phone,</if>
+            <if test="channel != null">channel,</if>
+            <if test="activityId != null">activity_id,</if>
+            <if test="provinces != null">provinces,</if>
+            <if test="city != null">city,</if>
+            <if test="sex != null and sex != ''">sex,</if>
+            <if test="age != null">age,</if>
+            <if test="weixin != null">weixin,</if>
+            <if test="qq != null">qq,</if>
+            <if test="level != null">level,</if>
+            <if test="subject != null">subject,</if>
+            <if test="courseId != null">course_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="occupation != null">occupation,</if>
+            <if test="education != null">education,</if>
+            <if test="job != null">job,</if>
+            <if test="salary != null">salary,</if>
+            <if test="major != null">major,</if>
+            <if test="expectedSalary != null">expected_salary,</if>
+            <if test="reasons != null">reasons,</if>
+            <if test="plan != null">plan,</if>
+            <if test="planTime != null">plan_time,</if>
+            <if test="otherIntention != null">other_intention,</if>
+            <if test="nextTime != null">next_time,</if>
+            <if test="status != null">status,</if>
+            <if test="clueId != null">clue_id,</if>
+            <if test="transfer != null">transfer,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="channel != null">#{channel},</if>
+            <if test="activityId != null">#{activityId},</if>
+            <if test="provinces != null">#{provinces},</if>
+            <if test="city != null">#{city},</if>
+            <if test="sex != null and sex != ''">#{sex},</if>
+            <if test="age != null">#{age},</if>
+            <if test="weixin != null">#{weixin},</if>
+            <if test="qq != null">#{qq},</if>
+            <if test="level != null">#{level},</if>
+            <if test="subject != null">#{subject},</if>
+            <if test="courseId != null">#{courseId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="occupation != null">#{occupation},</if>
+            <if test="education != null">#{education},</if>
+            <if test="job != null">#{job},</if>
+            <if test="salary != null">#{salary},</if>
+            <if test="major != null">#{major},</if>
+            <if test="expectedSalary != null">#{expectedSalary},</if>
+            <if test="reasons != null">#{reasons},</if>
+            <if test="plan != null">#{plan},</if>
+            <if test="planTime != null">#{planTime},</if>
+            <if test="otherIntention != null">#{otherIntention},</if>
+            <if test="nextTime != null">#{nextTime},</if>
+            <if test="status != null">#{status},</if>
+            <if test="clueId != null">#{clueId},</if>
+            <if test="transfer != null">#{transfer},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTbBusiness" parameterType="TbBusiness">
+        update tb_business
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="channel != null">channel = #{channel},</if>
+            <if test="activityId != null">activity_id = #{activityId},</if>
+            <if test="provinces != null">provinces = #{provinces},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="sex != null and sex != ''">sex = #{sex},</if>
+            <if test="age != null">age = #{age},</if>
+            <if test="weixin != null">weixin = #{weixin},</if>
+            <if test="qq != null">qq = #{qq},</if>
+            <if test="level != null">level = #{level},</if>
+            <if test="subject != null">subject = #{subject},</if>
+            <if test="courseId != null">course_id = #{courseId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="occupation != null">occupation = #{occupation},</if>
+            <if test="education != null">education = #{education},</if>
+            <if test="job != null">job = #{job},</if>
+            <if test="salary != null">salary = #{salary},</if>
+            <if test="major != null">major = #{major},</if>
+            <if test="expectedSalary != null">expected_salary = #{expectedSalary},</if>
+            <if test="reasons != null">reasons = #{reasons},</if>
+            <if test="plan != null">plan = #{plan},</if>
+            <if test="planTime != null">plan_time = #{planTime},</if>
+            <if test="otherIntention != null">other_intention = #{otherIntention},</if>
+            <if test="nextTime != null">next_time = #{nextTime},</if>
+            <if test="status != null">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="resetBusiness">
+        update tb_business set next_time=null, status=#{status} where id = #{id}
+    </update>
+
+    <delete id="deleteTbBusinessById" parameterType="Long">
+        delete from tb_business where id = #{id}
+    </delete>
+
+    <delete id="deleteTbBusinessByIds" parameterType="String">
+        delete from tb_business where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="resetNextTimeAndStatus">
+        update tb_business set next_time=null, status=#{status} where id = #{id}
+    </update>
+
+    <update id="setTransfer">
+        update tb_business set next_time=null, status=#{status}, transfer='1' where id = #{id}
+    </update>
+    
+     <update id="updateBusinessEndTimeById">
+        update tb_business set end_time=#{endTime},next_time = null where id = #{id}
+    </update>
+    
+    <select id="countAllBusiness" resultType="int">
+       select count(id) from tb_business
+        <where>
+            <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
+                and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
+            </if>
+            <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
+                and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
+            </if>
+        </where>
+    </select>
+    
+    <select id="countAllContractByUser" parameterType="com.huike.clues.domain.vo.IndexStatisticsVo"  resultType="java.util.Map">
+        select r.create_by, r.dept_id, count(r.id) as num from tb_business business
+            left join tb_contract r
+            on r.business_id = business.id
+            <if test="indexVo.beginCreateTime != null and indexVo.beginCreateTime != ''"><!-- 开始创建时间 -->
+            	where r.`create_time` BETWEEN #{indexVo.beginCreateTime} AND #{indexVo.endCreateTime} 
+            </if>
+        GROUP BY r.create_by LIMIT 10
+    </select>
+</mapper>

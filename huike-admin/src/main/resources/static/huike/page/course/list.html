@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>汇客CRM管理系统</title>
+  <link rel="shortcut icon" href="../../favicon.ico" />
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="../../plugins/element-ui/index.css" />
+  <link rel="stylesheet" href="../../styles/transition.css" />
+  <link rel="stylesheet" href="../../styles/element-ui.css" />
+  <link rel="stylesheet" href="../../styles/iconfont/iconfont.css" />
+  <link rel="stylesheet" href="../../styles/common.css" />
+  <link rel="stylesheet" href="../../styles/index.css" />
+  <link rel="stylesheet" href="../../styles/page.css" />
+  <style>
+    .app-container{
+      min-height: 618px;
+    }
+  </style>
+</head>
+
+<body>
+<div class="app-container customer-page-box" id="course-app">
+  <el-form ref="queryForm" class="cus-search-box" :model="queryParams">
+    <el-form-item label="课程编号" prop="code">
+      <el-input
+              v-model="queryParams.code"
+              placeholder="请输入课程编号"
+              clearable
+              @keyup.enter.native="handleQuery"
+      />
+    </el-form-item>
+    <el-form-item label="课程名称" prop="name">
+      <el-input
+              v-model="queryParams.name"
+              placeholder="请输入课程名称"
+              clearable
+              @keyup.enter.native="handleQuery"
+      />
+    </el-form-item>
+    <el-form-item label="适用人群" prop="applicablePerson">
+      <el-select v-model="queryParams.applicablePerson" placeholder="请选择适用人群" clearable>
+        <el-option
+                v-for="dict in applicablePersonOptions"
+                :key="dict.dictValue"
+                :label="dict.dictLabel"
+                :value="dict.dictValue"
+        />
+      </el-select>
+    </el-form-item>
+    <el-form-item label="创建时间">
+      <el-date-picker
+              v-model="createTime"
+              clearable
+              type="daterange"
+              align="right"
+              unlink-panels
+              value-format="yyyy-MM-dd"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+      ></el-date-picker>
+    </el-form-item>
+    <el-form-item label="课程学科" prop="subject">
+      <el-select v-model="queryParams.subject" placeholder="请选择课程学科" clearable>
+        <el-option
+                v-for="dict in subjectOptions"
+                :key="dict.dictValue"
+                :label="dict.dictLabel"
+                :value="dict.dictValue"
+        />
+      </el-select>
+    </el-form-item>
+
+    <el-form-item class="search-btn wp-75">
+      <el-button class="cus-search-btn" type="primary" @click="handleQuery">搜索</el-button>
+      <el-button class="cus-reset-btn" @click="resetQuery">重置</el-button>
+    </el-form-item>
+  </el-form>
+
+  <div class="cus-btn-box">
+    <div class="label">已选<span class="num">{{ ids.length }}</span>项</div>
+    <div class="cus-btn-con">
+      <el-button class="primary-btn" @click="addOrUpdateHandle()">添加课程</el-button>
+      <el-button class="default-btn" :disabled="multiple" @click="handleDelete()">批量删除</el-button>
+    </div>
+  </div>
+
+  <div v-loading="dataListLoading" :class="{ 'loading-box': dataListLoading }">
+    <div v-show="dataList && dataList.length > 0">
+      <el-table
+              stripe
+              class="cus-table-box"
+              :data="dataList"
+              @selection-change="handleSelectionChange"
+              @sort-change="dataListSortChangeHandle"
+      >
+        <el-table-column type="selection" width="62" align="center"></el-table-column>
+        <el-table-column label="课程编号" min-width="100" align="center" prop="code"></el-table-column>
+        <el-table-column
+                label="课程学科"
+                min-width="100"
+                align="center"
+                prop="subject"
+                :formatter="subjectFormat"
+        ></el-table-column>
+        <el-table-column label="课程名称" min-width="100" align="center" prop="name"></el-table-column>
+        <el-table-column label="价格(元)" min-width="100" align="center" prop="price"></el-table-column>
+        <el-table-column
+                label="适用人群"
+                min-width="100"
+                align="center"
+                prop="applicablePerson"
+                :formatter="applicablePersonFormat"
+        ></el-table-column>
+        <el-table-column
+                label="课程介绍"
+                min-width="120"
+                align="center"
+                prop="info"
+                show-overflow-tooltip
+        ></el-table-column>
+        <el-table-column
+                label="创建时间"
+                min-width="120"
+                align="center"
+                prop="createTime"
+                sortable
+        ></el-table-column>
+        <el-table-column label="操作" align="center" class-name="small-padding fixed-width" min-width="120">
+          <template slot-scope="scope">
+            <el-button size="mini" type="text" @click="addOrUpdateHandle(scope.row.id)">修改</el-button>
+            <el-button size="mini" type="text" class="del-text" @click="handleDelete(scope.row.id)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <!-- 分页 -->
+      <div v-show="total > 0" class="pagination-container">
+        <el-pagination
+                :background="false"
+                :current-page.sync="pageNum"
+                :page-size.sync="pageSize"
+                layout="total, sizes, prev, pager, next, jumper"
+                :page-sizes="[10, 20, 30, 50]"
+                :total="total"
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+        ></el-pagination>
+      </div>
+    </div>
+    <!-- 空数据 -->
+    <div
+            class="empty-box table-empty-box"
+            v-show="(!dataList || dataList.length <= 0) && !dataListLoading"
+            style="height: calc(100vh - 66px - 215px - 83px)"
+    >
+      <img class="icon" src="../../images/icon-empty.png" />
+      <span class="label">暂无内容</span>
+    </div>
+  </div>
+
+  <!-- 弹窗, 新增 / 修改 -->
+  <!-- 添加或修改线索管理对话框 -->
+  <el-dialog
+          :title="!form.id ? '添加课程' : '修改课程'"
+          :visible.sync="visible"
+          width="618px"
+          append-to-body
+          :close-on-click-modal="false"
+  >
+    <el-form ref="form" class="cus-search-box cus-dialog-form-box" :model="form" :rules="rules">
+      <el-form-item label="课程学科" prop="subject">
+        <el-select v-model="form.subject" placeholder="请选择课程学科">
+          <el-option
+                  v-for="dict in subjectOptions"
+                  :key="dict.dictValue"
+                  :label="dict.dictLabel"
+                  :value="dict.dictValue"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="课程名称" prop="name">
+        <el-input v-model="form.name" placeholder="请输入课程名称" maxlength="10" />
+      </el-form-item>
+      <el-form-item label="适应人群" prop="applicablePerson">
+        <el-select v-model="form.applicablePerson" placeholder="请选择适应人群">
+          <el-option
+                  v-for="dict in applicablePersonOptions"
+                  :key="dict.dictValue"
+                  :label="dict.dictLabel"
+                  :value="dict.dictValue"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="课程价格" prop="price">
+        <el-input-number
+                v-model="form.price"
+                :precision="0"
+                :step="1"
+                placeholder="请输入课程价格"
+                controls-position="right"
+                :min="0"
+                :max="99999"
+        />
+        <!-- <el-input v-model="form.price" placeholder="请输入课程价格" /> -->
+      </el-form-item>
+      <el-form-item label="课程介绍" prop="info" class="wp-100">
+        <el-input
+                v-model="form.info"
+                type="textarea"
+                placeholder="请输入课程介绍"
+                :rows="2"
+                maxlength="20"
+                resize="none"
+                show-word-limit
+        />
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button class="cus-reset-btn" @click="visible = false">取 消</el-button>
+      <el-button class="cus-search-btn" @click="submitForm">确 定</el-button>
+    </div>
+  </el-dialog>
+</div>
+
+<!-- 开发环境版本，包含了有帮助的命令行警告 -->
+<script src="../../plugins/vue/vue.js"></script>
+<!-- 引入组件库 -->
+<script src="../../plugins/element-ui/index.js"></script>
+<!-- 引入axios -->
+<script src="../../plugins/axios/axios.min.js"></script>
+<script src="../../js/request.js"></script>
+<script src="../../api/course/course.js"></script>
+<script src="../../api/system/dict/data.js"></script>
+<script src="../../js/common.js"></script>
+<script src="../../js/validate.js"></script>
+
+<script>
+  new Vue({
+    el: '#course-app',
+    data() {
+      return {
+        dataListLoading: false,
+        dataList: [], // 列表数据
+        pageNum: 1, // 当前页码
+        pageSize: 10, // 每页数
+        total: 0, // 总条数
+        order: null, // 排序，asc／desc
+        orderField: null, // 排序，字段
+        ids: [],
+        dataListSelections: [],
+        single: true, // 非单个禁用
+        multiple: true, // 非多个禁用
+        createTime: '',
+        queryParams: {
+          code: '',
+          name: '',
+          applicablePerson: '',
+          beginCreateTime: '',
+          endCreateTime: '',
+          subject: '',
+        },
+        // 课程学科字典
+        subjectOptions: [],
+        // 适用人群字典
+        applicablePersonOptions: [],
+        // 弹出框显示隐藏
+        visible: false,
+        // 表单参数
+        form: {
+          id: null,
+          name: null,
+          subject: null,
+          price: undefined,
+          applicablePerson: null,
+          info: null,
+        },
+      }
+    },
+    computed: {
+      rules() {
+        return {
+          name: [
+            { required: true, message: '课程名称不能为空', trigger: 'blur' },
+            { validator: isVerification, message: '禁止输入特殊字符' },
+          ],
+          subject: [{ required: true, message: '课程学科不能为空', trigger: 'change' }],
+          price: [{ required: true, message: '课程价格不能为空', trigger: 'blur' }],
+          applicablePerson: [{ required: true, message: '适应人群不能为空', trigger: 'change' }],
+        }
+      },
+    },
+    watch: {
+      createTime(val) {
+        console.log(val)
+        if (val && val.length >= 2) {
+          this.queryParams.beginCreateTime = val[0]
+          this.queryParams.endCreateTime = val[1]
+        } else {
+          this.queryParams.beginCreateTime = ''
+          this.queryParams.endCreateTime = ''
+        }
+      },
+    },
+    created() {
+      getDicts('course_subject').then((response) => {
+        this.subjectOptions = response.data
+      })
+      getDicts('applicable_person').then((response) => {
+        this.applicablePersonOptions = response.data
+      })
+      this.getList()
+    },
+    methods: {
+      // 获取列表数据
+      getList() {
+        this.dataListLoading = true
+        listCourse({
+          order: this.order,
+          orderField: this.orderField,
+          pageNum: this.pageNum,
+          pageSize: this.pageSize,
+          ...this.queryParams,
+        })
+                .then((res) => {
+          this.dataListLoading = false
+          if (res.code !== 200) {
+          this.dataList = []
+          this.total = 0
+          return this.$message.error(res.msg)
+        }
+        this.dataList = res.rows
+        this.total = res.total
+        console.log('-=-=-res=-=-=-=', this.dataList)
+      })
+      .catch(() => {
+          this.dataListLoading = false
+        })
+      },
+      // 排序
+      dataListSortChangeHandle(data) {
+        if (!data.order || !data.prop) {
+          this.order = ''
+          this.orderField = ''
+          return false
+        }
+        this.order = data.order.replace(/ending$/, '')
+        this.orderField = data.prop.replace(/([A-Z])/g, '_$1').toLowerCase()
+        this.getList()
+      },
+      /** 搜索按钮操作 */
+      handleQuery() {
+        this.pageNum = 1
+        this.getList()
+      },
+      // 课程学科字典翻译
+      subjectFormat(row) {
+        return selectDictLabel(this.subjectOptions, row.subject)
+      },
+      // 适用人群字典翻译
+      applicablePersonFormat(row) {
+        return selectDictLabel(this.applicablePersonOptions, row.applicablePerson)
+      },
+      /** 重置按钮操作 */
+      resetQuery() {
+        this.$refs['queryForm'].resetFields()
+        this.createTime = null
+        this.queryParams.beginCreateTime = ''
+        this.queryParams.endCreateTime = ''
+        this.handleQuery()
+      },
+      // 分页
+      handleSizeChange(val) {
+        this.pageSize = val
+        this.getList()
+      },
+      // 分页
+      handleCurrentChange(val) {
+        this.pageNum = val
+        this.getList()
+      },
+      // 多选框选中数据
+      handleSelectionChange(selection) {
+        this.dataListSelections = selection
+        this.ids = selection.map((item) => item.id)
+        this.single = selection.length !== 1
+        this.multiple = !selection.length
+      },
+      // 删除
+      handleDelete(id) {
+        const ids = id || this.ids
+        if (!ids && this.dataListSelections.length <= 0) {
+          return this.$message({
+            message: '请选择至少一条数据',
+            type: 'warning',
+            duration: 500,
+          })
+        }
+        this.$confirm('确定将选择数据删除?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
+                .then(() => {
+          return delCourse(ids)
+        })
+      .then((res) => {
+          if (res.code !== 200) {
+          return this.$message.error(res.msg)
+        }
+        this.getList()
+        this.$message.success('删除成功')
+      })
+      .catch(() => {})
+      },
+      // 新增 / 修改
+      addOrUpdateHandle(id) {
+        this.form.id = id
+        this.formInit()
+      },
+      // 新增/修改弹框初始化
+      formInit() {
+        this.visible = true
+        this.$nextTick(() => {
+          this.$refs.form.resetFields()
+          if (this.form.id) {
+          this.getInfo()
+        }
+      })
+      },
+      // 获取信息
+      getInfo() {
+        getCourse(this.form.id)
+                .then((res) => {
+          if (res.code !== 200) {
+          return this.$message.error(res.msg)
+        }
+        this.form = {
+          ...this.form,
+          ...res.data,
+        }
+      })
+      .catch(() => {})
+      },
+      /** 提交按钮 */
+      async submitForm() {
+    this.$refs.form.validate(async (valid) => {
+      if (valid) {
+        const res = await (this.form.id ? updateCourse : addCourse)(this.form)
+        if (res.code !== 200) {
+          return this.$message.error(res.msg)
+        }
+        this.$message.success('操作成功')
+        this.visible = false
+        this.handleQuery()
+      }
+    })
+  },
+  },
+  })
+</script>
+</body>
+</html>

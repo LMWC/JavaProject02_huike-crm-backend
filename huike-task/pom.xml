@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>huike-parent</artifactId>
+        <groupId>com.huike</groupId>
+        <version>3.4.0</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>huike-task</artifactId>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+    <description>
+        spring Task 定时任务
+    </description>
+
+    <dependencies>
+
+
+        <!-- 定时任务
+        <dependency>
+	      <groupId>com.xuxueli</groupId>
+	      <artifactId>xxl-job-core</artifactId>
+		</dependency>-->
+
+        <!-- 通用工具-->
+        <dependency>
+            <groupId>com.huike</groupId>
+            <artifactId>huike-common</artifactId>
+        </dependency>
+<<<<<<< HEAD:huike-task/pom.xml
+=======
+
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-spring</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+        </dependency>
+    </dependencies>
+>>>>>>> a89c1ce12cfb3643528f0edecc6e2034a1285485:huike-quartz/pom.xml
+
+    </dependencies>
+</project>

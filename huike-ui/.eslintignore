@@ -1,0 +1,28 @@
+# 忽略build目录下类型为js的文件的语法检查
+build/*.js
+# 忽略src/assets目录下文件的语法检查
+src/assets
+# 忽略src/assets目录下文件的语法检查
+src/views/tool
+src/views/monitor
+src/views/system/user/profile/userInfo.vue
+# 忽略public目录下文件的语法检查
+public
+# 忽略当前目录下为js的文件的语法检查
+*.js
+# 忽略当前目录下为vue的文件的语法检查
+# *.vue
+
+# 忽略目录
+tests/
+node_modules/
+dist/
+
+# 忽略文件
+**/*-min.js
+**/*.min.js
+**/*.dll.js
+**/*.eot
+**/*.svg
+**/*.ttf
+**/*.woff

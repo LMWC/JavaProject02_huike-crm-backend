@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huike.business.mapper.TbBusinessTrackRecordMapper">
+    
+    <resultMap type="TbBusinessTrackRecord" id="TbBusinessTrackRecordResult">
+        <result property="id"    column="id"    />
+        <result property="businessId"    column="business_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="keyItems"    column="key_items"    />
+        <result property="record"    column="record"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="trackStatus"    column="track_status"    />
+        <result property="nextTime"    column="next_time"    />
+    </resultMap>
+
+    <sql id="selectTbBusinessTrackRecordVo">
+        select id, business_id, create_by, key_items, record, create_time, track_status,next_time from tb_business_track_record
+    </sql>
+
+    <select id="selectTbBusinessTrackRecordList" parameterType="TbBusinessTrackRecord" resultMap="TbBusinessTrackRecordResult">
+        <include refid="selectTbBusinessTrackRecordVo"/>
+        <where>  
+            <if test="businessId != null  and businessId != ''"> and business_id = #{businessId}</if>
+            <if test="keyItems != null  and keyItems != ''"> and key_items = #{keyItems}</if>
+            <if test="record != null  and record != ''"> and record = #{record}</if>
+            <if test="trackStatus != null  and trackStatus != ''"> and track_status = #{trackStatus}</if>
+        </where>
+    </select>
+    
+    <select id="selectTbBusinessTrackRecordById" parameterType="Long" resultMap="TbBusinessTrackRecordResult">
+        <include refid="selectTbBusinessTrackRecordVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTbBusinessTrackRecord" parameterType="TbBusinessTrackRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_business_track_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="businessId != null and businessId != ''">business_id,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="keyItems != null">key_items,</if>
+            <if test="record != null">record,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="trackStatus != null">track_status,</if>
+            <if test="nextTime != null">next_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="businessId != null and businessId != ''">#{businessId},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="keyItems != null">#{keyItems},</if>
+            <if test="record != null">#{record},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="trackStatus != null">#{trackStatus},</if>
+            <if test="nextTime != null">#{nextTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTbBusinessTrackRecord" parameterType="TbBusinessTrackRecord">
+        update tb_business_track_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="businessId != null and businessId != ''">business_id = #{businessId},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="keyItems != null">key_items = #{keyItems},</if>
+            <if test="record != null">record = #{record},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="trackStatus != null">track_status = #{trackStatus},</if>
+            <if test="nextTime != null">next_time = #{nextTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTbBusinessTrackRecordById" parameterType="Long">
+        delete from tb_business_track_record where id = #{id}
+    </delete>
+
+    <delete id="deleteTbBusinessTrackRecordByIds" parameterType="String">
+        delete from tb_business_track_record where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
