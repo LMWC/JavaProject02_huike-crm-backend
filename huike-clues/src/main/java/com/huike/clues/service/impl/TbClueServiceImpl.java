@@ -1,13 +1,8 @@
 package com.huike.clues.service.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
-import com.huike.clues.strategy.Rule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +12,6 @@ import com.huike.clues.domain.TbAssignRecord;
 import com.huike.clues.domain.TbClue;
 import com.huike.clues.domain.TbClueTrackRecord;
 import com.huike.clues.domain.TbRulePool;
-import com.huike.clues.domain.vo.TbClueExcelVo;
 import com.huike.clues.mapper.SysDictDataMapper;
 import com.huike.clues.mapper.SysUserMapper;
 import com.huike.clues.mapper.TbActivityMapper;
@@ -27,6 +21,7 @@ import com.huike.clues.mapper.TbClueTrackRecordMapper;
 import com.huike.clues.service.ITbActivityService;
 import com.huike.clues.service.ITbClueService;
 import com.huike.clues.service.ITbRulePoolService;
+import com.huike.clues.strategy.Rule;
 import com.huike.clues.utils.HuiKeCrmDateUtils;
 import com.huike.clues.utils.JobUtils;
 import com.huike.common.annotation.DataScope;
@@ -35,8 +30,6 @@ import com.huike.common.core.domain.entity.SysUser;
 import com.huike.common.exception.CustomException;
 import com.huike.common.utils.DateUtils;
 import com.huike.common.utils.SecurityUtils;
-import com.huike.common.utils.StringUtils;
-import com.huike.common.utils.bean.BeanUtils;
 
 /**
  * 线索管理Service业务层处理
@@ -185,79 +178,6 @@ public class TbClueServiceImpl implements ITbClueService {
 	}
 
 	@Override
-	@Transactional
-	public Map<String, Integer> importClues(List<TbClue> clueList) {
-		if (StringUtils.isNull(clueList) || clueList.size() == 0) {
-			throw new CustomException("导入用户数据不能为空！");
-		}
-		Map<String, Integer> map = new HashMap<>();
-		List<TbClue> toAssignlist = new ArrayList<>();
-		int successNum = 0;
-		int failureNum = 0;
-		for (TbClue clue : clueList) {
-			try {
-				if (StringUtils.isBlank(clue.getPhone())) {
-					failureNum++;
-					continue;
-				}
-				if (StringUtils.isBlank(clue.getChannel())) {
-					failureNum++;
-					continue;
-				}
-
-				// 验证是否存在这个用户
-				TbClue dbcule = tbClueMapper.selectTbClueByPhone(clue.getPhone());
-				if (dbcule == null) {
-					// 特殊字段处理
-					String channel = sysDictDataMapper.selectDictValue(TbClue.ImportDictType.CHANNEL.getDictType(),
-							clue.getChannel());
-					clue.setChannel(channel);
-
-					if (StringUtils.isNoneBlank(clue.getSubject())) {
-						String subject = sysDictDataMapper.selectDictValue(TbClue.ImportDictType.SUBJECT.getDictType(),
-								clue.getSubject());
-						clue.setSubject(subject);
-					}
-
-					if (StringUtils.isNoneBlank(clue.getLevel())) {
-						String level = sysDictDataMapper.selectDictValue(TbClue.ImportDictType.LEVEL.getDictType(),
-								clue.getLevel());
-						clue.setLevel(level);
-					}
-
-					if (StringUtils.isNoneBlank(clue.getSex())) {
-						String sex = sysDictDataMapper.selectDictValue(TbClue.ImportDictType.SEX.getDictType(),
-								clue.getSex());
-						clue.setSex(sex);
-					}
-
-					if (StringUtils.isNoneBlank(clue.getActivityName())) {
-						String sex = sysDictDataMapper.selectDictValue(TbClue.ImportDictType.SEX.getDictType(),
-								clue.getSex());
-						clue.setSex(sex);
-					}
-					clue.setStatus(TbClue.StatusType.UNFOLLOWED.getValue());
-					tbClueMapper.insertTbClue(clue);
-					// 默认分配超级管理员
-					//如果线索添加成功，利用策略将线索分配给具体的人
-					rule.loadRule(clue);
-					successNum++;
-					toAssignlist.add(clue);
-				} else {
-					failureNum++;
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				failureNum++;
-			}
-		}
-
-		map.put("successNum", successNum);
-		map.put("failureNum", failureNum);
-		return map;
-	}
-
-	@Override
 	public String assign(Long[] clueIds, Long userId) {
 		TbRulePool rulePool = rulePoolService.selectTbRulePoolByType(Constants.rule_type_clue);
 		// TbAssignRecord tbAssignRecord =new TbAssignRecord();
@@ -294,7 +214,7 @@ public class TbClueServiceImpl implements ITbClueService {
 		// 统计当前分配人所有线索
 		int asignRecords = assignRecordMapper.countAssignCluesByUser(userId);
 		if (asignRecords >= rulePool.getMaxNunmber()) {
-			throw new CustomException("捞取失败！最大保有量(" + rulePool.getMaxNunmber() + ")，剩余可以捞取0条线索");
+			throw  new CustomException("捞取失败！最大保有量("+rulePool.getMaxNunmber()+")，剩余可以捞取"+(rulePool.getMaxNunmber()-asignRecords)+"条线索");
 		}
 		for (int i = 0; i < clueIds.length; i++) {
 			Long clueId = clueIds[i];
@@ -348,60 +268,11 @@ public class TbClueServiceImpl implements ITbClueService {
 		return tbAssignRecord;
 	}
 
-	@Override
-	@Transactional
-	public int falseClue(Long id, String reason, String remark) {
-		TbClue tbClue = tbClueMapper.selectTbClueById(id);
-		int falseCount = tbClue.getFalseCount();
-		// 上报超过三次删除
-		if (falseCount >= 2) {
-			// 删除这条线索
-			return tbClueMapper.removeClueByFalseClue(id);
-//           return updateStatus(id, TbClue.StatusType.DELETED.getValue());
-		}
-		// 少于三次入线索池
-		tbClue.setFalseCount(tbClue.getFalseCount() + 1);
-		tbClue.setStatus(TbClue.StatusType.FALSE.getValue());
-		updateTbClue(tbClue);
-		updateStatus(tbClue.getId(), TbClue.StatusType.FALSE.getValue());
-		// 伪线索原因
-		TbClueTrackRecord trackRecord = new TbClueTrackRecord();
-		trackRecord.setCreateBy(SecurityUtils.getUsername());
-		trackRecord.setFalseReason(reason);
-		trackRecord.setRecord(remark);
-		trackRecord.setClueId(id);
-		trackRecord.setType("1");
-		trackRecord.setCreateTime(DateUtils.getNowDate());
-		return tbClueTrackRecordMapper.insertTbClueTrackRecord(trackRecord);
-	}
 
 	@Override
 	@Transactional
 	public int updateStatus(Long clueId, String status) {
 		return tbClueMapper.resetNextTimeAndStatus(clueId, status);
-	}
-
-	/**
-	 * 批量导入
-	 */
-	@Override
-	public Map<String, Integer> addTbClue(List<TbClueExcelVo> cluevoList) {
-		List<TbClue> clueList = cluevoList.stream().map(vo -> {
-			TbClue tbClue = new TbClue();
-			BeanUtils.copyProperties(vo, tbClue);
-			tbClue.setCreateBy(SecurityUtils.getUsername());
-			tbClue.setCreateTime(DateUtils.getNowDate());
-			String activityCode = vo.getActivityCode();
-			// 关联活动
-			if (StringUtils.isNoneBlank(activityCode)) {
-				TbActivity activity = activityService.selectTbActivityByCode(activityCode);
-				if (activity != null) {
-					tbClue.setActivityId(activity.getId());
-				}
-			}
-			return tbClue;
-		}).collect(Collectors.toList());
-		return tbClueService.importClues(clueList);
 	}
 
 	/**

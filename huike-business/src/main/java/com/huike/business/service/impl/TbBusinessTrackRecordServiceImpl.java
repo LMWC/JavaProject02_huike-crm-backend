@@ -29,18 +29,6 @@ public class TbBusinessTrackRecordServiceImpl implements ITbBusinessTrackRecordS
 
 
     /**
-     * 查询商机跟进记录
-     * 
-     * @param id 商机跟进记录ID
-     * @return 商机跟进记录
-     */
-    @Override
-    public TbBusinessTrackRecord selectTbBusinessTrackRecordById(Long id)
-    {
-        return tbBusinessTrackRecordMapper.selectTbBusinessTrackRecordById(id);
-    }
-
-    /**
      * 查询商机跟进记录列表
      * 
      * @param tbBusinessTrackRecord 商机跟进记录
@@ -51,24 +39,6 @@ public class TbBusinessTrackRecordServiceImpl implements ITbBusinessTrackRecordS
         return tbBusinessTrackRecordMapper.selectTbBusinessTrackRecordList(tbBusinessTrackRecord);
     }
 
-    /**
-     * 新增商机跟进记录
-     * 
-     * @param tbBusinessTrackRecord 商机跟进记录
-     * @return 结果
-     */
-    @Override
-    public int insertTbBusinessTrackRecord(TbBusinessTrackRecord tbBusinessTrackRecord)
-    {
-        tbBusinessTrackRecord.setCreateTime(DateUtils.getNowDate());
-        return tbBusinessTrackRecordMapper.insertTbBusinessTrackRecord(tbBusinessTrackRecord);
-    }
-
-    @Override
-    public int insertTbBusinessTrackRecord(TbBusiness tbBusiness, TbBusinessTrackRecord tbBusinessTrackRecord) {
-        tbBusinessMapper.updateTbBusiness(tbBusiness);
-        return tbBusinessTrackRecordMapper.insertTbBusinessTrackRecord(tbBusinessTrackRecord);
-    }
 
     /**
      * 修改商机跟进记录
@@ -106,11 +76,4 @@ public class TbBusinessTrackRecordServiceImpl implements ITbBusinessTrackRecordS
         return tbBusinessTrackRecordMapper.deleteTbBusinessTrackRecordById(id);
     }
     
-    /**
-     * 跟进商机id查询商机跟进记录
-     */
-	@Override
-	public List<TbBusinessTrackRecord> selectTbBusinessTrackRecordList(Long id) {
-		return tbBusinessTrackRecordMapper.selectTbBusinessTrackRecordListByBusinessId(id);
-	}
 }

@@ -8,13 +8,6 @@ import com.huike.business.domain.TbBusinessTrackRecord;
  * @date 2021-04-28
  */
 public interface TbBusinessTrackRecordMapper {
-    /**
-     * 查询商机跟进记录
-     * 
-     * @param id 商机跟进记录ID
-     * @return 商机跟进记录
-     */
-    public TbBusinessTrackRecord selectTbBusinessTrackRecordById(Long id);
 
     /**
      * 查询商机跟进记录列表
@@ -23,14 +16,6 @@ public interface TbBusinessTrackRecordMapper {
      * @return 商机跟进记录集合
      */
     public List<TbBusinessTrackRecord> selectTbBusinessTrackRecordList(TbBusinessTrackRecord tbBusinessTrackRecord);
-
-    /**
-     * 新增商机跟进记录
-     * 
-     * @param tbBusinessTrackRecord 商机跟进记录
-     * @return 结果
-     */
-    public int insertTbBusinessTrackRecord(TbBusinessTrackRecord tbBusinessTrackRecord);
 
     /**
      * 修改商机跟进记录

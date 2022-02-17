@@ -13,37 +13,5 @@ import com.huike.clues.domain.vo.IndexStatisticsVo;
  */
 public interface ReportMapper {
 	
-    
-    /**
-     * 获取基础信息
-     * @param request
-     * @param now
-     * @param username
-     * @return
-     */
-	public Map getBaseData(@Param("indexVo")IndexStatisticsVo request, 
-			@Param("now")String now,@Param("username")String username);
-
-	/**
-	 * 获取今日简报数据
-	 * @param request
-	 * @param now
-	 * @param username
-	 * @return
-	 */
-	public Map getTodayData(@Param("indexVo")IndexStatisticsVo request, 
-			@Param("now")String now,@Param("username")String username);
-
-
-	/**
-	 * 获取待办任务
-	 * @param request
-	 * @param now
-	 * @param username
-	 * @return
-	 */
-	public Map getTodoData(@Param("indexVo")IndexStatisticsVo request, 
-			@Param("now")String now,@Param("username")String username);
-
 
 }

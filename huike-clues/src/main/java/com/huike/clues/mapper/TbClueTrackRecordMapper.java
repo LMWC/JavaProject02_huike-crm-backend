@@ -24,13 +24,6 @@ public interface TbClueTrackRecordMapper {
      */
     public List<TbClueTrackRecord> selectTbClueTrackRecordList(TbClueTrackRecord tbClueTrackRecord);
 
-    /**
-     * 新增线索跟进记录
-     * 
-     * @param tbClueTrackRecord 线索跟进记录
-     * @return 结果
-     */
-    public int insertTbClueTrackRecord(TbClueTrackRecord tbClueTrackRecord);
 
     /**
      * 修改线索跟进记录
@@ -56,12 +49,4 @@ public interface TbClueTrackRecordMapper {
      */
     public int deleteTbClueTrackRecordByIds(Long[] ids);
 
-    /**
-     * 根据线索id查询线索跟进记录
-     * @param clueId
-     * @return
-     */
-	public List<TbClueTrackRecord> selectTbClueTrackRecordListByClueId(Long clueId);
-    
-    
 }

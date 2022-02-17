@@ -21,15 +21,6 @@ public interface TbBusinessMapper {
      */
     public TbBusiness selectTbBusinessById(Long id);
     
-    /**
-     * 统计商机数
-     * @param beginCreateTime
-     * @param endCreateTime
-     * @return
-     */
-    public int businessNumsFromClue(@Param("beginCreateTime") String beginCreateTime, @Param("endCreateTime") String endCreateTime);
-
-
     public int countAllBusinessForIndex(IndexStatisticsVo vo);
 
     /**
@@ -84,8 +75,6 @@ public interface TbBusinessMapper {
     public int setTransfer(@Param("id") Long id, @Param("status") String status);
 
 	public void updateBusinessEndTimeById(@Param("id")Long id, @Param("endTime")Date endTime);
-
-	public int countAllBusiness(@Param("beginCreateTime") String beginCreateTime, @Param("endCreateTime") String endCreateTime);
 
 	public List<Map<String,Object>> countAllContractByUser(@Param("indexVo")IndexStatisticsVo vo);
 }

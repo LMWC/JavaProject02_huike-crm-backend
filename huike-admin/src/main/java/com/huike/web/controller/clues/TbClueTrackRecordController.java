@@ -32,48 +32,6 @@ import com.huike.common.utils.SecurityUtils;
 @RestController
 @RequestMapping("/clues/record")
 public class TbClueTrackRecordController extends BaseController {
-    @Autowired
-    private ITbClueTrackRecordService tbClueTrackRecordService;
 
 
-    /**
-     * 查询线索跟进记录列表
-     */
-    @PreAuthorize("@ss.hasPermi('clues:record:list')")
-    @GetMapping("/list")
-    public TableDataInfo list(@RequestParam("clueId")Long clueId) {
-        startPage();
-        List<TbClueTrackRecord> list = tbClueTrackRecordService.selectTbClueTrackRecordList(clueId);
-        return getDataTable(list);
-    }
-    /**
-     * 获取线索跟进记录详细信息
-     */
-    //@ApiOperation("获取线索跟进记录详细信息")
-    @PreAuthorize("@ss.hasPermi('clues:record:query')")
-    @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id)
-    {
-        return AjaxResult.success(tbClueTrackRecordService.selectTbClueTrackRecordById(id));
-    }
-
-    /**
-     * 新增线索跟进记录
-     */
-    //@ApiOperation("新增线索跟进记录")
-    @PreAuthorize("@ss.hasPermi('clues:record:add')")
-    @Log(title = "线索跟进记录", businessType = BusinessType.INSERT)
-    @PostMapping
-    public AjaxResult add(@RequestBody ClueTrackRecordVo tbClueTrackRecord)
-    {
-        TbClueTrackRecord trackRecord=new TbClueTrackRecord();
-        BeanUtils.copyProperties(tbClueTrackRecord,trackRecord);
-        trackRecord.setCreateTime(DateUtils.getNowDate());
-        trackRecord.setCreateBy(SecurityUtils.getUsername());
-        TbClue tbClue=new TbClue();
-        BeanUtils.copyProperties(tbClueTrackRecord,tbClue);
-        tbClue.setStatus(TbClue.StatusType.FOLLOWING.getValue()); //进行中
-        tbClue.setId(tbClueTrackRecord.getClueId());
-        return toAjax(tbClueTrackRecordService.insertTbClueTrackRecord(tbClue,trackRecord));
-    }
 }

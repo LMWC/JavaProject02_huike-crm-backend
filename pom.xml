@@ -33,8 +33,6 @@
         <velocity.version>1.7</velocity.version>
         <jwt.version>0.9.1</jwt.version>
         <org.projectlombok.version>1.18.8</org.projectlombok.version>
-        <miniio.version>7.0.2</miniio.version>
-        <esay_excel.version>2.2.6</esay_excel.version>
         <xxl_job.version>2.1.0</xxl_job.version>
 
     </properties>
@@ -247,20 +245,6 @@
                 <artifactId>lombok</artifactId>
                 <version>${org.projectlombok.version}</version>
             </dependency>
-            
-            <!-- easy Excel -->
-            <dependency>
-			    <groupId>com.alibaba</groupId>
-			    <artifactId>easyexcel</artifactId>
-			    <version>${esay_excel.version}</version>
-			</dependency>
-			
-			<!-- xxl job -->
-            <dependency>
-		      <groupId>com.xuxueli</groupId>
-		      <artifactId>xxl-job-core</artifactId>
-		      <version>${xxl_job.version}</version>
-			</dependency>
         </dependencies>
     </dependencyManagement>
 

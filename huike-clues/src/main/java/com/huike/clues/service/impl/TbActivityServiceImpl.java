@@ -18,12 +18,14 @@ import com.huike.common.core.redis.RedisCache;
 import com.huike.common.utils.DateUtils;
 import com.huike.common.utils.StringUtils;
 
+
 /**
  * 活动管理Service业务层处理
  * @date 2021-04-01
  */
 @Service
 public class TbActivityServiceImpl implements ITbActivityService {
+
     @Autowired
     private TbActivityMapper tbActivityMapper;
 
@@ -38,17 +40,11 @@ public class TbActivityServiceImpl implements ITbActivityService {
      * @return 活动管理
      */
     @Override
-    public TbActivity selectTbActivityById(Long id)
-    {
+    public TbActivity selectTbActivityById(Long id){
         return tbActivityMapper.selectTbActivityById(id);
     }
 
 
-//    public void loadAllActivityCode() {
-//        List<String> codeList= tbActivityMapper.selectAllCode();
-//        Set<String> set= new HashSet<>(codeList);
-//        redisCache.setCacheSet(Constants.ACT_CODE_KEY, set);
-//    }
 
     @Override
     public TbActivity selectTbActivityByCode(String code) {
@@ -76,24 +72,12 @@ public class TbActivityServiceImpl implements ITbActivityService {
     @Transactional
     public int insertTbActivity(TbActivity tbActivity){
         tbActivity.setCreateTime(DateUtils.getNowDate());
-        tbActivity.setCode(UUIDUtils.getUUID());
+        tbActivity.setCode(getCode());
         tbActivity.setStatus("2");
         int rows= tbActivityMapper.insertTbActivity(tbActivity);
         return rows;
     }
 
-
-//    private String getCode(){
-//        //随机8位编码
-////        String code= StringUtils.getRandom(8);
-//        String code = UUIDUtils.getUUID();
-//        //店铺校验
-//        Set<String> codeSets =  redisCache.getCacheSet(Constants.ACT_CODE_KEY);
-//        if(codeSets.contains(code)){
-//            getCode();
-//        }
-//        return code;
-//    }
 
 
 
@@ -107,13 +91,6 @@ public class TbActivityServiceImpl implements ITbActivityService {
     public int updateTbActivity(TbActivity tbActivity){
         TbActivity dbActivity= tbActivityMapper.selectTbActivityById(tbActivity.getId());
         int rows= tbActivityMapper.updateTbActivity(tbActivity);
-        //结束时间修改任务
-        if(tbActivity.getEndTime()!=null&&!tbActivity.getEndTime().equals(dbActivity.getEndTime())){
-            String target="activityTask.finish('"+tbActivity.getId()+"')";
-            String jobName="活动结束任务id_"+tbActivity.getId();
-          //TODO 添加任务
-//            sysJobService.addJob(jobName,target,tbActivity.getEndTime());
-        }
         return rows;
     }
 
@@ -136,18 +113,33 @@ public class TbActivityServiceImpl implements ITbActivityService {
      * @return 结果
      */
     @Override
-    public int deleteTbActivityById(Long id)
-    {
+    public int deleteTbActivityById(Long id) {
         TbActivity tbActivity = tbActivityMapper.selectTbActivityById(id);
         int rows=tbActivityMapper.deleteTbActivityById(id);
-      //TODO 添加任务
-//        sysJobService.deleteJob(tbActivity.getName());
         return rows;
     }
 
     @Override
     public Map getCountByStatus() {
         return tbActivityMapper.getCountByStatus();
+    }
+
+    @Override
+    public void loadAllActivityCode() {
+        List<String> codeList= tbActivityMapper.selectAllCode();
+        Set<String> set= new HashSet<>(codeList);
+        redisCache.setCacheSet(Constants.ACT_CODE_KEY, set);
+    }
+
+    private String getCode(){
+        //随机8位编码
+        String code= StringUtils.getRandom(8);
+        //店铺校验
+        Set<String> codeSets =  redisCache.getCacheSet(Constants.ACT_CODE_KEY);
+        if(codeSets.contains(code)){
+            getCode();
+        }
+        return code;
     }
 
 }

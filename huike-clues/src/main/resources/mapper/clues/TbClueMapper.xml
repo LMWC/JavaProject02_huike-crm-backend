@@ -29,7 +29,7 @@
                create_by,false_count, next_time,transfer from tb_clue
     </sql>
 
-    <select id="selectTbCluePoll" parameterType="TbClue" resultMap="TbClueResult">
+     <select id="selectTbCluePoll" parameterType="TbClue" resultMap="TbClueResult">
         <include refid="selectTbClueVo"/>
         <where>
             <if test="id != null  and id != ''"> and id = #{id}</if>
@@ -54,6 +54,7 @@
         </where>
         order by create_time
     </select>
+
 
 
     <resultMap type="TbClue" id="TbClueAssignResult">
@@ -138,77 +139,11 @@
         <result property="order"    column="contract_order"    />
     </resultMap>
 
-
-
-    <select id="selectTbClueForReport" parameterType="TbClue" resultMap="clueReport">
-        select clue.id, clue.name, clue.phone, clue.channel, clue.activity_id, activity.code as code, activity.name as info,clue.status as clue_status, clue.create_time as clue_create_time,
-        r.user_name as owner,b.create_time as business_create_time,b.`status` as business_status,c.create_time contract_create_time,c.contract_order from tb_clue clue
-        left join  tb_activity activity on activity.id = clue.activity_id
-        left join tb_business b on clue.id=b.clue_id
-        left join tb_contract c on b.id=c.business_id
-        left join tb_assign_record r on clue.id=r.assign_id
-        and r.latest = '1' and r.type='0'
-        <where>
-            <if test="id != null  and id != ''"> and clue.id = #{id}</if>
-            <if test="name != null  and name != ''"> and clue.name like concat('%', #{name}, '%')</if>
-            <if test="phone != null  and phone != ''"> and clue.phone = #{phone}</if>
-            <if test="channel != null  and channel != ''"> and clue.channel = #{channel}</if>
-            <if test="activityId != null  and activityId != ''"> and clue.activity_id = #{activityId}</if>
-            <if test="sex != null  and sex != ''"> and clue.sex = #{sex}</if>
-            <if test="age != null "> and clue.age = #{age}</if>
-            <if test="weixin != null  and weixin != ''"> and clue.weixin = #{weixin}</if>
-            <if test="qq != null  and qq != ''"> and clue.qq = #{qq}</if>
-            <if test="level != null  and level != ''"> and clue.level = #{level}</if>
-            <if test="subject != null  and subject != ''"> and clue.subject = #{subject}</if>
-            <if test="params.beginCreateTime != null and params.beginCreateTime != ''"><!-- 开始创建时间 -->
-                and date_format(clue.create_time,'%y%m%d') &gt;= date_format(#{params.beginCreateTime},'%y%m%d')
-            </if>
-            <if test="params.endCreateTime != null and params.endCreateTime != ''"><!--  -->
-                and date_format(clue.create_time,'%y%m%d') &lt;= date_format(#{params.endCreateTime},'%y%m%d')
-            </if>
-            <if test="nextTime != null "> and clue.next_time = #{nextTime}</if>
-            <if test="owner != null  and owner != ''"> and r.user_name like concat('%', #{owner}, '%')</if>
-        </where>
-
-        order by clue.create_time desc
-    </select>
-
-
-
-
-
-    <!--    <select id="selectTbClueById" parameterType="Long" resultMap="TbClueAssignResult">-->
-<!--        <include refid="selectTbClueAssignVo"/>-->
-<!--        where clue.id = #{id}  and r.latest = '1'-->
-<!--    </select>-->
-
     <select id="selectTbClueById" parameterType="Long" resultMap="TbClueResult">
         <include refid="selectTbClueVo"/>
         where id = #{id}
     </select>
 
-
-    <select id="countAllClues" resultType="int">
-       select count(id) from tb_clue
-        <where>
-            <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
-                and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
-            </if>
-            <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
-                and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
-            </if>
-        </where>
-    </select>
-
-    <select id="effectiveCluesNums" resultType="int">
-        select count(id) from tb_clue where status in ('1','2','5','6','7')
-            <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
-                and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
-            </if>
-            <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
-                and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
-            </if>
-    </select>
 
     <select id="selectClueByIds" parameterType="String" resultMap="TbClueResult">
         <include refid="selectTbClueVo"/>
@@ -311,38 +246,6 @@
             #{id}
         </foreach>
     </delete>
-
-
-    <select id="cluesStatistics"
-            resultType="java.util.Map">
-        SELECT count(1) as num,DATE_FORMAT(create_time,'%Y-%m-%d') dd from tb_clue
-        <where>
-        <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
-            and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
-        </if>
-        <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
-            and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
-        </if>
-        </where>
-        GROUP BY dd;
-    </select>
-
-
-    <select id="countByActivity" parameterType="TbClue"  resultType="java.util.Map">
-        SELECT
-        sum(case when t.`status`='4' THEN 1 ELSE 0 END ) AS falseClues,
-        (SELECT COUNT(b.id) AS total FROM `tb_clue` a LEFT JOIN `tb_business` b ON a.phone = b.phone WHERE a.activity_id=#{activityId} ) AS toBusiness,
-        count(1) AS total
-        from tb_clue t
-        where channel=#{channel} and t.activity_id=#{activityId}
-        <if test="params.beginCreateTime != null and params.beginCreateTime != ''"><!-- 开始创建时间 -->
-            and date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginCreateTime},'%y%m%d')
-        </if>
-        <if test="params.endCreateTime != null and params.endCreateTime != ''"><!--  -->
-            and date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endCreateTime},'%y%m%d')
-        </if>
-    </select>
-
 
     <select id="countAllContractByUser" parameterType="com.huike.clues.domain.vo.IndexStatisticsVo"  resultType="java.util.Map">
         select clue.create_by, r.dept_id, count(clue.id) as num from tb_clue clue
@@ -591,7 +494,4 @@
 			    AND `status` IN (1,2)
     </select>
     
-    <delete id="removeClueByFalseClue">
-    	DELETE FROM `tb_clue` WHERE id = #{id}
-    </delete>
 </mapper>

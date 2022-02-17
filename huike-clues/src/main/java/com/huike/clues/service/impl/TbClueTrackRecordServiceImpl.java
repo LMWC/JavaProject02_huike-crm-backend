@@ -27,18 +27,6 @@ public class TbClueTrackRecordServiceImpl implements ITbClueTrackRecordService
     private TbClueMapper tbClueMapper;
 
     /**
-     * 查询线索跟进记录
-     * 
-     * @param id 线索跟进记录ID
-     * @return 线索跟进记录
-     */
-    @Override
-    public TbClueTrackRecord selectTbClueTrackRecordById(Long id)
-    {
-        return tbClueTrackRecordMapper.selectTbClueTrackRecordById(id);
-    }
-
-    /**
      * 查询线索跟进记录列表
      * 
      * @param tbClueTrackRecord 线索跟进记录
@@ -48,28 +36,6 @@ public class TbClueTrackRecordServiceImpl implements ITbClueTrackRecordService
     public List<TbClueTrackRecord> selectTbClueTrackRecordList(TbClueTrackRecord tbClueTrackRecord)
     {
         return tbClueTrackRecordMapper.selectTbClueTrackRecordList(tbClueTrackRecord);
-    }
-
-    /**
-     * 新增线索跟进记录
-     * 
-     * @param tbClueTrackRecord 线索跟进记录
-     * @return 结果
-     */
-    @Override
-    public int insertTbClueTrackRecord(TbClueTrackRecord tbClueTrackRecord)
-    {
-        tbClueTrackRecord.setCreateTime(DateUtils.getNowDate());
-        tbClueTrackRecord.setCreateBy(SecurityUtils.getUsername());
-        return tbClueTrackRecordMapper.insertTbClueTrackRecord(tbClueTrackRecord);
-    }
-
-
-    @Override
-    @Transactional
-    public int insertTbClueTrackRecord(TbClue tbClue, TbClueTrackRecord tbClueTrackRecord) {
-        tbClueMapper.updateTbClue(tbClue);
-        return tbClueTrackRecordMapper.insertTbClueTrackRecord(tbClueTrackRecord);
     }
 
     /**
@@ -108,11 +74,4 @@ public class TbClueTrackRecordServiceImpl implements ITbClueTrackRecordService
         return tbClueTrackRecordMapper.deleteTbClueTrackRecordById(id);
     }
     
-    /**
-     * 根据线索id查询线索跟进记录
-     */
-	@Override
-	public List<TbClueTrackRecord> selectTbClueTrackRecordList(Long clueId) {
-		return tbClueTrackRecordMapper.selectTbClueTrackRecordListByClueId(clueId);
-	}
 }

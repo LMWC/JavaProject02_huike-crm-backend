@@ -124,24 +124,12 @@
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
 		
-		<!-- Miniio -->
-		<dependency>
-		    <groupId>io.minio</groupId>
-		    <artifactId>minio</artifactId>
-		    <version>${miniio.version}</version>
-		</dependency>
-		
 		<!-- lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
         
-        <!-- easy Excel -->
-	    <dependency>
-		    <groupId>com.alibaba</groupId>
-		    <artifactId>easyexcel</artifactId>
-		</dependency>
     </dependencies>
 
 </project>

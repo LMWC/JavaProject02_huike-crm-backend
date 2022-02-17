@@ -2,9 +2,6 @@ package com.huike.web.controller.clues;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
-import com.huike.common.annotation.DataScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,19 +10,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.alibaba.excel.EasyExcel;
 import com.huike.business.service.ITbBusinessService;
 import com.huike.clues.domain.TbClue;
 import com.huike.clues.domain.vo.AssignmentVo;
 import com.huike.clues.domain.vo.FalseClueVo;
-import com.huike.clues.domain.vo.TbClueExcelVo;
 import com.huike.clues.service.ITbActivityService;
 import com.huike.clues.service.ITbClueService;
-import com.huike.clues.utils.easyExcel.ExcelListener;
 import com.huike.common.annotation.Log;
 import com.huike.common.core.controller.BaseController;
 import com.huike.common.core.domain.AjaxResult;
@@ -52,7 +44,6 @@ public class TbClueController extends BaseController {
 	/**
 	 * 查询线索管理列表
 	 */
-	// @ApiOperation("查询线索管理列表")
 	@PreAuthorize("@ss.hasPermi('clues:clue:list')")
 	@GetMapping("/list")
 	public TableDataInfo list(TbClue tbClue) {
@@ -114,14 +105,6 @@ public class TbClueController extends BaseController {
 		return toAjax(tbBusinessService.changeBusiness(id));
 	}
 
-	// @ApiOperation("伪线索")
-	@PreAuthorize("@ss.hasPermi('clues:clue:false')")
-	@Log(title = "伪线索", businessType = BusinessType.UPDATE)
-	@PutMapping("/false/{id}")
-	public AjaxResult cluesFalse(@PathVariable Long id, @RequestBody FalseClueVo falseClueVo) {
-		return toAjax(tbClueService.falseClue(id, falseClueVo.getReason(), falseClueVo.getRemark()));
-	}
-
 	// @ApiOperation("批量分配")
 	@PreAuthorize("@ss.hasPermi('clues:clue:assignment')")
 	@Log(title = "批量分配", businessType = BusinessType.UPDATE)
@@ -136,15 +119,6 @@ public class TbClueController extends BaseController {
 	@PutMapping("/gain")
 	public AjaxResult gain(@RequestBody AssignmentVo assignmentVo) {
 		return AjaxResult.success(tbClueService.gain(assignmentVo.getIds(), assignmentVo.getUserId()));
-	}
-
-	// @ApiOperation("上传线索")
-	@Log(title = "上传线索", businessType = BusinessType.IMPORT)
-	@PostMapping("/importData")
-	public AjaxResult importData(MultipartFile file) throws Exception {
-		ExcelListener excelListener = new ExcelListener(tbClueService);
-		EasyExcel.read(file.getInputStream(), TbClueExcelVo.class, excelListener).sheet().doRead();
-		return AjaxResult.success(excelListener.getResultData());
 	}
 
 }

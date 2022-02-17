@@ -64,4 +64,10 @@ public interface ITbActivityService
     public int deleteTbActivityById(Long id);
 
     public Map getCountByStatus();
+
+
+    /**
+     * 预加载活动编号
+     */
+    void loadAllActivityCode();
 }

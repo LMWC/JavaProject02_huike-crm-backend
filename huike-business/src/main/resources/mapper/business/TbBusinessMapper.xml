@@ -117,7 +117,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="planTime != null "> and plan_time = #{planTime}</if>
             <if test="otherIntention != null  and otherIntention != ''"> and other_intention = #{otherIntention}</if>
             <if test="nextTime != null "> and next_time = #{nextTime}</if>
-            <if test="beginCreateTime != null"> and create_time BETWEEN #{beginCreateTime} AND #{endCreateTime}</if>
              and status = '3'
         </where>
     </select>
@@ -151,9 +150,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="otherIntention != null  and otherIntention != ''"> and b.other_intention = #{otherIntention}</if>
             <if test="nextTime != null "> and b.next_time = #{nextTime}</if>
             <if test="beginCreateTime != null"> and b.create_time BETWEEN #{beginCreateTime} AND #{endCreateTime}</if>
-            <if test="status != null and status != ''"> and b.status = #{status}</if>
-            <if test="status == null or status == ''"> and b.status in ('1','2')</if>
-            and r.latest = '1' and r.type='1' 
+            and r.latest = '1' and r.type='1'
         </where>
         <!-- 数据范围过滤 -->
         ${params.dataScope}
@@ -166,30 +163,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
 
-    <select id="businessNumsFromClue"  resultType="int">
-       select count(id) from tb_business where clue_id is not null AND `status` IN (1,2,4,7)
-       <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
-                and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
-       </if>
-        <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
-                and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
-        </if>
-    </select>
-
-
-    <select id="countAllBusinessForIndex" resultType="int" parameterType="com.huike.clues.domain.vo.IndexStatisticsVo">
-        select count(1) from tb_assign_record r where r.latest='1' and r.type='1'
-        <where>
-            <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
-                and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
-            </if>
-            <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
-                and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
-            </if>
-        </where>
-        ${params.dataScope}
-    </select>
-        
     <insert id="insertTbBusiness" parameterType="TbBusiness" useGeneratedKeys="true" keyProperty="id">
         insert into tb_business
         <trim prefix="(" suffix=")" suffixOverrides=",">

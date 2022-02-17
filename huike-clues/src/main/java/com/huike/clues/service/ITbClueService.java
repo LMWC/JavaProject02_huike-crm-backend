@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.huike.clues.domain.TbClue;
-import com.huike.clues.domain.vo.TbClueExcelVo;
-import com.huike.common.core.domain.entity.SysUser;
 
 /**
  * 线索管理Service接口
@@ -65,12 +63,6 @@ public interface ITbClueService {
      */
     public int deleteTbClueById(Long id);
 
-    /**
-     * 导入线索数据
-     * @param clueList
-     * @return 结果
-     */
-    public Map<String,Integer> importClues(List<TbClue> clueList);
 
 
     public String assign(Long[] clueIds, Long userId);
@@ -82,16 +74,6 @@ public interface ITbClueService {
 
 
     /**
-     * 伪线索
-     * @param id
-     * @param reason
-     * @param remark
-     * @return
-     */
-    public int falseClue(Long id, String reason,String remark);
-
-
-    /**
      * 修改下次跟进时间及线索状态
      * @param clueId
      * @param status
@@ -99,12 +81,6 @@ public interface ITbClueService {
      */
     public int updateStatus(Long clueId,String status);
     
-    /**
-     * 批量导入
-     * @param list
-     */
-	public Map<String, Integer> addTbClue(List<TbClueExcelVo> list);
-	
 	/**
 	 * 判断用户手机号是否存在
 	 * @param phone

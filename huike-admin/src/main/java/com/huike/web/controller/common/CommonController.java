@@ -28,71 +28,52 @@ import com.huike.common.utils.file.FileUtils;
  */
 @RestController
 public class CommonController extends BaseController {
-    private static final Logger log = LoggerFactory.getLogger(CommonController.class);
+	private static final Logger log = LoggerFactory.getLogger(CommonController.class);
 
-    @Autowired
-    private ISysFileService fileService;
+	@Autowired
+	private ISysFileService fileService;
 
-    
-    /**
-     * 通用下载请求
-     * 
-     * @param fileName 文件名称
-     * @param delete 是否删除
-     */
-    @GetMapping("common/download")
-    public AjaxResult fileDownload(String fileName, HttpServletResponse response, HttpServletRequest request){
-        try{
-            if (!FileUtils.checkAllowDownload(fileName)){
-                throw new Exception(StringUtils.format("文件名称({})非法，不允许下载。 ", fileName));
-            }
-            return fileService.downloadByMinio(fileName,response);
-        }catch (Exception e){
-            log.error("下载文件失败", e);
-            return AjaxResult.error(e.getMessage()); 
-        }
-    }
+	/**
+	 * 通用下载请求
+	 * 
+	 * @param fileName 文件名称
+	 * @param delete   是否删除
+	 */
+	@GetMapping("common/download")
+	public AjaxResult fileDownload(String fileName, HttpServletResponse response, HttpServletRequest request) {
+		return null;
+	}
 
-    /**
-     * 通用上传请求
-     */
-    @PostMapping("/common/upload")
-    public AjaxResult uploadFile(MultipartFile file) throws Exception{
-        try{
-            // 上传文件路径
-        	return fileService.upload(file);
-        }catch (Exception e){
-            return AjaxResult.error(e.getMessage());
-        }
-    }
+	/**
+	 * 通用上传请求
+	 */
+	@PostMapping("/common/upload")
+	public AjaxResult uploadFile(MultipartFile file) throws Exception {
+		return null;
+	}
 
-    /**
-     * 本地资源通用下载
-     */
-    @GetMapping("/common/download/resource")
-    public void resourceDownload(String resource, HttpServletRequest request, HttpServletResponse response)
-            throws Exception
-    {
-        try
-        {
-            if (!FileUtils.checkAllowDownload(resource))
-            {
-                throw new Exception(StringUtils.format("资源文件({})非法，不允许下载。 ", resource));
-            }
-            // 本地资源路径
-            String localPath = HuiKeConfig.getProfile();
-            // 数据库资源地址
-            String downloadPath = localPath + StringUtils.substringAfter(resource, Constants.RESOURCE_PREFIX);
-            System.out.println("downloadPath---"+downloadPath);
-            // 下载名称
-            String downloadName = StringUtils.substringAfterLast(downloadPath, "/");
-            response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
-            FileUtils.setAttachmentResponseHeader(response, downloadName);
-            FileUtils.writeBytes(downloadPath, response.getOutputStream());
-        }
-        catch (Exception e)
-        {
-            log.error("下载文件失败", e);
-        }
-    }
+	/**
+	 * 本地资源通用下载
+	 */
+	@GetMapping("/common/download/resource")
+	public void resourceDownload(String resource, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		try {
+			if (!FileUtils.checkAllowDownload(resource)) {
+				throw new Exception(StringUtils.format("资源文件({})非法，不允许下载。 ", resource));
+			}
+			// 本地资源路径
+			String localPath = HuiKeConfig.getProfile();
+			// 数据库资源地址
+			String downloadPath = localPath + StringUtils.substringAfter(resource, Constants.RESOURCE_PREFIX);
+			System.out.println("downloadPath---" + downloadPath);
+			// 下载名称
+			String downloadName = StringUtils.substringAfterLast(downloadPath, "/");
+			response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+			FileUtils.setAttachmentResponseHeader(response, downloadName);
+			FileUtils.writeBytes(downloadPath, response.getOutputStream());
+		} catch (Exception e) {
+			log.error("下载文件失败", e);
+		}
+	}
 }

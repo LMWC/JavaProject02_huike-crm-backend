@@ -12,13 +12,6 @@ import com.huike.clues.domain.TbClueTrackRecord;
  * @date 2021-04-19
  */
 public interface ITbClueTrackRecordService {
-    /**
-     * 查询线索跟进记录
-     * 
-     * @param id 线索跟进记录ID
-     * @return 线索跟进记录
-     */
-    public TbClueTrackRecord selectTbClueTrackRecordById(Long id);
 
     /**
      * 查询线索跟进记录列表
@@ -27,22 +20,6 @@ public interface ITbClueTrackRecordService {
      * @return 线索跟进记录集合
      */
     public List<TbClueTrackRecord> selectTbClueTrackRecordList(TbClueTrackRecord tbClueTrackRecord);
-
-    /**
-     * 新增线索跟进记录
-     * 
-     * @param tbClueTrackRecord 线索跟进记录
-     * @return 结果
-     */
-    public int insertTbClueTrackRecord(TbClueTrackRecord tbClueTrackRecord);
-
-    /**
-     * 添加线索跟进记录
-     * @param tbClue
-     * @param tbClueTrackRecord
-     * @return
-     */
-    public int insertTbClueTrackRecord(TbClue tbClue, TbClueTrackRecord tbClueTrackRecord);
 
     /**
      * 修改线索跟进记录
@@ -68,10 +45,4 @@ public interface ITbClueTrackRecordService {
      */
     public int deleteTbClueTrackRecordById(Long id);
     
-    /**
-     * 跟进线索id查询线索跟进记录
-     * @param clueId
-     * @return
-     */
-	public List<TbClueTrackRecord> selectTbClueTrackRecordList(Long clueId);
 }
