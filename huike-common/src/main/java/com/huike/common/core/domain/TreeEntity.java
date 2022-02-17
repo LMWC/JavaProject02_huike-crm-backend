@@ -1,23 +1,15 @@
 package com.huike.common.core.domain;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
-
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import lombok.Data;
 
 /**
  * Tree基类
  * 
  * 
  */
-@Data
-public class TreeEntity {
+public class TreeEntity extends BaseEntity
+{
     private static final long serialVersionUID = 1L;
 
     /** 父菜单名称 */
@@ -34,36 +26,54 @@ public class TreeEntity {
 
     /** 子部门 */
     private List<?> children = new ArrayList<>();
-    
-    /** 搜索值 */
-	@TableField(exist = false)
-	@JsonIgnore
-	private String searchValue;
 
-	@TableField(exist = false)
-	/** 创建者 */
-	private String createBy;
+    public String getParentName()
+    {
+        return parentName;
+    }
 
-	/** 创建时间 */
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date createTime;
+    public void setParentName(String parentName)
+    {
+        this.parentName = parentName;
+    }
 
-	@TableField(exist = false)
-	/** 更新者 */
-	private String updateBy;
+    public Long getParentId()
+    {
+        return parentId;
+    }
 
-	@TableField(exist = false)
-	/** 更新时间 */
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date updateTime;
+    public void setParentId(Long parentId)
+    {
+        this.parentId = parentId;
+    }
 
-	@TableField(exist = false)
-	/** 备注 */
-	@JsonIgnore
-	private String remark;
+    public Integer getOrderNum()
+    {
+        return orderNum;
+    }
 
-	/** 请求参数 */
-	@TableField(exist = false)
-	@JsonIgnore
-	private Map<String, Object> params;
+    public void setOrderNum(Integer orderNum)
+    {
+        this.orderNum = orderNum;
+    }
+
+    public String getAncestors()
+    {
+        return ancestors;
+    }
+
+    public void setAncestors(String ancestors)
+    {
+        this.ancestors = ancestors;
+    }
+
+    public List<?> getChildren()
+    {
+        return children;
+    }
+
+    public void setChildren(List<?> children)
+    {
+        this.children = children;
+    }
 }

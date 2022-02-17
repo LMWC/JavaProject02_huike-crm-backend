@@ -1,116 +1,178 @@
 package com.huike.clues.domain;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import com.huike.common.annotation.Excel;
+import com.huike.common.core.domain.BaseEntity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 规则分配对象 tb_rule_assign
  */
-@Data
-public class TbRuleAssign {
-	private static final long serialVersionUID = 1L;
+public class TbRuleAssign extends BaseEntity
+{
+    private static final long serialVersionUID = 1L;
 
-	/** 线索id */
-	@TableId(type = IdType.AUTO)
-	private Long id;
+    /** 线索id */
+    private Long id;
 
-	/** 规则集合 */
-	@Excel(name = "规则集合")
-	private String ruleCondition;
+    /** 规则集合 */
+    @Excel(name = "规则集合")
+    private String ruleCondition;
 
-	/** 规则表达式 */
-	@Excel(name = "规则表达式")
-	@JsonIgnore
-	private String ruleExpression;
+    /** 规则表达式 */
+    @Excel(name = "规则表达式")
+    @JsonIgnore
+    private String ruleExpression;
 
-	/** 分配对象 */
-	@Excel(name = "分配对象")
-	private String assignObject;
+    /** 分配对象 */
+    @Excel(name = "分配对象")
+    private String assignObject;
 
-	private List<String> assignObjectNames = new ArrayList<>();
+    private List<String> assignObjectNames=new ArrayList<>();
 
-	/** 分配类型(本人,角色，组织) */
-	@Excel(name = "分配类型(本人,角色，组织)")
-	private String assignType;
+    /** 分配类型(本人,角色，组织) */
+    @Excel(name = "分配类型(本人,角色，组织)")
+    private String assignType;
 
-	/** 规则顺序 */
-	@Excel(name = "规则顺序")
-	private Long ruleOrder;
+    /** 规则顺序 */
+    @Excel(name = "规则顺序")
+    private Long ruleOrder;
 
-	private String type;
+    private String type;
 
-	private List<TbRuleExpression> rulesList;
-	
-	/** 搜索值 */
-	@TableField(exist = false)
-	@JsonIgnore
-	private String searchValue;
+    public String getType() {
+        return type;
+    }
 
-	@TableField(exist = false)
-	/** 创建者 */
-	private String createBy;
+    public void setType(String type) {
+        this.type = type;
+    }
 
-	/** 创建时间 */
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date createTime;
+    public List<String> getAssignObjectNames() {
+        return assignObjectNames;
+    }
 
-	@TableField(exist = false)
-	/** 更新者 */
-	private String updateBy;
+    public void setAssignObjectNames(List<String> assignObjectNames) {
+        this.assignObjectNames = assignObjectNames;
+    }
 
-	@TableField(exist = false)
-	/** 更新时间 */
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date updateTime;
+    private List<TbRuleExpression> rulesList;
 
-	@TableField(exist = false)
-	/** 备注 */
-	@JsonIgnore
-	private String remark;
+    public List<TbRuleExpression> getRulesList() {
+        return rulesList;
+    }
 
-	/** 请求参数 */
-	@TableField(exist = false)
-	@JsonIgnore
-	private Map<String, Object> params;
+    public void setRulesList(List<TbRuleExpression> rulesList) {
+        this.rulesList = rulesList;
+    }
 
-	@AllArgsConstructor
-	@Getter
-	public enum AssignType {
-		/**
-		 * 小时
-		 */
-		USER("0"),
+    public void setId(Long id)
+    {
+        this.id = id;
+    }
 
-		/**
-		 * 天
-		 */
-		POST("1"),
+    public Long getId()
+    {
+        return id;
+    }
+    public void setRuleCondition(String ruleCondition)
+    {
+        this.ruleCondition = ruleCondition;
+    }
 
-		/**
-		 * 部门
-		 */
-		DEPARTMENT("2"),
+    public String getRuleCondition()
+    {
+        return ruleCondition;
+    }
+    public void setRuleExpression(String ruleExpression)
+    {
+        this.ruleExpression = ruleExpression;
+    }
 
-		/**
-		 * 角色
-		 */
-		ROLE("3");
+    public String getRuleExpression()
+    {
+        return ruleExpression;
+    }
+    public void setAssignObject(String assignObject)
+    {
+        this.assignObject = assignObject;
+    }
 
-		private String value;
+    public String getAssignObject()
+    {
+        return assignObject;
+    }
 
-	}
+    public String getAssignType() {
+        return assignType;
+    }
+
+    public void setAssignType(String assignType) {
+        this.assignType = assignType;
+    }
+
+    public void setRuleOrder(Long ruleOrder)
+    {
+        this.ruleOrder = ruleOrder;
+    }
+
+    public Long getRuleOrder()
+    {
+        return ruleOrder;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
+                .append("id", getId())
+                .append("ruleCondition", getRuleCondition())
+                .append("ruleExpression", getRuleExpression())
+                .append("assignObject", getAssignObject())
+                .append("assignType", getAssignType())
+                .append("ruleOrder", getRuleOrder())
+                .append("createBy", getCreateBy())
+                .append("createTime", getCreateTime())
+                .toString();
+    }
+
+    public enum AssignType{
+        /**
+         * 小时
+         */
+        USER("0"),
+
+        /**
+         * 天
+         */
+        POST("1"),
+
+        /**
+         * 部门
+         */
+        DEPARTMENT("2"),
+
+        /**
+         * 角色
+         */
+        ROLE("3");
+
+
+
+        private String value;
+
+        private AssignType(String value)
+        {
+            this.value = value;
+        }
+
+        public String getValue()
+        {
+            return value;
+        }
+    }
 
 }

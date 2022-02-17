@@ -1,216 +1,373 @@
 package com.huike.generator.domain;
 
-import java.util.Date;
-import java.util.Map;
-
 import javax.validation.constraints.NotBlank;
-
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.huike.common.core.domain.BaseEntity;
 import com.huike.common.utils.StringUtils;
-
-import lombok.Data;
 
 /**
  * 代码生成业务字段表 gen_table_column
  * 
  * 
  */
-@Data
-public class GenTableColumn {
+public class GenTableColumn extends BaseEntity
+{
+    private static final long serialVersionUID = 1L;
 
-	private static final long serialVersionUID = 1L;
+    /** 编号 */
+    private Long columnId;
 
-	/** 编号 */
-	private Long columnId;
+    /** 归属表编号 */
+    private Long tableId;
 
-	/** 归属表编号 */
-	private Long tableId;
+    /** 列名称 */
+    private String columnName;
 
-	/** 列名称 */
-	private String columnName;
+    /** 列描述 */
+    private String columnComment;
 
-	/** 列描述 */
-	private String columnComment;
+    /** 列类型 */
+    private String columnType;
 
-	/** 列类型 */
-	private String columnType;
+    /** JAVA类型 */
+    private String javaType;
 
-	/** JAVA类型 */
-	private String javaType;
+    /** JAVA字段名 */
+    @NotBlank(message = "Java属性不能为空")
+    private String javaField;
 
-	/** JAVA字段名 */
-	@NotBlank(message = "Java属性不能为空")
-	private String javaField;
+    /** 是否主键（1是） */
+    private String isPk;
 
-	/** 是否主键（1是） */
-	private String isPk;
+    /** 是否自增（1是） */
+    private String isIncrement;
 
-	/** 是否自增（1是） */
-	private String isIncrement;
+    /** 是否必填（1是） */
+    private String isRequired;
 
-	/** 是否必填（1是） */
-	private String isRequired;
+    /** 是否为插入字段（1是） */
+    private String isInsert;
 
-	/** 是否为插入字段（1是） */
-	private String isInsert;
+    /** 是否编辑字段（1是） */
+    private String isEdit;
 
-	/** 是否编辑字段（1是） */
-	private String isEdit;
+    /** 是否列表字段（1是） */
+    private String isList;
 
-	/** 是否列表字段（1是） */
-	private String isList;
+    /** 是否查询字段（1是） */
+    private String isQuery;
 
-	/** 是否查询字段（1是） */
-	private String isQuery;
+    /** 查询方式（EQ等于、NE不等于、GT大于、LT小于、LIKE模糊、BETWEEN范围） */
+    private String queryType;
 
-	/** 查询方式（EQ等于、NE不等于、GT大于、LT小于、LIKE模糊、BETWEEN范围） */
-	private String queryType;
+    /** 显示类型（input文本框、textarea文本域、select下拉框、checkbox复选框、radio单选框、datetime日期控件、image图片上传控件、upload文件上传控件、editor富文本控件） */
+    private String htmlType;
 
-	/**
-	 * 显示类型（input文本框、textarea文本域、select下拉框、checkbox复选框、radio单选框、datetime日期控件、image图片上传控件、upload文件上传控件、editor富文本控件）
-	 */
-	private String htmlType;
+    /** 字典类型 */
+    private String dictType;
 
-	/** 字典类型 */
-	private String dictType;
+    /** 排序 */
+    private Integer sort;
 
-	/** 排序 */
-	private Integer sort;
-	
-	
-	/** 搜索值 */
-	@TableField(exist = false)
-	@JsonIgnore
-	private String searchValue;
+    public void setColumnId(Long columnId)
+    {
+        this.columnId = columnId;
+    }
 
-	@TableField(exist = false)
-	/** 创建者 */
-	private String createBy;
+    public Long getColumnId()
+    {
+        return columnId;
+    }
 
-	/** 创建时间 */
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date createTime;
+    public void setTableId(Long tableId)
+    {
+        this.tableId = tableId;
+    }
 
-	@TableField(exist = false)
-	/** 更新者 */
-	private String updateBy;
+    public Long getTableId()
+    {
+        return tableId;
+    }
 
-	@TableField(exist = false)
-	/** 更新时间 */
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date updateTime;
+    public void setColumnName(String columnName)
+    {
+        this.columnName = columnName;
+    }
 
-	@TableField(exist = false)
-	/** 备注 */
-	@JsonIgnore
-	private String remark;
+    public String getColumnName()
+    {
+        return columnName;
+    }
 
-	/** 请求参数 */
-	@TableField(exist = false)
-	@JsonIgnore
-	private Map<String, Object> params;
+    public void setColumnComment(String columnComment)
+    {
+        this.columnComment = columnComment;
+    }
 
-	public boolean isPk() {
-		return isPk(this.isPk);
-	}
+    public String getColumnComment()
+    {
+        return columnComment;
+    }
 
-	public boolean isPk(String isPk) {
-		return isPk != null && StringUtils.equals("1", isPk);
-	}
+    public void setColumnType(String columnType)
+    {
+        this.columnType = columnType;
+    }
 
-	public boolean isIncrement() {
-		return isIncrement(this.isIncrement);
-	}
+    public String getColumnType()
+    {
+        return columnType;
+    }
 
-	public boolean isIncrement(String isIncrement) {
-		return isIncrement != null && StringUtils.equals("1", isIncrement);
-	}
+    public void setJavaType(String javaType)
+    {
+        this.javaType = javaType;
+    }
 
-	public boolean isRequired() {
-		return isRequired(this.isRequired);
-	}
+    public String getJavaType()
+    {
+        return javaType;
+    }
 
-	public boolean isRequired(String isRequired) {
-		return isRequired != null && StringUtils.equals("1", isRequired);
-	}
+    public void setJavaField(String javaField)
+    {
+        this.javaField = javaField;
+    }
 
-	public boolean isInsert() {
-		return isInsert(this.isInsert);
-	}
+    public String getJavaField()
+    {
+        return javaField;
+    }
 
-	public boolean isInsert(String isInsert) {
-		return isInsert != null && StringUtils.equals("1", isInsert);
-	}
+    public String getCapJavaField()
+    {
+        return StringUtils.capitalize(javaField);
+    }
 
-	public void setIsEdit(String isEdit) {
-		this.isEdit = isEdit;
-	}
+    public void setIsPk(String isPk)
+    {
+        this.isPk = isPk;
+    }
 
-	public String getIsEdit() {
-		return isEdit;
-	}
+    public String getIsPk()
+    {
+        return isPk;
+    }
 
-	public boolean isEdit() {
-		return isInsert(this.isEdit);
-	}
+    public boolean isPk()
+    {
+        return isPk(this.isPk);
+    }
 
-	public boolean isEdit(String isEdit) {
-		return isEdit != null && StringUtils.equals("1", isEdit);
-	}
+    public boolean isPk(String isPk)
+    {
+        return isPk != null && StringUtils.equals("1", isPk);
+    }
 
-	public boolean isList() {
-		return isList(this.isList);
-	}
+    public String getIsIncrement()
+    {
+        return isIncrement;
+    }
 
-	public boolean isList(String isList) {
-		return isList != null && StringUtils.equals("1", isList);
-	}
+    public void setIsIncrement(String isIncrement)
+    {
+        this.isIncrement = isIncrement;
+    }
 
-	public boolean isQuery() {
-		return isQuery(this.isQuery);
-	}
+    public boolean isIncrement()
+    {
+        return isIncrement(this.isIncrement);
+    }
 
-	public boolean isQuery(String isQuery) {
-		return isQuery != null && StringUtils.equals("1", isQuery);
-	}
+    public boolean isIncrement(String isIncrement)
+    {
+        return isIncrement != null && StringUtils.equals("1", isIncrement);
+    }
 
-	public boolean isSuperColumn() {
-		return isSuperColumn(this.javaField);
-	}
+    public void setIsRequired(String isRequired)
+    {
+        this.isRequired = isRequired;
+    }
 
-	public static boolean isSuperColumn(String javaField) {
-		return StringUtils.equalsAnyIgnoreCase(javaField,
-				// BaseEntity
-				"createBy", "createTime", "updateBy", "updateTime", "remark",
-				// TreeEntity
-				"parentName", "parentId", "orderNum", "ancestors");
-	}
+    public String getIsRequired()
+    {
+        return isRequired;
+    }
 
-	public boolean isUsableColumn() {
-		return isUsableColumn(javaField);
-	}
+    public boolean isRequired()
+    {
+        return isRequired(this.isRequired);
+    }
 
-	public static boolean isUsableColumn(String javaField) {
-		// isSuperColumn()中的名单用于避免生成多余Domain属性，若某些属性在生成页面时需要用到不能忽略，则放在此处白名单
-		return StringUtils.equalsAnyIgnoreCase(javaField, "parentId", "orderNum", "remark");
-	}
+    public boolean isRequired(String isRequired)
+    {
+        return isRequired != null && StringUtils.equals("1", isRequired);
+    }
 
-	public String readConverterExp() {
-		String remarks = StringUtils.substringBetween(this.columnComment, "（", "）");
-		StringBuffer sb = new StringBuffer();
-		if (StringUtils.isNotEmpty(remarks)) {
-			for (String value : remarks.split(" ")) {
-				if (StringUtils.isNotEmpty(value)) {
-					Object startStr = value.subSequence(0, 1);
-					String endStr = value.substring(1);
-					sb.append("").append(startStr).append("=").append(endStr).append(",");
-				}
-			}
-			return sb.deleteCharAt(sb.length() - 1).toString();
-		} else {
-			return this.columnComment;
-		}
-	}
+    public void setIsInsert(String isInsert)
+    {
+        this.isInsert = isInsert;
+    }
+
+    public String getIsInsert()
+    {
+        return isInsert;
+    }
+
+    public boolean isInsert()
+    {
+        return isInsert(this.isInsert);
+    }
+
+    public boolean isInsert(String isInsert)
+    {
+        return isInsert != null && StringUtils.equals("1", isInsert);
+    }
+
+    public void setIsEdit(String isEdit)
+    {
+        this.isEdit = isEdit;
+    }
+
+    public String getIsEdit()
+    {
+        return isEdit;
+    }
+
+    public boolean isEdit()
+    {
+        return isInsert(this.isEdit);
+    }
+
+    public boolean isEdit(String isEdit)
+    {
+        return isEdit != null && StringUtils.equals("1", isEdit);
+    }
+
+    public void setIsList(String isList)
+    {
+        this.isList = isList;
+    }
+
+    public String getIsList()
+    {
+        return isList;
+    }
+
+    public boolean isList()
+    {
+        return isList(this.isList);
+    }
+
+    public boolean isList(String isList)
+    {
+        return isList != null && StringUtils.equals("1", isList);
+    }
+
+    public void setIsQuery(String isQuery)
+    {
+        this.isQuery = isQuery;
+    }
+
+    public String getIsQuery()
+    {
+        return isQuery;
+    }
+
+    public boolean isQuery()
+    {
+        return isQuery(this.isQuery);
+    }
+
+    public boolean isQuery(String isQuery)
+    {
+        return isQuery != null && StringUtils.equals("1", isQuery);
+    }
+
+    public void setQueryType(String queryType)
+    {
+        this.queryType = queryType;
+    }
+
+    public String getQueryType()
+    {
+        return queryType;
+    }
+
+    public String getHtmlType()
+    {
+        return htmlType;
+    }
+
+    public void setHtmlType(String htmlType)
+    {
+        this.htmlType = htmlType;
+    }
+
+    public void setDictType(String dictType)
+    {
+        this.dictType = dictType;
+    }
+
+    public String getDictType()
+    {
+        return dictType;
+    }
+
+    public void setSort(Integer sort)
+    {
+        this.sort = sort;
+    }
+
+    public Integer getSort()
+    {
+        return sort;
+    }
+
+    public boolean isSuperColumn()
+    {
+        return isSuperColumn(this.javaField);
+    }
+
+    public static boolean isSuperColumn(String javaField)
+    {
+        return StringUtils.equalsAnyIgnoreCase(javaField,
+                // BaseEntity
+                "createBy", "createTime", "updateBy", "updateTime", "remark",
+                // TreeEntity
+                "parentName", "parentId", "orderNum", "ancestors");
+    }
+
+    public boolean isUsableColumn()
+    {
+        return isUsableColumn(javaField);
+    }
+
+    public static boolean isUsableColumn(String javaField)
+    {
+        // isSuperColumn()中的名单用于避免生成多余Domain属性，若某些属性在生成页面时需要用到不能忽略，则放在此处白名单
+        return StringUtils.equalsAnyIgnoreCase(javaField, "parentId", "orderNum", "remark");
+    }
+
+    public String readConverterExp()
+    {
+        String remarks = StringUtils.substringBetween(this.columnComment, "（", "）");
+        StringBuffer sb = new StringBuffer();
+        if (StringUtils.isNotEmpty(remarks))
+        {
+            for (String value : remarks.split(" "))
+            {
+                if (StringUtils.isNotEmpty(value))
+                {
+                    Object startStr = value.subSequence(0, 1);
+                    String endStr = value.substring(1);
+                    sb.append("").append(startStr).append("=").append(endStr).append(",");
+                }
+            }
+            return sb.deleteCharAt(sb.length() - 1).toString();
+        }
+        else
+        {
+            return this.columnComment;
+        }
+    }
 }

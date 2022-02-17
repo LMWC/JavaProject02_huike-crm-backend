@@ -29,9 +29,6 @@ public class ClueReportVo {
 
     /** 所属部门 */
     private String deptId;
-    
-    /** 所属部门名 */
-    private String deptName;
 
     /** 线索状态 */
     private String clueStatus;
@@ -53,15 +50,7 @@ public class ClueReportVo {
 
     /** 订单金额*/
     private Double order;
-    
-    public String getDeptName() {
-        return deptName;
-    }
 
-    public void setDeptName(String deptName) {
-        this.deptName = deptName;
-    }
-    
     public String getCode() {
         return code;
     }

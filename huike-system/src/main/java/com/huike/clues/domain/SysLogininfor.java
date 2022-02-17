@@ -1,23 +1,18 @@
 package com.huike.clues.domain;
 
 import java.util.Date;
-import java.util.Map;
-
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.huike.common.annotation.Excel;
 import com.huike.common.annotation.Excel.ColumnType;
-
-import lombok.Data;
+import com.huike.common.core.domain.BaseEntity;
 
 /**
  * 系统访问记录表 sys_logininfor
  * 
  * 
  */
-@Data
-public class SysLogininfor {
+public class SysLogininfor extends BaseEntity
+{
     private static final long serialVersionUID = 1L;
 
     /** ID */
@@ -57,35 +52,93 @@ public class SysLogininfor {
     @Excel(name = "访问时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date loginTime;
 
-    /** 搜索值 */
-	@TableField(exist = false)
-	@JsonIgnore
-	private String searchValue;
+    public Long getInfoId()
+    {
+        return infoId;
+    }
 
-	@TableField(exist = false)
-	/** 创建者 */
-	private String createBy;
+    public void setInfoId(Long infoId)
+    {
+        this.infoId = infoId;
+    }
 
-	/** 创建时间 */
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date createTime;
+    public String getUserName()
+    {
+        return userName;
+    }
 
-	@TableField(exist = false)
-	/** 更新者 */
-	private String updateBy;
+    public void setUserName(String userName)
+    {
+        this.userName = userName;
+    }
 
-	@TableField(exist = false)
-	/** 更新时间 */
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date updateTime;
+    public String getStatus()
+    {
+        return status;
+    }
 
-	@TableField(exist = false)
-	/** 备注 */
-	@JsonIgnore
-	private String remark;
+    public void setStatus(String status)
+    {
+        this.status = status;
+    }
 
-	/** 请求参数 */
-	@TableField(exist = false)
-	@JsonIgnore
-	private Map<String, Object> params;
+    public String getIpaddr()
+    {
+        return ipaddr;
+    }
+
+    public void setIpaddr(String ipaddr)
+    {
+        this.ipaddr = ipaddr;
+    }
+
+    public String getLoginLocation()
+    {
+        return loginLocation;
+    }
+
+    public void setLoginLocation(String loginLocation)
+    {
+        this.loginLocation = loginLocation;
+    }
+
+    public String getBrowser()
+    {
+        return browser;
+    }
+
+    public void setBrowser(String browser)
+    {
+        this.browser = browser;
+    }
+
+    public String getOs()
+    {
+        return os;
+    }
+
+    public void setOs(String os)
+    {
+        this.os = os;
+    }
+
+    public String getMsg()
+    {
+        return msg;
+    }
+
+    public void setMsg(String msg)
+    {
+        this.msg = msg;
+    }
+
+    public Date getLoginTime()
+    {
+        return loginTime;
+    }
+
+    public void setLoginTime(Date loginTime)
+    {
+        this.loginTime = loginTime;
+    }
 }

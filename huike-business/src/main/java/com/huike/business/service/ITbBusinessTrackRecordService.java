@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.huike.business.domain.TbBusiness;
 import com.huike.business.domain.TbBusinessTrackRecord;
-import com.huike.business.dto.TbBusinessTrackRecordDto;
 
 /**
  * 商机跟进记录Service接口
@@ -37,16 +36,42 @@ public interface ITbBusinessTrackRecordService
     public int insertTbBusinessTrackRecord(TbBusinessTrackRecord tbBusinessTrackRecord);
 
 
-
-    public int insertTbBusinessTrackRecord(TbBusiness tbBusiness,TbBusinessTrackRecord tbBusinessTrackRecord);
-
-
-
-    
     /**
-     * 商机根据记录
+     * 新增商机跟进记录
+     * @param tbBusiness
      * @param tbBusinessTrackRecord
      * @return
      */
-	public List<TbBusinessTrackRecord> selectTbBusinessTrackRecordList(TbBusinessTrackRecordDto tbBusinessTrackRecord);
+    public int insertTbBusinessTrackRecord(TbBusiness tbBusiness,TbBusinessTrackRecord tbBusinessTrackRecord);
+
+    /**
+     * 修改商机跟进记录
+     * 
+     * @param tbBusinessTrackRecord 商机跟进记录
+     * @return 结果
+     */
+    public int updateTbBusinessTrackRecord(TbBusinessTrackRecord tbBusinessTrackRecord);
+
+    /**
+     * 批量删除商机跟进记录
+     * 
+     * @param ids 需要删除的商机跟进记录ID
+     * @return 结果
+     */
+    public int deleteTbBusinessTrackRecordByIds(Long[] ids);
+
+    /**
+     * 删除商机跟进记录信息
+     * 
+     * @param id 商机跟进记录ID
+     * @return 结果
+     */
+    public int deleteTbBusinessTrackRecordById(Long id);
+
+    /**
+     * 跟进商机id查询商机跟进记录
+     * @param id
+     * @return
+     */
+	public List<TbBusinessTrackRecord> selectTbBusinessTrackRecordList(Long id);
 }

@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.huike.clues.domain.vo.IndexStatisticsVo;
 import com.huike.common.core.domain.AjaxResult;
+import com.huike.report.domain.vo.IndexVo;
+import com.huike.report.domain.vo.LineChartVo;
 import com.huike.report.service.IReportService;
-
-import io.swagger.annotations.ApiOperation;
 
 @RestController
 @RequestMapping("/index")
@@ -26,7 +26,7 @@ public class IndexController {
 
 
 
-    @ApiOperation("基础数据统计")
+    //@ApiOperation("基础数据统计")
     @GetMapping()
     public AjaxResult contractStatistics(IndexStatisticsVo request){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -37,22 +37,22 @@ public class IndexController {
     }
 
 
-    @ApiOperation("销售龙虎榜")
+    //@ApiOperation("销售龙虎榜")
     @GetMapping("/salesStatistic")
     public AjaxResult salesStatistics(IndexStatisticsVo request){
-    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         request.setBeginCreateTime(request.getBeginCreateTime()+" 00:00:00");
         request.setEndCreateTime(request.getEndCreateTime()+" 23:59:59");
-    	List<Map<String,Object>> list= reportService.clueChangeStatisticsForIndex(request);
+        List<Map<String,Object>> list= reportService.clueChangeStatisticsForIndex(request);
         return AjaxResult.success(list);
     }
 
 
 
-    @ApiOperation("商机转换龙虎榜")
+    //@ApiOperation("商机转换龙虎榜")
     @GetMapping("/businessChangeStatistics")
     public AjaxResult businessChangeStatistics(IndexStatisticsVo request){
-    	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         request.setBeginCreateTime(request.getBeginCreateTime()+" 00:00:00");
         request.setEndCreateTime(request.getEndCreateTime()+" 23:59:59");
         List<Map<String,Object>> list= reportService.businessChangeStatisticsForIndex(request);

@@ -1,33 +1,19 @@
 package com.huike.clues.domain;
 
-import java.util.Date;
-import java.util.Map;
-
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import com.huike.common.annotation.Excel;
-
-import io.swagger.annotations.ApiModel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
+import com.huike.common.core.domain.BaseEntity;
 
 /**
  * 线索分配记录对象 tb_assign_record
  * @date 2021-04-19
  */
-@TableName("tb_assign_record")
-@ApiModel(value="线索分配记录对象",description="线索分配记录对象")
-@Data
-public class TbAssignRecord{
+public class TbAssignRecord extends BaseEntity
+{
     private static final long serialVersionUID = 1L;
 
     /** 主键id */
-    @TableId(type = IdType.AUTO)
     private Long id;
 
     /** id */
@@ -52,42 +38,96 @@ public class TbAssignRecord{
 
     @Excel(name = "类型0 线索 1 商机")
     private String type="0";
-    
-	/** 搜索值 */
-	@TableField(exist = false)
-	@JsonIgnore
-	private String searchValue;
 
-	@TableField(exist = false)
-	/** 创建者 */
-	private String createBy;
+   // private String status;
 
-	/** 创建时间 */
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date createTime;
+//    public String getStatus() {
+//        return status;
+//    }
+//
+//    public void setStatus(String status) {
+//        this.status = status;
+//    }
 
-	@TableField(exist = false)
-	/** 更新者 */
-	private String updateBy;
+    public void setId(Long id)
+    {
+        this.id = id;
+    }
 
-	@TableField(exist = false)
-	/** 更新时间 */
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date updateTime;
+    public Long getId() 
+    {
+        return id;
+    }
 
-	@TableField(exist = false)
-	/** 备注 */
-	@JsonIgnore
-	private String remark;
+    public Long getAssignId() {
+        return assignId;
+    }
 
-	/** 请求参数 */
-	@TableField(exist = false)
-	@JsonIgnore
-	private Map<String, Object> params;
+    public void setAssignId(Long assignId) {
+        this.assignId = assignId;
+    }
 
-   
-    @AllArgsConstructor
-    @Getter
+    public void setUserId(Long userId)
+    {
+        this.userId = userId;
+    }
+
+    public Long getUserId() 
+    {
+        return userId;
+    }
+    public void setUserName(String userName) 
+    {
+        this.userName = userName;
+    }
+
+    public String getUserName() 
+    {
+        return userName;
+    }
+    public void setDeptId(Long deptId) 
+    {
+        this.deptId = deptId;
+    }
+
+    public Long getDeptId() 
+    {
+        return deptId;
+    }
+    public void setLatest(String latest) 
+    {
+        this.latest = latest;
+    }
+
+    public String getLatest() 
+    {
+        return latest;
+    }
+    public void setType(String type) 
+    {
+        this.type = type;
+    }
+
+    public String getType() 
+    {
+        return type;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
+            .append("id", getId())
+            .append("assignId", getAssignId())
+            .append("userId", getUserId())
+            .append("userName", getUserName())
+            .append("deptId", getDeptId())
+            .append("createTime", getCreateTime())
+            .append("createBy", getCreateBy())
+            .append("latest", getLatest())
+            .append("type", getType())
+            .toString();
+    }
+
     public enum RecordType {
         /**
          * 线索
@@ -99,7 +139,17 @@ public class TbAssignRecord{
          */
         BUSNIESS("1");
 
+
         private String value;
 
+        private RecordType(String value)
+        {
+            this.value = value;
+        }
+
+        public String getValue()
+        {
+            return value;
+        }
     }
 }

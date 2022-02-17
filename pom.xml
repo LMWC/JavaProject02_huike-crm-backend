@@ -21,7 +21,6 @@
         <druid.version>1.2.4</druid.version>
         <bitwalker.version>1.21</bitwalker.version>
         <swagger.version>2.9.2</swagger.version>
-        <swagger.model.version>1.5.21</swagger.model.version>
 		<kaptcha.version>2.3.2</kaptcha.version>
         <pagehelper.boot.version>1.3.0</pagehelper.boot.version>
         <fastjson.version>1.2.75</fastjson.version>
@@ -37,14 +36,7 @@
         <miniio.version>7.0.2</miniio.version>
         <esay_excel.version>2.2.6</esay_excel.version>
         <xxl_job.version>2.1.0</xxl_job.version>
-<<<<<<< HEAD
 
-=======
-<!--        <activiti-dependencies.version>7.0.0.Beta2</activiti-dependencies.version>-->
-        <mybatis.version>3.5.5</mybatis.version>
-        <mybatis.spring.version>2.0.5</mybatis.spring.version>
-        <mybatis.plus.version>3.4.0</mybatis.plus.version>
->>>>>>> a89c1ce12cfb3643528f0edecc6e2034a1285485
     </properties>
 	
     <!-- 依赖声明 -->
@@ -116,18 +108,6 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-			
-			<dependency>
-	            <groupId>io.swagger</groupId>
-	            <artifactId>swagger-annotations</artifactId>
-	            <version>${swagger.model.version}</version>
-	        </dependency>
-	
-	        <dependency>
-	            <groupId>io.swagger</groupId>
-	            <artifactId>swagger-models</artifactId>
-	            <version>${swagger.model.version}</version>
-	        </dependency>
 			
             <!-- swagger2-UI-->
             <dependency>
@@ -281,22 +261,6 @@
 		      <artifactId>xxl-job-core</artifactId>
 		      <version>${xxl_job.version}</version>
 			</dependency>
-
-            <dependency>
-                <groupId>org.mybatis</groupId>
-                <artifactId>mybatis</artifactId>
-                <version>${mybatis.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mybatis</groupId>
-                <artifactId>mybatis-spring</artifactId>
-                <version>${mybatis.spring.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-boot-starter</artifactId>
-                <version>${mybatis.plus.version}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 

@@ -16,15 +16,14 @@ import com.huike.common.core.controller.BaseController;
 import com.huike.common.core.domain.AjaxResult;
 import com.huike.common.enums.BusinessType;
 
-import io.swagger.annotations.ApiOperation;
-
 /**
  * 线索池规则Controller
  * @date 2021-04-16
  */
 @RestController
 @RequestMapping("/rule/pool")
-public class TbRulePoolController extends BaseController{
+public class TbRulePoolController extends BaseController
+{
     @Autowired
     private ITbRulePoolService tbRulePoolService;
 
@@ -32,7 +31,7 @@ public class TbRulePoolController extends BaseController{
      * 查询线索池规则列表
      */
    // @PreAuthorize("@ss.hasPermi('clues:pool:list')")
-    @ApiOperation("获取基础信息type=0 线索 type=1 商机")
+    //@ApiOperation("获取基础信息type=0 线索 type=1 商机")
     @GetMapping("/{type}")
     public AjaxResult getInfo(@PathVariable("type") String type)
     {
@@ -44,7 +43,7 @@ public class TbRulePoolController extends BaseController{
     /**
      * 新增线索池规则
      */
-    @ApiOperation("新增线索池规则")
+    //@ApiOperation("新增线索池规则")
     //@PreAuthorize("@ss.hasPermi('clues:pool:add')")
     @Log(title = "线索池规则", businessType = BusinessType.INSERT)
     @PostMapping
@@ -56,7 +55,7 @@ public class TbRulePoolController extends BaseController{
     /**
      * 修改线索池规则
      */
-    @ApiOperation("修改线索池规则")
+    //@ApiOperation("修改线索池规则")
     //@PreAuthorize("@ss.hasPermi('clues:pool:edit')")
     @Log(title = "线索池规则", businessType = BusinessType.UPDATE)
     @PutMapping

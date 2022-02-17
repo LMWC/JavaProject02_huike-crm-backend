@@ -358,10 +358,12 @@
               code: null,
               channel: null,
               status: null,
-              beginCreateTime: '',
-              endCreateTime: '',
-              beginTime: '',
-              endTime: '',
+              params: {
+                beginCreateTime: '',
+                endCreateTime: '',
+                beginTime: '',
+                endTime: '',
+              },
             },
             totalCount: {
               finish: 0,
@@ -412,21 +414,21 @@
           createTime(val) {
             console.log(val)
             if (val && val.length >= 2) {
-              this.queryParams.beginCreateTime = val[0]
-              this.queryParams.endCreateTime = val[1]
+              this.queryParams.params.beginCreateTime = val[0]
+              this.queryParams.params.endCreateTime = val[1]
             } else {
-              this.queryParams.beginCreateTime = ''
-              this.queryParams.endCreateTime = ''
+              this.queryParams.params.beginCreateTime = ''
+              this.queryParams.params.endCreateTime = ''
             }
           },
           activityTime(val) {
             console.log(val)
             if (val && val.length >= 2) {
-              this.queryParams.beginTime = val[0]
-              this.queryParams.endTime = val[1]
+              this.queryParams.params.beginTime = val[0]
+              this.queryParams.params.endTime = val[1]
             } else {
-              this.queryParams.beginTime = ''
-              this.queryParams.endTime = ''
+              this.queryParams.params.beginTime = ''
+              this.queryParams.params.endTime = ''
             }
           },
         },
@@ -516,11 +518,11 @@
           resetQuery() {
             this.$refs['queryForm'].resetFields()
             this.createTime = null
-            this.queryParams.beginCreateTime = ''
-            this.queryParams.endCreateTime = ''
+            this.queryParams.params.beginCreateTime = ''
+            this.queryParams.params.endCreateTime = ''
             this.activityTime = null
-            this.queryParams.beginTime = ''
-            this.queryParams.endTime = ''
+            this.queryParams.params.beginTime = ''
+            this.queryParams.params.endTime = ''
             this.$refs.table.clearFilter('status')
             this.handleQuery()
           },

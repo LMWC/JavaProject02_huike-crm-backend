@@ -3,9 +3,7 @@ package com.huike.clues.service;
 import java.util.List;
 import java.util.Map;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.huike.clues.domain.TbActivity;
-import com.huike.clues.dto.TbActivityDto;
 
 /**
  * 活动管理Service接口
@@ -31,7 +29,7 @@ public interface ITbActivityService
      * @param tbActivity 活动管理
      * @return 活动管理集合
      */
-    public Page<TbActivity> selectTbActivityList(TbActivityDto tbActivity);
+    public List<TbActivity> selectTbActivityList(TbActivity tbActivity);
 
     /**
      * 新增活动管理
@@ -66,11 +64,4 @@ public interface ITbActivityService
     public int deleteTbActivityById(Long id);
 
     public Map getCountByStatus();
-
-    /**
-          * 获取渠道下所有活动
-     * @param channel
-     * @return
-     */
-	public List<TbActivity> selectTbActivityListByChannel(String channel);
 }

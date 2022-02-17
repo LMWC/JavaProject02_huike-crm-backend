@@ -10,75 +10,82 @@ import org.apache.ibatis.annotations.Param;
 
 /**
  * 商机Mapper接口
- * 
  * @date 2021-04-25
  */
 public interface TbBusinessMapper {
-	/**
-	 * 查询商机
-	 * 
-	 * @param id 商机ID
-	 * @return 商机
-	 */
-	public TbBusiness selectTbBusinessById(Long id);
+    /**
+     * 查询商机
+     * 
+     * @param id 商机ID
+     * @return 商机
+     */
+    public TbBusiness selectTbBusinessById(Long id);
+    
+    /**
+     * 统计商机数
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
+    public int businessNumsFromClue(@Param("beginCreateTime") String beginCreateTime, @Param("endCreateTime") String endCreateTime);
 
-	public int businessNumsFromClue(@Param("beginCreateTime") String beginCreateTime,
-			@Param("endCreateTime") String endCreateTime);
 
-	public int countAllBusinessForIndex(IndexStatisticsVo vo);
+    public int countAllBusinessForIndex(IndexStatisticsVo vo);
 
-	/**
-	 * 查询商机列表
-	 * 
-	 * @param tbBusiness 商机
-	 * @return 商机集合
-	 */
-	public List<TbBusiness> selectTbBusinessList(TbBusiness tbBusiness);
+    /**
+     * 查询商机列表
+     * 
+     * @param tbBusiness 商机
+     * @return 商机集合
+     */
+    public List<TbBusiness> selectTbBusinessList(TbBusiness tbBusiness);
 
-	public List<TbBusiness> selectTbBusinessPool(TbBusiness tbBusiness);
 
-	/**
-	 * 新增商机
-	 * 
-	 * @param tbBusiness 商机
-	 * @return 结果
-	 */
-	public int insertTbBusiness(TbBusiness tbBusiness);
+    public List<TbBusiness> selectTbBusinessPool(TbBusiness tbBusiness);
 
-	/**
-	 * 修改商机
-	 * 
-	 * @param tbBusiness 商机
-	 * @return 结果
-	 */
-	public int updateTbBusiness(TbBusiness tbBusiness);
 
-	public int resetBusiness(@Param("id") Long id, @Param("status") String status);
+    /**
+     * 新增商机
+     * 
+     * @param tbBusiness 商机
+     * @return 结果
+     */
+    public int insertTbBusiness(TbBusiness tbBusiness);
 
-	/**
-	 * 删除商机
-	 * 
-	 * @param id 商机ID
-	 * @return 结果
-	 */
-	public int deleteTbBusinessById(Long id);
+    /**
+     * 修改商机
+     * 
+     * @param tbBusiness 商机
+     * @return 结果
+     */
+    public int updateTbBusiness(TbBusiness tbBusiness);
 
-	/**
-	 * 批量删除商机
-	 * 
-	 * @param ids 需要删除的数据ID
-	 * @return 结果
-	 */
-	public int deleteTbBusinessByIds(Long[] ids);
+    public int  resetBusiness(@Param("id") Long id, @Param("status") String status);
 
-	public int resetNextTimeAndStatus(@Param("id") Long id, @Param("status") String status);
+    /**
+     * 删除商机
+     * 
+     * @param id 商机ID
+     * @return 结果
+     */
+    public int deleteTbBusinessById(Long id);
 
-	public int setTransfer(@Param("id") Long id, @Param("status") String status);
+    /**
+     * 批量删除商机
+     * 
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+    public int deleteTbBusinessByIds(Long[] ids);
 
-	public void updateBusinessEndTimeById(@Param("id") Long id, @Param("endTime") Date endTime);
+    public int resetNextTimeAndStatus(@Param("id") Long id, @Param("status") String status);
 
-	public int countAllBusiness(@Param("beginCreateTime") String beginCreateTime,
-			@Param("endCreateTime") String endCreateTime);
 
-	public List<Map<String, Object>> countAllContractByUser(@Param("indexVo") IndexStatisticsVo vo);
+    public int setTransfer(@Param("id") Long id, @Param("status") String status);
+
+	public void updateBusinessEndTimeById(@Param("id")Long id, @Param("endTime")Date endTime);
+
+	public int countAllBusiness(@Param("beginCreateTime") String beginCreateTime, @Param("endCreateTime") String endCreateTime);
+
+	public List<Map<String,Object>> countAllContractByUser(@Param("indexVo")IndexStatisticsVo vo);
 }

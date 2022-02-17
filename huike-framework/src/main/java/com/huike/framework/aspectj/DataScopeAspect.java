@@ -58,8 +58,7 @@ public class DataScopeAspect {
 
     // 配置织入点
     @Pointcut("@annotation(com.huike.common.annotation.DataScope)")
-    public void dataScopePointCut()
-    {
+    public void dataScopePointCut(){
     }
 
     @Before("dataScopePointCut()")

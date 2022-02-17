@@ -1,9 +1,9 @@
 package com.huike.clues.service;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import java.util.List;
+
 import com.huike.clues.domain.TbClue;
 import com.huike.clues.domain.TbClueTrackRecord;
-import com.huike.clues.dto.TbClueTrackRecordDto;
 
 /**
  * 线索跟进记录Service接口
@@ -11,8 +11,7 @@ import com.huike.clues.dto.TbClueTrackRecordDto;
  * @author ruoyi
  * @date 2021-04-19
  */
-public interface ITbClueTrackRecordService 
-{
+public interface ITbClueTrackRecordService {
     /**
      * 查询线索跟进记录
      * 
@@ -27,7 +26,7 @@ public interface ITbClueTrackRecordService
      * @param tbClueTrackRecord 线索跟进记录
      * @return 线索跟进记录集合
      */
-    public Page<TbClueTrackRecord> selectTbClueTrackRecordList(TbClueTrackRecordDto tbClueTrackRecord);
+    public List<TbClueTrackRecord> selectTbClueTrackRecordList(TbClueTrackRecord tbClueTrackRecord);
 
     /**
      * 新增线索跟进记录
@@ -37,7 +36,12 @@ public interface ITbClueTrackRecordService
      */
     public int insertTbClueTrackRecord(TbClueTrackRecord tbClueTrackRecord);
 
-
+    /**
+     * 添加线索跟进记录
+     * @param tbClue
+     * @param tbClueTrackRecord
+     * @return
+     */
     public int insertTbClueTrackRecord(TbClue tbClue, TbClueTrackRecord tbClueTrackRecord);
 
     /**
@@ -63,4 +67,11 @@ public interface ITbClueTrackRecordService
      * @return 结果
      */
     public int deleteTbClueTrackRecordById(Long id);
+    
+    /**
+     * 跟进线索id查询线索跟进记录
+     * @param clueId
+     * @return
+     */
+	public List<TbClueTrackRecord> selectTbClueTrackRecordList(Long clueId);
 }

@@ -136,20 +136,18 @@
         <result property="businessStatus"    column="business_status"    />
         <result property="contractCreateTime"    column="contract_create_time"    />
         <result property="order"    column="contract_order"    />
-        <result property="deptName"    column="deptName"    />
     </resultMap>
 
 
 
     <select id="selectTbClueForReport" parameterType="TbClue" resultMap="clueReport">
         select clue.id, clue.name, clue.phone, clue.channel, clue.activity_id, activity.code as code, activity.name as info,clue.status as clue_status, clue.create_time as clue_create_time,
-        r.user_name as owner,b.create_time as business_create_time,b.`status` as business_status,c.create_time contract_create_time,c.contract_order,dept.`dept_name` as deptName from tb_clue clue
+        r.user_name as owner,b.create_time as business_create_time,b.`status` as business_status,c.create_time contract_create_time,c.contract_order from tb_clue clue
         left join  tb_activity activity on activity.id = clue.activity_id
         left join tb_business b on clue.id=b.clue_id
         left join tb_contract c on b.id=c.business_id
         left join tb_assign_record r on clue.id=r.assign_id
         and r.latest = '1' and r.type='0'
-        LEFT JOIN `sys_dept` dept ON dept.`dept_id` = r.`dept_id`
         <where>
             <if test="id != null  and id != ''"> and clue.id = #{id}</if>
             <if test="name != null  and name != ''"> and clue.name like concat('%', #{name}, '%')</if>
@@ -170,13 +168,8 @@
             </if>
             <if test="nextTime != null "> and clue.next_time = #{nextTime}</if>
             <if test="owner != null  and owner != ''"> and r.user_name like concat('%', #{owner}, '%')</if>
-            <if test="deptIds != null ">
-				 r.`dept_id` IN 
-				<foreach item="id" index="index" collection="deptIds"  open="(" separator="," close=")">  
-				         #{id}               
-				 </foreach>
-            </if>
         </where>
+
         order by clue.create_time desc
     </select>
 
@@ -367,23 +360,50 @@
     </update>
     
     <select id="countAllClueByUser"   resultType="java.util.Map">
-        SELECT DISTINCT 
-		  (a.user_name) AS create_by,
-		  COUNT(DISTINCT(a.assign_id)) AS num,
-		  b.`dept_id` AS dept_id
+		SELECT DISTINCT
+			(a.user_name) AS create_by,
+			COUNT(DISTINCT(a.assign_id)) AS num,
+			c.`dept_name` AS deptName
 		FROM
-		  `tb_assign_record` a 
-		  LEFT JOIN `sys_user` b
-		  ON a.`user_name` = b.`user_name`
-		  LEFT JOIN `tb_business` c 
-		  ON  a.`assign_id` = c.`clue_id`
-		WHERE a.`type` = 0 
-		<if test="indexVo.beginCreateTime != null and indexVo.beginCreateTime != ''"><!-- 开始创建时间 -->
-		  AND a.create_time BETWEEN #{indexVo.beginCreateTime} AND #{indexVo.endCreateTime} 
-		</if>
-		AND c.`id` IS NOT NULL
-		GROUP BY a.user_name 
-		ORDER BY a.create_time DESC 
+			`tb_assign_record` a
+		LEFT JOIN `sys_user` b ON a.`user_name` = b.`user_name`
+		LEFT JOIN `sys_dept` c ON b.`dept_id` = c.`dept_id`
+		WHERE
+			a.`type` = 0
+		AND a.latest = 1
+		AND a.`assign_id` IN (
+			SELECT DISTINCT
+				(clue_id)
+			FROM
+				tb_business
+			WHERE
+			<if test="indexVo.beginCreateTime != null and indexVo.beginCreateTime != ''"><!-- 开始创建时间 -->
+				 create_time BETWEEN #{indexVo.beginCreateTime} AND #{indexVo.endCreateTime} 
+			</if>
+		)
+		GROUP BY
+			a.user_name
+		ORDER BY
+			num DESC
+        LIMIT 10
+    </select>
+
+    <select id="getCluesNum" resultType="int">
+        SELECT
+        IFNULL(COUNT(id), 0)
+        FROM
+        `tb_clue`
+        WHERE id IN
+        (SELECT
+        assign_id
+        FROM
+        `tb_assign_record`
+        WHERE `create_time` BETWEEN #{indexVo.beginCreateTime}
+            AND #{indexVo.endCreateTime}
+          AND `type` = 0
+        AND `latest` = 1
+        AND `user_name` = #{username})
+        AND `status` IN (1, 2)
     </select>
     
     <select id="getcontractsBasicInfo"   resultType="java.util.Map">

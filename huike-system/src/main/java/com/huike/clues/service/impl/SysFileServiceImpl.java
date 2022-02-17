@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,7 +48,7 @@ public class SysFileServiceImpl implements ISysFileService{
             miniUtil.putObject(bucketName, objectName, inputStream);
             String url = miniUtil.getObjectUrl(bucketName, objectName);
             AjaxResult ajax = AjaxResult.success();
-            ajax.put("fileName", fileName);
+            ajax.put("fileName", "/"+bucketName+"/"+objectName);
             //url需要进行截取
             ajax.put("url", url);
             return ajax;
@@ -72,6 +74,22 @@ public class SysFileServiceImpl implements ISysFileService{
 			String bucketName = minioConfig.getBucketName();
 			MinioUtil miniUtil = new MinioUtil();
 			String url = miniUtil.getObjectUrl(bucketName, fileName);
+			AjaxResult ajax = AjaxResult.success();
+		    ajax.put("fileName", fileName);
+		    ajax.put("url", url);
+		    return ajax;
+		}catch (Exception e) {
+			return AjaxResult.error(e.getMessage());
+		}
+	}
+	
+	@Override
+	public AjaxResult downloadByMinio(String fileName,HttpServletResponse response) {
+		try {
+			String bucketName = minioConfig.getBucketName();
+			MinioUtil miniUtil = new MinioUtil();
+			String url = miniUtil.getObjectUrl(bucketName, fileName);
+			miniUtil.downloadFile(bucketName, fileName, "clues.xlsx", response);
 			AjaxResult ajax = AjaxResult.success();
 		    ajax.put("fileName", fileName);
 		    ajax.put("url", url);

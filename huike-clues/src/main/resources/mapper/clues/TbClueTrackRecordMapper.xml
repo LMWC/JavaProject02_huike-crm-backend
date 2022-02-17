@@ -33,6 +33,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
     
+     
+     <select id="selectTbClueTrackRecordListByClueId" parameterType="Long" resultMap="TbClueTrackRecordResult">
+        <include refid="selectTbClueTrackRecordVo"/>
+        <where>  
+            <if test="clueId != null  and clueId != ''"> and clue_id = #{clueId}</if>
+        </where>
+    </select>
+    
+    
     <select id="selectTbClueTrackRecordById" parameterType="Long" resultMap="TbClueTrackRecordResult">
         <include refid="selectTbClueTrackRecordVo"/>
         where id = #{id}

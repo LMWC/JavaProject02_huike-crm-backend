@@ -1,23 +1,18 @@
 package com.huike.clues.domain;
 
 import java.util.Date;
-import java.util.Map;
-
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.huike.common.annotation.Excel;
 import com.huike.common.annotation.Excel.ColumnType;
-
-import lombok.Data;
+import com.huike.common.core.domain.BaseEntity;
 
 /**
  * 操作日志记录表 oper_log
  * 
  * 
  */
-@Data
-public class SysOperLog {
+public class SysOperLog extends BaseEntity
+{
     private static final long serialVersionUID = 1L;
 
     /** 日志主键 */
@@ -88,35 +83,173 @@ public class SysOperLog {
     @Excel(name = "操作时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date operTime;
 
-    /** 搜索值 */
-	@TableField(exist = false)
-	@JsonIgnore
-	private String searchValue;
+    public Long getOperId()
+    {
+        return operId;
+    }
 
-	@TableField(exist = false)
-	/** 创建者 */
-	private String createBy;
+    public void setOperId(Long operId)
+    {
+        this.operId = operId;
+    }
 
-	/** 创建时间 */
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date createTime;
+    public String getTitle()
+    {
+        return title;
+    }
 
-	@TableField(exist = false)
-	/** 更新者 */
-	private String updateBy;
+    public void setTitle(String title)
+    {
+        this.title = title;
+    }
 
-	@TableField(exist = false)
-	/** 更新时间 */
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date updateTime;
+    public Integer getBusinessType()
+    {
+        return businessType;
+    }
 
-	@TableField(exist = false)
-	/** 备注 */
-	@JsonIgnore
-	private String remark;
+    public void setBusinessType(Integer businessType)
+    {
+        this.businessType = businessType;
+    }
 
-	/** 请求参数 */
-	@TableField(exist = false)
-	@JsonIgnore
-	private Map<String, Object> params;
+    public Integer[] getBusinessTypes()
+    {
+        return businessTypes;
+    }
+
+    public void setBusinessTypes(Integer[] businessTypes)
+    {
+        this.businessTypes = businessTypes;
+    }
+
+    public String getMethod()
+    {
+        return method;
+    }
+
+    public void setMethod(String method)
+    {
+        this.method = method;
+    }
+
+    public String getRequestMethod()
+    {
+        return requestMethod;
+    }
+
+    public void setRequestMethod(String requestMethod)
+    {
+        this.requestMethod = requestMethod;
+    }
+
+    public Integer getOperatorType()
+    {
+        return operatorType;
+    }
+
+    public void setOperatorType(Integer operatorType)
+    {
+        this.operatorType = operatorType;
+    }
+
+    public String getOperName()
+    {
+        return operName;
+    }
+
+    public void setOperName(String operName)
+    {
+        this.operName = operName;
+    }
+
+    public String getDeptName()
+    {
+        return deptName;
+    }
+
+    public void setDeptName(String deptName)
+    {
+        this.deptName = deptName;
+    }
+
+    public String getOperUrl()
+    {
+        return operUrl;
+    }
+
+    public void setOperUrl(String operUrl)
+    {
+        this.operUrl = operUrl;
+    }
+
+    public String getOperIp()
+    {
+        return operIp;
+    }
+
+    public void setOperIp(String operIp)
+    {
+        this.operIp = operIp;
+    }
+
+    public String getOperLocation()
+    {
+        return operLocation;
+    }
+
+    public void setOperLocation(String operLocation)
+    {
+        this.operLocation = operLocation;
+    }
+
+    public String getOperParam()
+    {
+        return operParam;
+    }
+
+    public void setOperParam(String operParam)
+    {
+        this.operParam = operParam;
+    }
+
+    public String getJsonResult()
+    {
+        return jsonResult;
+    }
+
+    public void setJsonResult(String jsonResult)
+    {
+        this.jsonResult = jsonResult;
+    }
+
+    public Integer getStatus()
+    {
+        return status;
+    }
+
+    public void setStatus(Integer status)
+    {
+        this.status = status;
+    }
+
+    public String getErrorMsg()
+    {
+        return errorMsg;
+    }
+
+    public void setErrorMsg(String errorMsg)
+    {
+        this.errorMsg = errorMsg;
+    }
+
+    public Date getOperTime()
+    {
+        return operTime;
+    }
+
+    public void setOperTime(Date operTime)
+    {
+        this.operTime = operTime;
+    }
 }

@@ -1,6 +1,7 @@
 package com.huike.web.controller.clues;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.huike.clues.domain.TbActivity;
-import com.huike.clues.dto.TbActivityDto;
 import com.huike.clues.service.ITbActivityService;
 import com.huike.common.annotation.Log;
 import com.huike.common.core.controller.BaseController;
@@ -23,17 +22,14 @@ import com.huike.common.core.domain.AjaxResult;
 import com.huike.common.core.page.TableDataInfo;
 import com.huike.common.enums.BusinessType;
 
-import io.swagger.annotations.ApiOperation;
-
 /**
  * 活动管理Controller
  * 
- * @author WGL
+ * @author ruoyi
  * @date 2021-04-01
  */
 @RestController
 @RequestMapping("/clues/activity")
-<<<<<<< HEAD
 public class TbActivityController extends BaseController {
     @Autowired
     private ITbActivityService tbActivityService;
@@ -41,7 +37,6 @@ public class TbActivityController extends BaseController {
     /**
      * 查询活动管理列表
      */
-    //@ApiOperation("查询活动管理列表")
     @PreAuthorize("@ss.hasPermi('clues:activity:list')")
     @GetMapping("/list")
     public TableDataInfo list(TbActivity tbActivity)
@@ -51,68 +46,63 @@ public class TbActivityController extends BaseController {
         Map<String,Object> countParms=tbActivityService.getCountByStatus();
         return getDataTable(list,countParms);
     }
-=======
-public class TbActivityController extends BaseController{
->>>>>>> a89c1ce12cfb3643528f0edecc6e2034a1285485
 
-	@Autowired
-	private ITbActivityService tbActivityService;
 
-	/**
-	 * 查询活动管理列表
-	 */
-	@ApiOperation("查询活动管理列表")
-	@PreAuthorize("@ss.hasPermi('clues:activity:list')")
-	@GetMapping("/list")
-	public TableDataInfo list(TbActivityDto tbActivity) {
-		Page<TbActivity> selectTbActivityList = tbActivityService.selectTbActivityList(tbActivity);
-		return getDataTable(selectTbActivityList);
-	}
+    /**
+     * 获取渠道下活动
+     * @param channel
+     * @return
+     */
+    @GetMapping("/listselect/{channel}")
+    public AjaxResult list(@PathVariable("channel")  String channel)
+    {
+        TbActivity tbActivity =new TbActivity();
+        tbActivity.setChannel(channel);
+        tbActivity.setStatus("2");
+        return AjaxResult.success(tbActivityService.selectTbActivityList(tbActivity));
+    }
 
-	@ApiOperation("获取渠道下活动")
-	@GetMapping("/listselect/{channel}")
-	public AjaxResult list(@PathVariable("channel") String channel) {
-		List<TbActivity> result = tbActivityService.selectTbActivityListByChannel(channel);
-		return AjaxResult.success(result);
-	}
+    /**
+     * 获取活动管理详细信息
+     */
+    @PreAuthorize("@ss.hasPermi('clues:activity:query')")
+    @GetMapping(value = "/{id}")
+    public AjaxResult getInfo(@PathVariable("id") Long id)
+    {
+        return AjaxResult.success(tbActivityService.selectTbActivityById(id));
+    }
 
-	/**
-	 * 获取活动管理详细信息
-	 */
-	@PreAuthorize("@ss.hasPermi('clues:activity:query')")
-	@GetMapping(value = "/{id}")
-	public AjaxResult getInfo(@PathVariable("id") Long id) {
-		return AjaxResult.success(tbActivityService.selectTbActivityById(id));
-	}
+    /**
+     * 新增活动管理
+     */
+    @PreAuthorize("@ss.hasPermi('clues:activity:add')")
+    @Log(title = "活动管理", businessType = BusinessType.INSERT)
+    @PostMapping
+    public AjaxResult add(@RequestBody TbActivity tbActivity)
+    {
+        return toAjax(tbActivityService.insertTbActivity(tbActivity));
+    }
 
-	/**
-	 * 新增活动管理
-	 */
-	@PreAuthorize("@ss.hasPermi('clues:activity:add')")
-	@Log(title = "活动管理", businessType = BusinessType.INSERT)
-	@PostMapping
-	public AjaxResult add(@RequestBody TbActivity tbActivity) {
-		return toAjax(tbActivityService.insertTbActivity(tbActivity));
-	}
 
-	/**
-	 * 修改活动管理
-	 */
-	@ApiOperation("修改活动管理")
-	@PreAuthorize("@ss.hasPermi('clues:activity:edit')")
-	@Log(title = "活动管理", businessType = BusinessType.UPDATE)
-	@PutMapping
-	public AjaxResult edit(@RequestBody TbActivity tbActivity) {
-		return toAjax(tbActivityService.updateTbActivity(tbActivity));
-	}
+    /**
+     * 修改活动管理
+     */
+    @PreAuthorize("@ss.hasPermi('clues:activity:edit')")
+    @Log(title = "活动管理", businessType = BusinessType.UPDATE)
+    @PutMapping
+    public AjaxResult edit(@RequestBody TbActivity tbActivity)
+    {
+        return toAjax(tbActivityService.updateTbActivity(tbActivity));
+    }
 
-	/**
-	 * 删除活动管理
-	 */
-	@PreAuthorize("@ss.hasPermi('clues:activity:remove')")
-	@Log(title = "活动管理", businessType = BusinessType.DELETE)
+    /**
+     * 删除活动管理
+     */
+    @PreAuthorize("@ss.hasPermi('clues:activity:remove')")
+    @Log(title = "活动管理", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
-	public AjaxResult remove(@PathVariable Long[] ids) {
-		return toAjax(tbActivityService.deleteTbActivityByIds(ids));
-	}
+    public AjaxResult remove(@PathVariable Long[] ids)
+    {
+        return toAjax(tbActivityService.deleteTbActivityByIds(ids));
+    }
 }

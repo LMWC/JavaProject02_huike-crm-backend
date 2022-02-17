@@ -5,12 +5,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +35,7 @@ import com.huike.report.domain.vo.IndexVo;
 import com.huike.report.domain.vo.LineChartVo;
 import com.huike.report.domain.vo.LineSeriesVo;
 import com.huike.report.domain.vo.VulnerabilityMapVo;
+import com.huike.report.mapper.ReportMapper;
 import com.huike.report.service.IReportService;
 
 @Service
@@ -62,6 +63,9 @@ public class ReportServiceImpl implements IReportService {
 
     @Autowired
     private TbAssignRecordMapper assignRecordMapper;
+    
+    @Autowired
+    private ReportMapper reportMpper;
 
     @Override
     public LineChartVo contractStatistics(String beginCreateTime, String endCreateTime) {
@@ -171,7 +175,9 @@ public class ReportServiceImpl implements IReportService {
     }
 
 
-
+    /**
+     * 渠道统计
+     */
     @Override
     public List<Map<String, Object>> chanelStatistics(String beginCreateTime, String endCreateTime) {
         List<Map<String, Object>> data= contractMapper.chanelStatistics(beginCreateTime,endCreateTime);
@@ -369,32 +375,22 @@ public class ReportServiceImpl implements IReportService {
         return list;
     }
 
+    /**
+     * 商机转换龙虎榜
+     * @param request
+     * @return
+     */
     @Override
     public List<Map<String, Object>> businessChangeStatisticsForIndex(IndexStatisticsVo request) {
         int allBusiness=  businessMapper.countAllBusiness(request.getBeginCreateTime(),request.getEndCreateTime());
         List<Map<String,Object>> list= businessMapper.countAllContractByUser(request);
         for (Map<String, Object> datum : list) {
-            Long deptId= (Long) datum.get("dept_id");
-            if(deptId!=null){
-                SysDept dept = deptMapper.selectDeptById(deptId);
-                datum.put("deptName", dept.getDeptName());
-            }
             Long num= (Long) datum.get("num");
             datum.put("radio",getRadio(allBusiness,num));
         }
-        Collections.sort(list,new Comparator<Map<String,Object>>() {
-
-			@Override
-			public int compare(Map<String, Object> o1, Map<String, Object> o2) {
-				BigDecimal radio1 = (BigDecimal)o1.get("radio");
-				BigDecimal radio2 = (BigDecimal)o2.get("radio");
-				return 0-radio1.compareTo(radio2);
-			}
-        	
-        });
         return list;
     }
-    
+
     /**
      * 线索转化龙虎榜
      */
@@ -402,43 +398,53 @@ public class ReportServiceImpl implements IReportService {
 	public List<Map<String, Object>> clueChangeStatisticsForIndex(IndexStatisticsVo request) {
 		int allclues=  clueMapper.countAllClues(request.getBeginCreateTime(),request.getEndCreateTime());
         List<Map<String,Object>> list= clueMapper.countAllClueByUser(request);
+        //计算转换率
         for (Map<String, Object> datum : list) {
-            Long deptId= (Long) datum.get("dept_id");
-            if(deptId!=null){
-                SysDept dept= deptMapper.selectDeptById(deptId);
-                datum.put("deptName", dept.getDeptName());
-            }
             Long num= (Long) datum.get("num");
             datum.put("radio",getRadio(allclues,num));
         }
-        Collections.sort(list,new Comparator<Map<String,Object>>() {
-
-			@Override
-			public int compare(Map<String, Object> o1, Map<String, Object> o2) {
-				BigDecimal radio1 = (BigDecimal)o1.get("radio");
-				BigDecimal radio2 = (BigDecimal)o2.get("radio");
-				return 0-radio1.compareTo(radio2);
-			}
-        	
-        });
         return list;
 	}
-	
-	
+
 	private BigDecimal getRadio(Integer all,Long num) {
+        if(all.intValue()==0){
+            return new BigDecimal(0);
+        }
 		BigDecimal numBigDecimal = new BigDecimal(num);
 		BigDecimal allBigDecimal = new BigDecimal(all);
-		if(allBigDecimal.compareTo(BigDecimal.ZERO)==0) {
-			return new BigDecimal(0);
-		}
 		BigDecimal divide = numBigDecimal.divide(allBigDecimal,4,BigDecimal.ROUND_HALF_UP);
 		return divide.multiply(new BigDecimal(100));
 	}
 
 	@Override
 	public Map<String, Object> getcontractsBasicInfo(IndexStatisticsVo request, String now) {
+		Map<String, Object> result = new HashMap<String,Object>();
 		String username = SecurityUtils.getUsername();
-		Map<String, Object> result = clueMapper.getcontractsBasicInfo(request,now,username);
+		try {
+			CompletableFuture<Map<String,Object>> baseData = CompletableFuture.supplyAsync(()->{
+					//处理基础数据
+			       	return reportMpper.getBaseData(request, now, username);
+			    });
+			CompletableFuture<Map<String,Object>> todayData = CompletableFuture.supplyAsync(()->{
+					//处理今日简报
+			       	return reportMpper.getTodayData(request, now, username);
+			    });
+			
+			CompletableFuture<Map<String,Object>> todoData = CompletableFuture.supplyAsync(()->{
+					//处理待办事项
+			       	return reportMpper.getTodoData(request, now, username);
+			    });
+			CompletableFuture
+		      .allOf(baseData,
+		    		  todayData,
+		    		  todoData)
+		    .join();
+			result.putAll(baseData.get());
+			result.putAll(todayData.get());
+			result.putAll(todoData.get());
+		}catch (Exception e) {
+			return null;
+		}
 		if(!username.equals("admin")) {
 			//不是admin 不能看见待分配商机和待分配线索
 			result.put("toallocatedBusinessNum", 0);

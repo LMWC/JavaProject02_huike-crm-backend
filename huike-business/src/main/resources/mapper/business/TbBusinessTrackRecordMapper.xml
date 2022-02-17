@@ -29,6 +29,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
     
+    <select id="selectTbBusinessTrackRecordListByBusinessId" parameterType="Long" resultMap="TbBusinessTrackRecordResult">
+        <include refid="selectTbBusinessTrackRecordVo"/>
+        <where>  
+            <if test="businessId != null  and businessId != ''"> and business_id = #{businessId}</if>
+        </where>
+    </select>
+    
     <select id="selectTbBusinessTrackRecordById" parameterType="Long" resultMap="TbBusinessTrackRecordResult">
         <include refid="selectTbBusinessTrackRecordVo"/>
         where id = #{id}
@@ -80,4 +87,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+    
 </mapper>

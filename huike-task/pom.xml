@@ -33,23 +33,6 @@
             <groupId>com.huike</groupId>
             <artifactId>huike-common</artifactId>
         </dependency>
-<<<<<<< HEAD:huike-task/pom.xml
-=======
-
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis-spring</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-        </dependency>
-    </dependencies>
->>>>>>> a89c1ce12cfb3643528f0edecc6e2034a1285485:huike-quartz/pom.xml
 
     </dependencies>
 </project>

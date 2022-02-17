@@ -1,111 +1,174 @@
 package com.huike.clues.domain;
 
 import java.util.Date;
-import java.util.Map;
-
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import com.huike.common.annotation.Excel;
-
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import com.huike.common.core.domain.BaseEntity;
 
 /**
  * 活动管理对象 tb_activity
  *
- * @author WGL
+ * @author ruoyi
  * @date 2021-04-02
  */
-@ApiModel(value="活动对象",description="活动类")
-@Data
-public class TbActivity{
-	private static final long serialVersionUID = 1L;
+public class TbActivity extends BaseEntity
+{
+    private static final long serialVersionUID = 1L;
 
-	/** id */
-	@ApiModelProperty(value="id",name="主键ID",example="1")
-	@TableId(type = IdType.AUTO)
-	private Long id;
+    /** id */
+    private Long id;
 
-	// 编码
-	@ApiModelProperty(value="code",name="活动编码")
-	private String code;
+    //编码
+    private String code;
 
-	@ApiModelProperty(value="name",name="活动名称",example="线下推广活动")
-	private String name;
+    private String name;
 
-	/** 渠道来源 */
-	@Excel(name = "渠道来源")
-	@ApiModelProperty(value="channel",name="渠道来源")
-	private String channel;
+    /** 渠道来源 */
+    @Excel(name = "渠道来源")
+    private String channel;
 
-	/** 活动简介 */
-	@Excel(name = "活动简介")
-	@ApiModelProperty(value="info",name="活动简介")
-	private String info;
+    /** 活动简介 */
+    @Excel(name = "活动简介")
+    private String info;
 
-	/** 活动类型 */
-	@Excel(name = "活动类型")
-	@ApiModelProperty(value="type",name="活动类型")
-	private String type;
+    /** 活动类型 */
+    @Excel(name = "活动类型")
+    private String type;
 
-	/** 课程折扣 */
-	@Excel(name = "课程折扣")
-	@ApiModelProperty(value="discount",name="课程折扣",example = "9.5")
-	private Float discount;
+    /** 课程折扣 */
+    @Excel(name = "课程折扣")
+    private Float discount;
 
-	/** 课程代金券 */
-	@Excel(name = "课程代金券")
-	@ApiModelProperty(value="vouchers",name="课程代金券",example = "50")
-	private Integer vouchers;
+    /** 课程代金券 */
+    @Excel(name = "课程代金券")
+    private Integer vouchers;
 
-	/** 状态 */
-	@Excel(name = "状态")
-	@ApiModelProperty(value="status",name="状态")
-	private String status;
+    /** 状态 */
+    @Excel(name = "状态")
+    private String status;
 
-	/** 开始时间 */
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-	@ApiModelProperty(value="beginTime",name="开始时间")
-	private Date beginTime;
+    /** 开始时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private Date beginTime;
 
-	/** 结束时间 */
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-	@ApiModelProperty(value="endTime",name="结束时间")
-	private Date endTime;
+    /** 结束时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private Date endTime;
 
-	/** 搜索值 */
-	@TableField(exist = false)
-	@JsonIgnore
-	private String searchValue;
+    public String getCode() {
+        return code;
+    }
 
-	@TableField(exist = false)
-	/** 创建者 */
-	private String createBy;
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-	/** 创建时间 */
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date createTime;
+    public void setId(Long id)
+    {
+        this.id = id;
+    }
 
-	@TableField(exist = false)
-	/** 更新者 */
-	private String updateBy;
+    public Long getId()
+    {
+        return id;
+    }
+    public void setChannel(String channel)
+    {
+        this.channel = channel;
+    }
 
-	@TableField(exist = false)
-	/** 更新时间 */
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date updateTime;
+    public String getChannel()
+    {
+        return channel;
+    }
+    public void setInfo(String info)
+    {
+        this.info = info;
+    }
 
-	@TableField(exist = false)
-	/** 备注 */
-	@JsonIgnore
-	private String remark;
+    public String getInfo()
+    {
+        return info;
+    }
+    public void setType(String type)
+    {
+        this.type = type;
+    }
 
-	/** 请求参数 */
-	@TableField(exist = false)
-	@JsonIgnore
-	private Map<String, Object> params;
+    public String getType()
+    {
+        return type;
+    }
+
+    public Float getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Float discount) {
+        this.discount = discount;
+    }
+
+    public void setVouchers(Integer vouchers)
+    {
+        this.vouchers = vouchers;
+    }
+
+    public Integer getVouchers()
+    {
+        return vouchers;
+    }
+    public void setStatus(String status)
+    {
+        this.status = status;
+    }
+
+    public String getStatus()
+    {
+        return status;
+    }
+    public void setBeginTime(Date beginTime)
+    {
+        this.beginTime = beginTime;
+    }
+
+    public Date getBeginTime()
+    {
+        return beginTime;
+    }
+    public void setEndTime(Date endTime)
+    {
+        this.endTime = endTime;
+    }
+
+    public Date getEndTime()
+    {
+        return endTime;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
+                .append("id", getId())
+                .append("name", getName())
+                .append("channel", getChannel())
+                .append("info", getInfo())
+                .append("type", getType())
+                .append("discount", getDiscount())
+                .append("vouchers", getVouchers())
+                .append("status", getStatus())
+                .append("beginTime", getBeginTime())
+                .append("endTime", getEndTime())
+                .append("code",getCode())
+                .toString();
+    }
 }

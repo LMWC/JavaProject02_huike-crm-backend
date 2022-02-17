@@ -34,8 +34,8 @@ import com.huike.common.utils.poi.ExcelUtil;
  */
 @RestController
 @RequestMapping("/system/dict/data")
-public class SysDictDataController extends BaseController{
-	
+public class SysDictDataController extends BaseController
+{
     @Autowired
     private ISysDictDataService dictDataService;
 

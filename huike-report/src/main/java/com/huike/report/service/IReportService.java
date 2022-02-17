@@ -50,11 +50,27 @@ public interface IReportService {
 
 
 
+    /**
+     * 销售统计部门报表
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
     public List<Map<String, Object>> deptStatisticsList(String beginCreateTime, String endCreateTime);
 
-
+    /**
+     * 销售统计渠道报表
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
     public List<Map<String, Object>> channelStatisticsList(String beginCreateTime, String endCreateTime);
-
+    /**
+     * 销售统计归属人报表
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
     public List<Map<String, Object>> ownerShipStatisticsList(String beginCreateTime, String endCreateTime);
 
     /**
@@ -87,7 +103,11 @@ public interface IReportService {
 
     public List<TbClue> cluesStatisticsList(TbClue clue);
 
-
+    /**
+     * 活动渠道统计
+     * @param activity
+     * @return
+     */
     public List<ActivityStatisticsVo> activityStatisticsList(TbActivity activity);
 
     //漏洞统计

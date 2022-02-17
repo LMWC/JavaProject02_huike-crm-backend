@@ -177,9 +177,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="deleteDeptById" parameterType="Long">
 		update sys_dept set del_flag = '2' where dept_id = #{deptId}
 	</delete>
-	
-	
-	<select id="selectAllChilDeptList" parameterType="Integer" resultType="Integer">
-		SELECT dept_id FROM `sys_dept` WHERE `dept_id` = #{deptId} OR ancestors LIKE CONCAT("%",#{deptId},"%")
-	</select>
+
 </mapper> 

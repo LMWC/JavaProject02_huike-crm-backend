@@ -1,29 +1,20 @@
 package com.huike.generator.domain;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-
 import org.apache.commons.lang3.ArrayUtils;
-
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.huike.common.constant.GenConstants;
+import com.huike.common.core.domain.BaseEntity;
 import com.huike.common.utils.StringUtils;
-
-import lombok.Data;
 
 /**
  * 业务表 gen_table
  * 
  * 
  */
-@Data
-public class GenTable {
+public class GenTable extends BaseEntity
+{
     private static final long serialVersionUID = 1L;
 
     /** 编号 */
@@ -103,39 +94,237 @@ public class GenTable {
 
     /** 上级菜单名称字段 */
     private String parentMenuName;
-    
-    /** 搜索值 */
-	@TableField(exist = false)
-	@JsonIgnore
-	private String searchValue;
 
-	@TableField(exist = false)
-	/** 创建者 */
-	private String createBy;
+    public Long getTableId()
+    {
+        return tableId;
+    }
 
-	/** 创建时间 */
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date createTime;
+    public void setTableId(Long tableId)
+    {
+        this.tableId = tableId;
+    }
 
-	@TableField(exist = false)
-	/** 更新者 */
-	private String updateBy;
+    public String getTableName()
+    {
+        return tableName;
+    }
 
-	@TableField(exist = false)
-	/** 更新时间 */
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private Date updateTime;
+    public void setTableName(String tableName)
+    {
+        this.tableName = tableName;
+    }
 
-	@TableField(exist = false)
-	/** 备注 */
-	@JsonIgnore
-	private String remark;
+    public String getTableComment()
+    {
+        return tableComment;
+    }
 
-	/** 请求参数 */
-	@TableField(exist = false)
-	@JsonIgnore
-	private Map<String, Object> params;
-    
+    public void setTableComment(String tableComment)
+    {
+        this.tableComment = tableComment;
+    }
+
+    public String getSubTableName()
+    {
+        return subTableName;
+    }
+
+    public void setSubTableName(String subTableName)
+    {
+        this.subTableName = subTableName;
+    }
+
+    public String getSubTableFkName()
+    {
+        return subTableFkName;
+    }
+
+    public void setSubTableFkName(String subTableFkName)
+    {
+        this.subTableFkName = subTableFkName;
+    }
+
+    public String getClassName()
+    {
+        return className;
+    }
+
+    public void setClassName(String className)
+    {
+        this.className = className;
+    }
+
+    public String getTplCategory()
+    {
+        return tplCategory;
+    }
+
+    public void setTplCategory(String tplCategory)
+    {
+        this.tplCategory = tplCategory;
+    }
+
+    public String getPackageName()
+    {
+        return packageName;
+    }
+
+    public void setPackageName(String packageName)
+    {
+        this.packageName = packageName;
+    }
+
+    public String getModuleName()
+    {
+        return moduleName;
+    }
+
+    public void setModuleName(String moduleName)
+    {
+        this.moduleName = moduleName;
+    }
+
+    public String getBusinessName()
+    {
+        return businessName;
+    }
+
+    public void setBusinessName(String businessName)
+    {
+        this.businessName = businessName;
+    }
+
+    public String getFunctionName()
+    {
+        return functionName;
+    }
+
+    public void setFunctionName(String functionName)
+    {
+        this.functionName = functionName;
+    }
+
+    public String getFunctionAuthor()
+    {
+        return functionAuthor;
+    }
+
+    public void setFunctionAuthor(String functionAuthor)
+    {
+        this.functionAuthor = functionAuthor;
+    }
+
+    public String getGenType()
+    {
+        return genType;
+    }
+
+    public void setGenType(String genType)
+    {
+        this.genType = genType;
+    }
+
+    public String getGenPath()
+    {
+        return genPath;
+    }
+
+    public void setGenPath(String genPath)
+    {
+        this.genPath = genPath;
+    }
+
+    public GenTableColumn getPkColumn()
+    {
+        return pkColumn;
+    }
+
+    public void setPkColumn(GenTableColumn pkColumn)
+    {
+        this.pkColumn = pkColumn;
+    }
+
+    public GenTable getSubTable()
+    {
+        return subTable;
+    }
+
+    public void setSubTable(GenTable subTable)
+    {
+        this.subTable = subTable;
+    }
+
+    public List<GenTableColumn> getColumns()
+    {
+        return columns;
+    }
+
+    public void setColumns(List<GenTableColumn> columns)
+    {
+        this.columns = columns;
+    }
+
+    public String getOptions()
+    {
+        return options;
+    }
+
+    public void setOptions(String options)
+    {
+        this.options = options;
+    }
+
+    public String getTreeCode()
+    {
+        return treeCode;
+    }
+
+    public void setTreeCode(String treeCode)
+    {
+        this.treeCode = treeCode;
+    }
+
+    public String getTreeParentCode()
+    {
+        return treeParentCode;
+    }
+
+    public void setTreeParentCode(String treeParentCode)
+    {
+        this.treeParentCode = treeParentCode;
+    }
+
+    public String getTreeName()
+    {
+        return treeName;
+    }
+
+    public void setTreeName(String treeName)
+    {
+        this.treeName = treeName;
+    }
+
+    public String getParentMenuId()
+    {
+        return parentMenuId;
+    }
+
+    public void setParentMenuId(String parentMenuId)
+    {
+        this.parentMenuId = parentMenuId;
+    }
+
+    public String getParentMenuName()
+    {
+        return parentMenuName;
+    }
+
+    public void setParentMenuName(String parentMenuName)
+    {
+        this.parentMenuName = parentMenuName;
+    }
+
     public boolean isSub()
     {
         return isSub(this.tplCategory);

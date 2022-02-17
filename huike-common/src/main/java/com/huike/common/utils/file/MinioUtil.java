@@ -388,7 +388,6 @@ public class MinioUtil {
         boolean flag = bucketExists(bucketName);
         String url = "";
         if (flag) {
-//            url = minioClient.getObjectUrl(bucketName, objectName);
         	url = minioClient.presignedGetObject(bucketName, objectName);
         }
         return url;

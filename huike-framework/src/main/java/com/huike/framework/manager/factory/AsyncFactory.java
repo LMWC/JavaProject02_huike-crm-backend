@@ -72,26 +72,6 @@ public class AsyncFactory {
 		};
 	}
 
-<<<<<<< HEAD
-    /**
-     * 操作日志记录
-     * 
-     * @param operLog 操作日志信息
-     * @return 任务task
-     */
-    public static TimerTask recordOper(final SysOperLog operLog) {
-        return new TimerTask()
-        {
-            @Override
-            public void run()
-            {
-                // 远程查询操作地点
-                operLog.setOperLocation(AddressUtils.getRealAddressByIP(operLog.getOperIp()));
-                SpringUtils.getBean(ISysOperLogService.class).insertOperlog(operLog);
-            }
-        };
-    }
-=======
 	/**
 	 * 操作日志记录
 	 * 
@@ -108,5 +88,4 @@ public class AsyncFactory {
 			}
 		};
 	}
->>>>>>> a89c1ce12cfb3643528f0edecc6e2034a1285485
 }

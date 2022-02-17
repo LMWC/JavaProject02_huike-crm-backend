@@ -56,15 +56,44 @@ public interface TbContractMapper {
      */
     public int deleteTbContractByIds(Long[] ids);
 
-
+    /**
+     * 合同统计
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
     public List<Map<String,Object>> contractStatistics(@Param("beginCreateTime") String beginCreateTime, @Param("endCreateTime") String endCreateTime);
-
+    
+    /**
+     * 学科统计
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
     public List<Map<String,Object>> subjectStatistics(@Param("beginCreateTime") String beginCreateTime, @Param("endCreateTime") String endCreateTime);
-
+    
+    /**
+     * 销售统计
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
     public List<Map<String,Object>> salesStatistics(@Param("beginCreateTime") String beginCreateTime, @Param("endCreateTime") String endCreateTime);
-
+    
+    /**
+     * 渠道统计
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
     public List<Map<String,Object>> chanelStatistics(@Param("beginCreateTime") String beginCreateTime, @Param("endCreateTime") String endCreateTime);
-
+    
+    /**
+     * 活动统计
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
     public List<Map<String,Object>> activityStatistics(@Param("beginCreateTime") String beginCreateTime, @Param("endCreateTime") String endCreateTime);
 
 
@@ -73,7 +102,12 @@ public interface TbContractMapper {
     public List<Map<String,Object>> channelStatistics(@Param("beginCreateTime") String beginCreateTime, @Param("endCreateTime") String endCreateTime);
 
     public List<Map<String,Object>> ownerShipStatistics(@Param("beginCreateTime") String beginCreateTime, @Param("endCreateTime") String endCreateTime);
-
+    /**
+     * 统计商机转化的合同数
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
     public int contractNumsFromBusiness(@Param("beginCreateTime") String beginCreateTime, @Param("endCreateTime") String endCreateTime);
 
     public Map<String,Object> countByActivity(TbContract tbContract);

@@ -13,8 +13,7 @@ import org.apache.ibatis.annotations.Param;
 
  * @date 2021-04-02
  */
-public interface TbClueMapper 
-{
+public interface TbClueMapper {
     /**
      * 查询线索管理
      * 
@@ -26,12 +25,22 @@ public interface TbClueMapper
 
     public List<TbClue>  selectClueByIds(Long[] ids);
 
-
+    /**
+     * 统计所有的线索
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
     public int countAllClues(@Param("beginCreateTime") String beginCreateTime, @Param("endCreateTime") String endCreateTime);
     
 //    public int countAllCluesForIndex(IndexStatisticsVo indexStatisticsVo);
 
-
+    /**
+     * 统计有效线索
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
     public int effectiveCluesNums(@Param("beginCreateTime") String beginCreateTime, @Param("endCreateTime") String endCreateTime);
 
     /**
@@ -117,7 +126,24 @@ public interface TbClueMapper
 	public Map<String, Object> getcontractsBasicInfo(@Param("indexVo")IndexStatisticsVo request, 
 			@Param("now")String now,@Param("username")String username);
 
-
+	
+	/**
+	 * 删除伪线索
+	 * @param id
+	 * @return
+	 */
 	public int removeClueByFalseClue(@Param("id")Long id);
+
+    /**
+     * 统计线索数量
+     * @param request
+     * @param now
+     * @param username
+     * @return
+     */
+    public int getCluesNum(@Param("indexVo")IndexStatisticsVo request,@Param("now")String now,@Param("username")String username);
+
+
+
 
 }

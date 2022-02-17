@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.huike.clues.mapper.TbCourseMapper">
+
+    <resultMap type="TbCourse" id="TbCourseResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="subject"    column="subject"    />
+        <result property="price"    column="price"    />
+        <result property="applicablePerson"    column="applicable_person"    />
+        <result property="info"    column="info"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="code"    column="code"    />
+    </resultMap>
+
+    <sql id="selectTbCourseVo">
+        select id, name, subject, price, applicable_person, info, create_time,code from tb_course
+    </sql>
+
+    <select id="selectTbCourseList" parameterType="TbCourse" resultMap="TbCourseResult">
+        <include refid="selectTbCourseVo"/>
+        <where>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="code != null  and code != ''"> and code like concat('%', #{code}, '%')</if>
+            <if test="subject != null  and subject != ''"> and subject = #{subject}</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="applicablePerson != null  and applicablePerson != ''"> and applicable_person = #{applicablePerson}</if>
+            <if test="info != null  and info != ''"> and info = #{info}</if>
+            <if test="params.beginCreateTime != null and params.beginCreateTime != ''"><!-- 开始创建时间 -->
+                and date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginCreateTime},'%y%m%d')
+            </if>
+            <if test="params.endCreateTime != null and params.endCreateTime != ''"><!--  -->
+                and date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endCreateTime},'%y%m%d')
+            </if>
+        </where>
+        ORDER BY `create_time` DESC
+    </select>
+
+    <select id="selectTbCourseById" parameterType="Long" resultMap="TbCourseResult">
+        <include refid="selectTbCourseVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTbCourse" parameterType="TbCourse" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_course
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="code != null and code != ''">code,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="subject != null and subject != ''">subject,</if>
+            <if test="price != null">price,</if>
+            <if test="applicablePerson != null and applicablePerson != ''">applicable_person,</if>
+            <if test="info != null">info,</if>
+            <if test="createTime != null">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="code != null and code != ''">#{code},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="subject != null and subject != ''">#{subject},</if>
+            <if test="price != null">#{price},</if>
+            <if test="applicablePerson != null and applicablePerson != ''">#{applicablePerson},</if>
+            <if test="info != null">#{info},</if>
+            <if test="createTime != null">#{createTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTbCourse" parameterType="TbCourse">
+        update tb_course
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="subject != null and subject != ''">subject = #{subject},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="applicablePerson != null and applicablePerson != ''">applicable_person = #{applicablePerson},</if>
+            <if test="info != null">info = #{info},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTbCourseById" parameterType="Long">
+        delete from tb_course where id = #{id}
+    </delete>
+
+    <delete id="deleteTbCourseByIds" parameterType="String">
+        delete from tb_course where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
