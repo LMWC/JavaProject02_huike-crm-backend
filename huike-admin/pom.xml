@@ -67,11 +67,7 @@
         </dependency>
 
 
-        <!-- 代码生成-->
-        <dependency>
-            <groupId>com.huike</groupId>
-            <artifactId>huike-generator</artifactId>
-        </dependency>
+
 
         <!-- 线索管理-->
         <dependency>

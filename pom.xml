@@ -33,7 +33,6 @@
         <velocity.version>1.7</velocity.version>
         <jwt.version>0.9.1</jwt.version>
         <org.projectlombok.version>1.18.8</org.projectlombok.version>
-        <xxl_job.version>2.1.0</xxl_job.version>
 
     </properties>
 	
@@ -177,13 +176,6 @@
             </dependency>
             
 
-            <!-- 代码生成-->
-            <dependency>
-                <groupId>com.huike</groupId>
-                <artifactId>huike-generator</artifactId>
-                <version>${huike.version}</version>
-            </dependency>
-			
             <!-- 核心模块-->
             <dependency>
                 <groupId>com.huike</groupId>
@@ -252,7 +244,6 @@
         <module>huike-admin</module>
         <module>huike-framework</module>
         <module>huike-system</module>
-        <module>huike-generator</module>
         <module>huike-common</module>
         <module>huike-clues</module>
         <module>huike-business</module>
@@ -293,36 +284,7 @@
 <!--                </configuration>-->
 <!--            </plugin>-->
 
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>wagon-maven-plugin</artifactId>
-                <version>1.0</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.jcraft</groupId>
-                        <artifactId>jsch</artifactId>
-                        <version>0.1.54</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.bouncycastle</groupId>
-                        <artifactId>bcprov-jdk16</artifactId>
-                        <version>1.46</version>
-                    </dependency>
-                </dependencies>
-                <configuration>
-                    <serverId>huike</serverId>
-                    <fromFile>F:/crm/huike-parent/huike-admin/target/huike-admin.jar</fromFile>
-                    <url>scp://172.17.2.65/root/soft/</url>
-                    <commands>
-                        <command>sh /root/soft/jk.sh</command>
-                    </commands>
-                    <!-- 显示运行命令的输出结果 -->
-                    <displayCommandOutputs>true</displayCommandOutputs>
-                </configuration>
-            </plugin>
         </plugins>
-
-
     </build>
 
     <repositories>
