@@ -92,10 +92,6 @@ public interface TbClueMapper {
 	public List<Map<String, Object>> countAllClueByUser(@Param("indexVo")IndexStatisticsVo vo);
 
 
-	public Map<String, Object> getcontractsBasicInfo(@Param("indexVo")IndexStatisticsVo request, 
-			@Param("now")String now,@Param("username")String username);
-
-	
     /**
      * 统计线索数量
      * @param request
