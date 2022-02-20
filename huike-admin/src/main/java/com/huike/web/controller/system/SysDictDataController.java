@@ -34,30 +34,31 @@ import com.huike.common.utils.poi.ExcelUtil;
  */
 @RestController
 @RequestMapping("/system/dict/data")
-public class SysDictDataController extends BaseController
-{
+public class SysDictDataController extends BaseController {
     @Autowired
     private ISysDictDataService dictDataService;
 
     @Autowired
     private ISysDictTypeService dictTypeService;
 
-    //@ApiOperation("字典列表")
+    /**
+     * 字典列表
+     */
     @PreAuthorize("@ss.hasPermi('system:dict:list')")
     @GetMapping("/list")
-    public TableDataInfo list(SysDictData dictData)
-    {
+    public TableDataInfo list(SysDictData dictData) {
         startPage();
         List<SysDictData> list = dictDataService.selectDictDataList(dictData);
         return getDataTable(list);
     }
 
-    //@ApiOperation("字典导出")
+    /**
+     * 字典导出
+     */
     @Log(title = "字典数据", businessType = BusinessType.EXPORT)
     @PreAuthorize("@ss.hasPermi('system:dict:export')")
     @GetMapping("/export")
-    public AjaxResult export(SysDictData dictData)
-    {
+    public AjaxResult export(SysDictData dictData) {
         List<SysDictData> list = dictDataService.selectDictDataList(dictData);
         ExcelUtil<SysDictData> util = new ExcelUtil<SysDictData>(SysDictData.class);
         return util.exportExcel(list, "字典数据");
@@ -66,7 +67,6 @@ public class SysDictDataController extends BaseController
     /**
      * 查询字典数据详细
      */
-    //@ApiOperation("查询字典数据详细")
     @PreAuthorize("@ss.hasPermi('system:dict:query')")
     @GetMapping(value = "/{dictCode}")
     public AjaxResult getInfo(@PathVariable Long dictCode)
@@ -77,7 +77,6 @@ public class SysDictDataController extends BaseController
     /**
      * 根据字典类型查询字典数据信息
      */
-    //@ApiOperation("根据字典类型查询字典数据信息")
     @GetMapping(value = "/type/{dictType}")
     public AjaxResult dictType(@PathVariable String dictType)
     {
@@ -92,7 +91,6 @@ public class SysDictDataController extends BaseController
     /**
      * 新增字典类型
      */
-    //@ApiOperation("新增字典类型")
     @PreAuthorize("@ss.hasPermi('system:dict:add')")
     @Log(title = "字典数据", businessType = BusinessType.INSERT)
     @PostMapping
@@ -105,7 +103,6 @@ public class SysDictDataController extends BaseController
     /**
      * 修改保存字典类型
      */
-    //@ApiOperation("修改保存字典类型")
     @PreAuthorize("@ss.hasPermi('system:dict:edit')")
     @Log(title = "字典数据", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -118,12 +115,10 @@ public class SysDictDataController extends BaseController
     /**
      * 删除字典类型
      */
-    //@ApiOperation("删除字典类型")
     @PreAuthorize("@ss.hasPermi('system:dict:remove')")
     @Log(title = "字典类型", businessType = BusinessType.DELETE)
     @DeleteMapping("/{dictCodes}")
-    public AjaxResult remove(@PathVariable Long[] dictCodes)
-    {
+    public AjaxResult remove(@PathVariable Long[] dictCodes) {
         return toAjax(dictDataService.deleteDictDataByIds(dictCodes));
     }
 }

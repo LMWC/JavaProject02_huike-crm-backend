@@ -27,8 +27,7 @@ import com.huike.contract.service.ITbContractService;
  */
 @RestController
 @RequestMapping("/contract")
-public class TbContractController extends BaseController
-{
+public class TbContractController extends BaseController {
     @Autowired
     private ITbContractService tbContractService;
     
@@ -66,11 +65,15 @@ public class TbContractController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('contract:contract:detail')")
     @GetMapping(value = "/detail/{id}")
-    public AjaxResult detail(@PathVariable("id") Long id)
-    {
+    public AjaxResult detail(@PathVariable("id") Long id) {
         return AjaxResult.success(tbContractService.selectTbContractById(id));
     }
-    
+
+    /**
+     * 合同详情
+     * @param id
+     * @return
+     */
     @PreAuthorize("@ss.hasPermi('contract:contract:detail')")
     @GetMapping(value = "/{id}")
     public AjaxResult detailById(@PathVariable("id") Long id){
@@ -81,7 +84,6 @@ public class TbContractController extends BaseController
     /**
      * 新增合同
      */
-    //@ApiOperation("新增合同")
     @PreAuthorize("@ss.hasPermi('contract:contract:add')")
     @Log(title = "合同", businessType = BusinessType.INSERT)
     @PostMapping
@@ -95,12 +97,10 @@ public class TbContractController extends BaseController
     /**
      * 修改合同
      */
-    //@ApiOperation("修改合同")
     @PreAuthorize("@ss.hasPermi('contract:contract:edit')")
     @Log(title = "合同", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody TbContract tbContract)
-    {
+    public AjaxResult edit(@RequestBody TbContract tbContract) {
         return toAjax(tbContractService.updateTbContract(tbContract));
     }
 

@@ -51,7 +51,9 @@ public class TbClueController extends BaseController {
 		return getDataTablePage(list);
 	}
 
-	// @ApiOperation("查询线索池")
+	/**
+	 * 查询线索池
+	 */
 	@PreAuthorize("@ss.hasPermi('clues:clue:pool')")
 	@GetMapping("/pool")
 	public TableDataInfo pool(TbClue tbClue) {
@@ -63,7 +65,6 @@ public class TbClueController extends BaseController {
 	/**
 	 * 获取线索管理详细信息
 	 */
-	// @ApiOperation("获取线索基础信息")
 	@PreAuthorize("@ss.hasPermi('clues:clue:query')")
 	@GetMapping(value = "/{id}")
 	public AjaxResult getInfo(@PathVariable("id") Long id) {
@@ -73,7 +74,6 @@ public class TbClueController extends BaseController {
 	/**
 	 * 新增线索管理
 	 */
-	// @ApiOperation("新增线索管理")
 	@PreAuthorize("@ss.hasPermi('clues:clue:add')")
 	@Log(title = "线索管理", businessType = BusinessType.INSERT)
 	@PostMapping
@@ -85,7 +85,6 @@ public class TbClueController extends BaseController {
 	/**
 	 * 修改线索管理
 	 */
-	// @ApiOperation("修改线索管理")
 	@PreAuthorize("@ss.hasPermi('clues:clue:edit')")
 	@Log(title = "线索管理", businessType = BusinessType.UPDATE)
 	@PutMapping
@@ -105,7 +104,9 @@ public class TbClueController extends BaseController {
 		return toAjax(tbBusinessService.changeBusiness(id));
 	}
 
-	// @ApiOperation("批量分配")
+	/**
+	 * 批量分配
+	 */
 	@PreAuthorize("@ss.hasPermi('clues:clue:assignment')")
 	@Log(title = "批量分配", businessType = BusinessType.UPDATE)
 	@PutMapping("/assignment")
@@ -113,7 +114,9 @@ public class TbClueController extends BaseController {
 		return AjaxResult.success(tbClueService.assign(assignmentVo.getIds(), assignmentVo.getUserId()));
 	}
 
-	// @ApiOperation("批量捞取")
+	/**
+	 * 批量捞取
+	 */
 	@PreAuthorize("@ss.hasPermi('clues:clue:gain')")
 	@Log(title = "批量捞取", businessType = BusinessType.UPDATE)
 	@PutMapping("/gain")

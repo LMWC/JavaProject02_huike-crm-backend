@@ -26,12 +26,13 @@ import com.huike.common.utils.poi.ExcelUtil;
  */
 @RestController
 @RequestMapping("/monitor/logininfor")
-public class SysLogininforController extends BaseController
-{
+public class SysLogininforController extends BaseController {
     @Autowired
     private ISysLogininforService logininforService;
 
-    //@ApiOperation("登录日志列表")
+    /**
+     * 登录日志列表
+     */
     @PreAuthorize("@ss.hasPermi('monitor:logininfor:list')")
     @GetMapping("/list")
     public TableDataInfo list(SysLogininfor logininfor)
@@ -41,18 +42,21 @@ public class SysLogininforController extends BaseController
         return getDataTable(list);
     }
 
-    //@ApiOperation("日志导出")
+    /**
+     * 日志导出
+     */
     @Log(title = "登录日志", businessType = BusinessType.EXPORT)
     @PreAuthorize("@ss.hasPermi('monitor:logininfor:export')")
     @GetMapping("/export")
-    public AjaxResult export(SysLogininfor logininfor)
-    {
+    public AjaxResult export(SysLogininfor logininfor) {
         List<SysLogininfor> list = logininforService.selectLogininforList(logininfor);
         ExcelUtil<SysLogininfor> util = new ExcelUtil<SysLogininfor>(SysLogininfor.class);
         return util.exportExcel(list, "登录日志");
     }
 
-    //@ApiOperation("日志详情")
+    /**
+     * 日志详情
+     */
     @PreAuthorize("@ss.hasPermi('monitor:logininfor:remove')")
     @Log(title = "登录日志", businessType = BusinessType.DELETE)
     @DeleteMapping("/{infoIds}")
@@ -61,12 +65,13 @@ public class SysLogininforController extends BaseController
         return toAjax(logininforService.deleteLogininforByIds(infoIds));
     }
 
-    //@ApiOperation("清空日志")
+    /**
+     * 清空日志
+     */
     @PreAuthorize("@ss.hasPermi('monitor:logininfor:remove')")
     @Log(title = "登录日志", businessType = BusinessType.CLEAN)
     @DeleteMapping("/clean")
-    public AjaxResult clean()
-    {
+    public AjaxResult clean() {
         logininforService.cleanLogininfor();
         return AjaxResult.success();
     }

@@ -54,7 +54,6 @@ public class SysUserController extends BaseController{
     /**
      * 获取用户列表
      */
-    //@ApiOperation("用户权限分页列表")
     @PreAuthorize("@ss.hasPermi('system:user:list')")
     @GetMapping("/list")
     public TableDataInfo list(SysUser user)
@@ -70,7 +69,6 @@ public class SysUserController extends BaseController{
      * @param user
      * @return
      */
-    //@ApiOperation("获取用户部门下拉列表")
     @GetMapping("/listselect")
     public AjaxResult listselect(SysUser user)
     {

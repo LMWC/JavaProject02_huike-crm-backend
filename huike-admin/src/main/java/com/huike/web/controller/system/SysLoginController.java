@@ -27,8 +27,7 @@ import com.huike.framework.web.service.TokenService;
  * 
  */
 @RestController
-public class SysLoginController
-{
+public class SysLoginController {
     @Autowired
     private SysLoginService loginService;
 
@@ -47,7 +46,6 @@ public class SysLoginController
      * @param loginBody 登录信息
      * @return 结果
      */
-    //@ApiOperation("登录方法")
     @PostMapping("/login")
     public AjaxResult login(@RequestBody LoginBody loginBody)
     {
@@ -64,7 +62,6 @@ public class SysLoginController
      * 
      * @return 用户信息
      */
-    //@ApiOperation("获取用户信息")
     @GetMapping("getInfo")
     public AjaxResult getInfo()
     {
@@ -86,7 +83,6 @@ public class SysLoginController
      * 
      * @return 路由信息
      */
-    //@ApiOperation("获取路由信息")
     @GetMapping("getRouters")
     public AjaxResult getRouters()
     {

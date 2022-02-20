@@ -38,8 +38,7 @@ import com.huike.framework.web.service.TokenService;
  */
 @RestController
 @RequestMapping("/system/role")
-public class SysRoleController extends BaseController
-{
+public class SysRoleController extends BaseController {
     @Autowired
     private ISysRoleService roleService;
 
@@ -177,7 +176,6 @@ public class SysRoleController extends BaseController
     /**
      * 获取角色选择框列表
      */
-    //@ApiOperation("获取角色选择框列表")
     @PreAuthorize("@ss.hasPermi('system:role:query')")
     @GetMapping("/optionselect")
     public AjaxResult optionselect()

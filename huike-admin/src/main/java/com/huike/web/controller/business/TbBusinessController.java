@@ -43,7 +43,6 @@ public class TbBusinessController extends BaseController {
     /**
      * 查询商机列表
      */
-    //@ApiOperation("查询商机列表")
     @PreAuthorize("@ss.hasPermi('business:business:list')")
     @GetMapping("/list")
     public TableDataInfo list(TbBusiness tbBusiness,HttpServletRequest req){
@@ -58,8 +57,9 @@ public class TbBusinessController extends BaseController {
     }
 
 
-
-    //@ApiOperation("查询公海池")
+    /**
+     * 查询公海池
+     */
     @PreAuthorize("@ss.hasPermi('business:business:pool')")
     @GetMapping("/pool")
     public TableDataInfo pool(TbBusiness tbBusiness,HttpServletRequest req){
@@ -78,7 +78,6 @@ public class TbBusinessController extends BaseController {
     /**
      * 获取商机详细信息
      */
-    //@ApiOperation("获取商机详细信息")
     @PreAuthorize("@ss.hasPermi('business:business:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
@@ -89,7 +88,6 @@ public class TbBusinessController extends BaseController {
     /**
      * 新增商机
      */
-    //@ApiOperation("新增商机")
     @PreAuthorize("@ss.hasPermi('business:business:add')")
     @Log(title = "商机", businessType = BusinessType.INSERT)
     @PostMapping
@@ -102,7 +100,6 @@ public class TbBusinessController extends BaseController {
     /**
      * 修改商机
      */
-    //@ApiOperation("修改商机")
     @PreAuthorize("@ss.hasPermi('business:business:edit')")
     @Log(title = "商机", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -114,7 +111,6 @@ public class TbBusinessController extends BaseController {
     /**
      * 删除商机
      */
-    //@ApiOperation("删除商机")
     @PreAuthorize("@ss.hasPermi('business:business:remove')")
     @Log(title = "商机", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
@@ -123,7 +119,6 @@ public class TbBusinessController extends BaseController {
         return toAjax(tbBusinessService.deleteTbBusinessByIds(ids));
     }
 
-    //@ApiOperation("商机分配")
     @PreAuthorize("@ss.hasPermi('business:business:assignment')")
     @Log(title = "批量分配", businessType = BusinessType.UPDATE)
     @PutMapping("/assignment")
@@ -132,7 +127,6 @@ public class TbBusinessController extends BaseController {
         return AjaxResult.success(tbBusinessService.assign(assignmentVo.getIds(),assignmentVo.getUserId()));
     }
 
-    //@ApiOperation("批量捞取")
     @PreAuthorize("@ss.hasPermi('business:business:gain')")
     @Log(title = "批量捞取", businessType = BusinessType.UPDATE)
     @PutMapping("/gain")
@@ -142,7 +136,6 @@ public class TbBusinessController extends BaseController {
     }
 
 
-    //@ApiOperation("踢回公海")
     @PreAuthorize("@ss.hasPermi('business:business:back')")
     @Log(title = "踢回公海", businessType = BusinessType.UPDATE)
     @PutMapping("/back/{id}/{reason}")
