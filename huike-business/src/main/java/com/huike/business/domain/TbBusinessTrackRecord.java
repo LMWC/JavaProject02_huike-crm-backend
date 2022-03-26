@@ -14,8 +14,8 @@ import java.util.List;
  * 商机跟进记录对象 tb_business_track_record
  * @date 2021-04-28
  */
-public class TbBusinessTrackRecord extends BaseEntity{
-	
+public class TbBusinessTrackRecord extends BaseEntity
+{
     private static final long serialVersionUID = 1L;
 
     /** 任务id */

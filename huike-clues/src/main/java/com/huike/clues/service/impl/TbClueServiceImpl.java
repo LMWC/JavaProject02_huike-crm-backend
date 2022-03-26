@@ -3,6 +3,7 @@ package com.huike.clues.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import com.huike.clues.strategy.Rule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,18 +11,15 @@ import org.springframework.transaction.annotation.Transactional;
 import com.huike.clues.domain.TbActivity;
 import com.huike.clues.domain.TbAssignRecord;
 import com.huike.clues.domain.TbClue;
-import com.huike.clues.domain.TbClueTrackRecord;
 import com.huike.clues.domain.TbRulePool;
 import com.huike.clues.mapper.SysDictDataMapper;
 import com.huike.clues.mapper.SysUserMapper;
 import com.huike.clues.mapper.TbActivityMapper;
 import com.huike.clues.mapper.TbAssignRecordMapper;
 import com.huike.clues.mapper.TbClueMapper;
-import com.huike.clues.mapper.TbClueTrackRecordMapper;
 import com.huike.clues.service.ITbActivityService;
 import com.huike.clues.service.ITbClueService;
 import com.huike.clues.service.ITbRulePoolService;
-import com.huike.clues.strategy.Rule;
 import com.huike.clues.utils.HuiKeCrmDateUtils;
 import com.huike.clues.utils.JobUtils;
 import com.huike.common.annotation.DataScope;
@@ -47,9 +45,6 @@ public class TbClueServiceImpl implements ITbClueService {
 
 	@Autowired
 	private TbAssignRecordMapper assignRecordMapper;
-
-	@Autowired
-	private TbClueTrackRecordMapper tbClueTrackRecordMapper;
 
 	@Autowired
 	private SysUserMapper userMapper;
@@ -98,7 +93,6 @@ public class TbClueServiceImpl implements ITbClueService {
 	 * @return 线索管理
 	 */
 	@Override
-	@DataScope(deptAlias = "r", userAlias = "r")
 	public List<TbClue> selectTbClueList(TbClue tbClue) {
 		return tbClueMapper.selectTbClueList(tbClue);
 	}
@@ -177,6 +171,7 @@ public class TbClueServiceImpl implements ITbClueService {
 		return tbClueMapper.deleteTbClueById(id);
 	}
 
+
 	@Override
 	public String assign(Long[] clueIds, Long userId) {
 		TbRulePool rulePool = rulePoolService.selectTbRulePoolByType(Constants.rule_type_clue);
@@ -214,7 +209,7 @@ public class TbClueServiceImpl implements ITbClueService {
 		// 统计当前分配人所有线索
 		int asignRecords = assignRecordMapper.countAssignCluesByUser(userId);
 		if (asignRecords >= rulePool.getMaxNunmber()) {
-			throw  new CustomException("捞取失败！最大保有量("+rulePool.getMaxNunmber()+")，剩余可以捞取"+(rulePool.getMaxNunmber()-asignRecords)+"条线索");
+			throw new CustomException("捞取失败！最大保有量(" + rulePool.getMaxNunmber() + ")，剩余可以捞取0条线索");
 		}
 		for (int i = 0; i < clueIds.length; i++) {
 			Long clueId = clueIds[i];
@@ -274,6 +269,7 @@ public class TbClueServiceImpl implements ITbClueService {
 	public int updateStatus(Long clueId, String status) {
 		return tbClueMapper.resetNextTimeAndStatus(clueId, status);
 	}
+
 
 	/**
 	 * 校验线索手机号是否存在

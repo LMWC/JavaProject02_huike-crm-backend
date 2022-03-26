@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.huike.business.domain.TbBusiness;
 import com.huike.business.mapper.TbBusinessMapper;
-import com.huike.business.mapper.TbBusinessTrackRecordMapper;
 import com.huike.business.service.ITbBusinessService;
 import com.huike.clues.domain.TbAssignRecord;
 import com.huike.clues.domain.TbClue;
@@ -45,9 +44,6 @@ public class TbBusinessServiceImpl implements ITbBusinessService {
 
     @Autowired
     private TbAssignRecordMapper tbAssignRecordMapper;
-
-    @Autowired
-    private TbBusinessTrackRecordMapper tbBusinessTrackRecordMapper;
 
     @Autowired
     private SysUserMapper userMapper;

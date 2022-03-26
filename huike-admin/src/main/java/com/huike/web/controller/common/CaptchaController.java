@@ -26,6 +26,7 @@ import com.huike.common.utils.uuid.IdUtils;
  * 
  * 
  */
+//@Api("验证码")
 @RestController
 public class CaptchaController {
     @Resource(name = "captchaProducer")
@@ -44,6 +45,7 @@ public class CaptchaController {
     /**
      * 生成验证码
      */
+    //@ApiOperation("生成验证码")
     @GetMapping("/captchaImage")
     public AjaxResult getCode(HttpServletResponse response) throws IOException
     {

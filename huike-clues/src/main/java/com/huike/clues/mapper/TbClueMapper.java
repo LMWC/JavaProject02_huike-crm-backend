@@ -25,6 +25,9 @@ public interface TbClueMapper {
 
     public List<TbClue>  selectClueByIds(Long[] ids);
 
+//    public int countAllCluesForIndex(IndexStatisticsVo indexStatisticsVo);
+
+
     /**
      * 查询线索管理
      *
@@ -43,6 +46,7 @@ public interface TbClueMapper {
 
    // public int countAssignByUser(@Param("userId") Long userId);
 
+    public List<TbClue> selectTbClueForReport(TbClue tbClue);
 
 
     public List<TbClue> selectTbCluePoll(TbClue tbClue);
@@ -84,13 +88,31 @@ public interface TbClueMapper {
      */
     public int deleteTbClueByIds(Long[] ids);
 
+
+    /**
+     * 根据渠道活动统计
+     * @param tbClue
+     * @return
+     */
+    public Map<String,Object> countByActivity(TbClue tbClue);
+
+
     public List<Map<String,Object>> countAllContractByUser(@Param("indexVo")IndexStatisticsVo vo);
+
 
 	public void updateClueEndTimeById(@Param("id")Long id,@Param("endTime") Date endTime);
 
 
-	public List<Map<String, Object>> countAllClueByUser(@Param("indexVo")IndexStatisticsVo vo);
+	public Map<String, Object> getcontractsBasicInfo(@Param("indexVo")IndexStatisticsVo request,
+			@Param("now")String now,@Param("username")String username);
 
+	
+	/**
+	 * 删除伪线索
+	 * @param id
+	 * @return
+	 */
+	public int removeClueByFalseClue(@Param("id")Long id);
 
     /**
      * 统计线索数量

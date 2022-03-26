@@ -22,16 +22,19 @@ import com.huike.common.enums.BusinessType;
  */
 @RestController
 @RequestMapping("/rule/pool")
-public class TbRulePoolController extends BaseController {
+public class TbRulePoolController extends BaseController
+{
     @Autowired
     private ITbRulePoolService tbRulePoolService;
 
     /**
-     * 查询线索池规则列表 获取基础信息type=0 线索 type=1 商机
+     * 查询线索池规则列表
      */
    // @PreAuthorize("@ss.hasPermi('clues:pool:list')")
+    //@ApiOperation("获取基础信息type=0 线索 type=1 商机")
     @GetMapping("/{type}")
-    public AjaxResult getInfo(@PathVariable("type") String type) {
+    public AjaxResult getInfo(@PathVariable("type") String type)
+    {
 
         return AjaxResult.success(tbRulePoolService.selectTbRulePoolByType(type));
     }
@@ -40,6 +43,7 @@ public class TbRulePoolController extends BaseController {
     /**
      * 新增线索池规则
      */
+    //@ApiOperation("新增线索池规则")
     //@PreAuthorize("@ss.hasPermi('clues:pool:add')")
     @Log(title = "线索池规则", businessType = BusinessType.INSERT)
     @PostMapping
@@ -51,6 +55,7 @@ public class TbRulePoolController extends BaseController {
     /**
      * 修改线索池规则
      */
+    //@ApiOperation("修改线索池规则")
     //@PreAuthorize("@ss.hasPermi('clues:pool:edit')")
     @Log(title = "线索池规则", businessType = BusinessType.UPDATE)
     @PutMapping

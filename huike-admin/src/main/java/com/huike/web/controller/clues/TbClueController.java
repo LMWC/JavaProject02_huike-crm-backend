@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.huike.business.service.ITbBusinessService;
 import com.huike.clues.domain.TbClue;
@@ -38,9 +39,6 @@ public class TbClueController extends BaseController {
 	@Autowired
 	private ITbBusinessService tbBusinessService;
 
-	@Autowired
-	private ITbActivityService activityService;
-
 	/**
 	 * 查询线索管理列表
 	 */
@@ -53,6 +51,8 @@ public class TbClueController extends BaseController {
 
 	/**
 	 * 查询线索池
+	 * @param tbClue
+	 * @return
 	 */
 	@PreAuthorize("@ss.hasPermi('clues:clue:pool')")
 	@GetMapping("/pool")
@@ -63,7 +63,9 @@ public class TbClueController extends BaseController {
 	}
 
 	/**
-	 * 获取线索管理详细信息
+	 * 获取线索基础信息
+	 * @param id
+	 * @return
 	 */
 	@PreAuthorize("@ss.hasPermi('clues:clue:query')")
 	@GetMapping(value = "/{id}")
@@ -73,6 +75,8 @@ public class TbClueController extends BaseController {
 
 	/**
 	 * 新增线索管理
+	 * @param tbClue
+	 * @return
 	 */
 	@PreAuthorize("@ss.hasPermi('clues:clue:add')")
 	@Log(title = "线索管理", businessType = BusinessType.INSERT)
@@ -84,6 +88,8 @@ public class TbClueController extends BaseController {
 
 	/**
 	 * 修改线索管理
+	 * @param tbClue
+	 * @return
 	 */
 	@PreAuthorize("@ss.hasPermi('clues:clue:edit')")
 	@Log(title = "线索管理", businessType = BusinessType.UPDATE)
@@ -104,8 +110,11 @@ public class TbClueController extends BaseController {
 		return toAjax(tbBusinessService.changeBusiness(id));
 	}
 
+
 	/**
-	 * 批量分配
+	 * 线索批量分配
+	 * @param assignmentVo
+	 * @return
 	 */
 	@PreAuthorize("@ss.hasPermi('clues:clue:assignment')")
 	@Log(title = "批量分配", businessType = BusinessType.UPDATE)
@@ -116,6 +125,8 @@ public class TbClueController extends BaseController {
 
 	/**
 	 * 批量捞取
+	 * @param assignmentVo
+	 * @return
 	 */
 	@PreAuthorize("@ss.hasPermi('clues:clue:gain')")
 	@Log(title = "批量捞取", businessType = BusinessType.UPDATE)

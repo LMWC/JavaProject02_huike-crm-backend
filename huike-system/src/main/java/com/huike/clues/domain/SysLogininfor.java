@@ -11,8 +11,8 @@ import com.huike.common.core.domain.BaseEntity;
  * 
  * 
  */
-public class SysLogininfor extends BaseEntity{
-	
+public class SysLogininfor extends BaseEntity
+{
     private static final long serialVersionUID = 1L;
 
     /** ID */

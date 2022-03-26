@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.huike.clues.domain.TbClue;
+import com.huike.clues.domain.dto.ImportResultDTO;
 
 /**
  * 线索管理Service接口
@@ -81,6 +82,7 @@ public interface ITbClueService {
      */
     public int updateStatus(Long clueId,String status);
     
+
 	/**
 	 * 判断用户手机号是否存在
 	 * @param phone

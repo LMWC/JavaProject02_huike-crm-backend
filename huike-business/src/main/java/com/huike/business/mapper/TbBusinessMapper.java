@@ -21,6 +21,7 @@ public interface TbBusinessMapper {
      */
     public TbBusiness selectTbBusinessById(Long id);
     
+
     public int countAllBusinessForIndex(IndexStatisticsVo vo);
 
     /**
@@ -76,5 +77,4 @@ public interface TbBusinessMapper {
 
 	public void updateBusinessEndTimeById(@Param("id")Long id, @Param("endTime")Date endTime);
 
-	public List<Map<String,Object>> countAllContractByUser(@Param("indexVo")IndexStatisticsVo vo);
 }

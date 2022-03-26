@@ -163,6 +163,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
 
+    <select id="countAllBusinessForIndex" resultType="int" parameterType="com.huike.clues.domain.vo.IndexStatisticsVo">
+        select count(1) from tb_assign_record r where r.latest='1' and r.type='1'
+        <where>
+            <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
+                and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
+            </if>
+            <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
+                and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
+            </if>
+        </where>
+        ${params.dataScope}
+    </select>
+        
     <insert id="insertTbBusiness" parameterType="TbBusiness" useGeneratedKeys="true" keyProperty="id">
         insert into tb_business
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -289,28 +302,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
      <update id="updateBusinessEndTimeById">
         update tb_business set end_time=#{endTime},next_time = null where id = #{id}
     </update>
-    
-    <select id="countAllBusiness" resultType="int">
-       select count(id) from tb_business
-        <where>
-            <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
-                and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
-            </if>
-            <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
-                and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
-            </if>
-        </where>
-    </select>
-    
-    <select id="countAllContractByUser" parameterType="com.huike.clues.domain.vo.IndexStatisticsVo"  resultType="java.util.Map">
-        select c.create_by, count(c.id) as num ,d.`dept_name` as deptName from tb_contract c
-            LEFT JOIN `sys_dept` d
-            ON c.`dept_id`   = d.`dept_id`
-            <if test="indexVo.beginCreateTime != null and indexVo.beginCreateTime != ''"><!-- 开始创建时间 -->
-            	where c.`create_time` BETWEEN #{indexVo.beginCreateTime} AND #{indexVo.endCreateTime}
-            </if>
-        GROUP BY c.create_by
-        ORDER BY num DESC
-        LIMIT 10
-    </select>
+
 </mapper>

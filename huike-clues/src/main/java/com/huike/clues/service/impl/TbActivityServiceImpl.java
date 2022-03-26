@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.huike.common.utils.uuid.UUIDUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,14 +17,12 @@ import com.huike.common.core.redis.RedisCache;
 import com.huike.common.utils.DateUtils;
 import com.huike.common.utils.StringUtils;
 
-
 /**
  * 活动管理Service业务层处理
  * @date 2021-04-01
  */
 @Service
 public class TbActivityServiceImpl implements ITbActivityService {
-
     @Autowired
     private TbActivityMapper tbActivityMapper;
 
@@ -40,10 +37,10 @@ public class TbActivityServiceImpl implements ITbActivityService {
      * @return 活动管理
      */
     @Override
-    public TbActivity selectTbActivityById(Long id){
+    public TbActivity selectTbActivityById(Long id)
+    {
         return tbActivityMapper.selectTbActivityById(id);
     }
-
 
 
     @Override
@@ -78,9 +75,6 @@ public class TbActivityServiceImpl implements ITbActivityService {
         return rows;
     }
 
-
-
-
     /**
      * 修改活动管理
      * 
@@ -91,6 +85,11 @@ public class TbActivityServiceImpl implements ITbActivityService {
     public int updateTbActivity(TbActivity tbActivity){
         TbActivity dbActivity= tbActivityMapper.selectTbActivityById(tbActivity.getId());
         int rows= tbActivityMapper.updateTbActivity(tbActivity);
+        //结束时间修改任务
+        if(tbActivity.getEndTime()!=null&&!tbActivity.getEndTime().equals(dbActivity.getEndTime())){
+            String target="activityTask.finish('"+tbActivity.getId()+"')";
+            String jobName="活动结束任务id_"+tbActivity.getId();
+        }
         return rows;
     }
 
@@ -113,8 +112,11 @@ public class TbActivityServiceImpl implements ITbActivityService {
      * @return 结果
      */
     @Override
-    public int deleteTbActivityById(Long id) {
+    public int deleteTbActivityById(Long id){
         TbActivity tbActivity = tbActivityMapper.selectTbActivityById(id);
+        if(tbActivity==null){
+            return 0;
+        }
         int rows=tbActivityMapper.deleteTbActivityById(id);
         return rows;
     }
@@ -141,5 +143,4 @@ public class TbActivityServiceImpl implements ITbActivityService {
         }
         return code;
     }
-
 }

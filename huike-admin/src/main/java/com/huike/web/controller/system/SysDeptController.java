@@ -73,6 +73,7 @@ public class SysDeptController extends BaseController{
     /**
      * 根据部门编号获取详细信息
      */
+    //@ApiOperation("根据部门编号获取详细信息")
     @PreAuthorize("@ss.hasPermi('system:dept:query')")
     @GetMapping(value = "/{deptId}")
     public AjaxResult getInfo(@PathVariable Long deptId)
@@ -83,6 +84,7 @@ public class SysDeptController extends BaseController{
     /**
      * 获取部门下拉树列表
      */
+    //@ApiOperation("获取部门下拉树列表")
     @GetMapping("/treeselect")
     public AjaxResult treeselect(SysDept dept)
     {
@@ -94,6 +96,7 @@ public class SysDeptController extends BaseController{
     /**
      * 加载对应角色部门列表树
      */
+    //@ApiOperation("获取对应角色部门列表树")
     @GetMapping(value = "/roleDeptTreeselect/{roleId}")
     public AjaxResult roleDeptTreeselect(@PathVariable("roleId") Long roleId)
     {
@@ -166,9 +169,7 @@ public class SysDeptController extends BaseController{
     }
 
 
-    /**
-     * 获取部门及人员
-     */
+    //@ApiOperation("获取部门及人员")
     @GetMapping("/treeAnduser")
     public AjaxResult treeAnduser()
     {

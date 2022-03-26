@@ -39,8 +39,7 @@ public class TbActivityController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('clues:activity:list')")
     @GetMapping("/list")
-    public TableDataInfo list(TbActivity tbActivity)
-    {
+    public TableDataInfo list(TbActivity tbActivity) {
         startPage();
         List<TbActivity> list = tbActivityService.selectTbActivityList(tbActivity);
         Map<String,Object> countParms=tbActivityService.getCountByStatus();
@@ -54,8 +53,7 @@ public class TbActivityController extends BaseController {
      * @return
      */
     @GetMapping("/listselect/{channel}")
-    public AjaxResult list(@PathVariable("channel")  String channel)
-    {
+    public AjaxResult list(@PathVariable("channel")  String channel) {
         TbActivity tbActivity =new TbActivity();
         tbActivity.setChannel(channel);
         tbActivity.setStatus("2");

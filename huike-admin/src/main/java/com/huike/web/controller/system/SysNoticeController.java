@@ -3,7 +3,6 @@ package com.huike.web.controller.system;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -32,6 +31,7 @@ public class SysNoticeController extends BaseController
     /**
      * 获取通知公告列表
      */
+    //@ApiOperation("获取系统提醒分页列表")
    // @PreAuthorize("@ss.hasPermi('system:notice:pagelist')")
     @GetMapping("/pagelist/{status}")
     public TableDataInfo pagelist(@PathVariable String status)
@@ -41,10 +41,8 @@ public class SysNoticeController extends BaseController
         return getDataTable(list);
     }
 
-    /**
-     * 获取系统提醒下拉列表
-     */
-    @PreAuthorize("@ss.hasPermi('system:notice:list')")
+    //@ApiOperation("获取系统提醒下拉列表")
+   // @PreAuthorize("@ss.hasPermi('system:notice:list')")
     @GetMapping("/list/{status}")
     public AjaxResult list(@PathVariable String status)
     {
@@ -55,7 +53,8 @@ public class SysNoticeController extends BaseController
     /**
      * 根据通知公告编号获取详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:notice:query')")
+    //@ApiOperation("获取详情信息")
+   // @PreAuthorize("@ss.hasPermi('system:notice:query')")
     @GetMapping(value = "/{noticeId}")
     public AjaxResult getInfo(@PathVariable Long noticeId)
     {
@@ -66,7 +65,8 @@ public class SysNoticeController extends BaseController
     /**
      * 修改通知公告
      */
-    @PreAuthorize("@ss.hasPermi('system:notice:edit')")
+    //@ApiOperation("未读变已读")
+   // @PreAuthorize("@ss.hasPermi('system:notice:edit')")
     @Log(title = "修改已读", businessType = BusinessType.UPDATE)
     @PutMapping(value = "/{noticeId}")
     public AjaxResult edit(@PathVariable Long noticeId)

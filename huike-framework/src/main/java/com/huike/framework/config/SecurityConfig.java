@@ -98,6 +98,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         HttpMethod.GET,
                         "/*.ttf",
+                        "/index/*",
                         "/*.woff",
                         "/*.gif",
                         "/*.eot",

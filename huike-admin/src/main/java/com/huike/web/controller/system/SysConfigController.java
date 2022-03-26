@@ -31,7 +31,8 @@ import com.huike.clues.service.ISysConfigService;
  */
 @RestController
 @RequestMapping("/system/config")
-public class SysConfigController extends BaseController {
+public class SysConfigController extends BaseController
+{
     @Autowired
     private ISysConfigService configService;
 
@@ -40,7 +41,8 @@ public class SysConfigController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('system:config:list')")
     @GetMapping("/list")
-    public TableDataInfo list(SysConfig config) {
+    public TableDataInfo list(SysConfig config)
+    {
         startPage();
         List<SysConfig> list = configService.selectConfigList(config);
         return getDataTable(list);
@@ -49,7 +51,8 @@ public class SysConfigController extends BaseController {
     @Log(title = "参数管理", businessType = BusinessType.EXPORT)
     @PreAuthorize("@ss.hasPermi('system:config:export')")
     @GetMapping("/export")
-    public AjaxResult export(SysConfig config) {
+    public AjaxResult export(SysConfig config)
+    {
         List<SysConfig> list = configService.selectConfigList(config);
         ExcelUtil<SysConfig> util = new ExcelUtil<SysConfig>(SysConfig.class);
         return util.exportExcel(list, "参数数据");
@@ -60,7 +63,8 @@ public class SysConfigController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('system:config:query')")
     @GetMapping(value = "/{configId}")
-    public AjaxResult getInfo(@PathVariable Long configId) {
+    public AjaxResult getInfo(@PathVariable Long configId)
+    {
         return AjaxResult.success(configService.selectConfigById(configId));
     }
 
@@ -68,7 +72,8 @@ public class SysConfigController extends BaseController {
      * 根据参数键名查询参数值
      */
     @GetMapping(value = "/configKey/{configKey}")
-    public AjaxResult getConfigKey(@PathVariable String configKey) {
+    public AjaxResult getConfigKey(@PathVariable String configKey)
+    {
         return AjaxResult.success(configService.selectConfigByKey(configKey));
     }
 
@@ -95,7 +100,8 @@ public class SysConfigController extends BaseController {
     @PreAuthorize("@ss.hasPermi('system:config:edit')")
     @Log(title = "参数管理", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@Validated @RequestBody SysConfig config) {
+    public AjaxResult edit(@Validated @RequestBody SysConfig config)
+    {
         if (UserConstants.NOT_UNIQUE.equals(configService.checkConfigKeyUnique(config)))
         {
             return AjaxResult.error("修改参数'" + config.getConfigName() + "'失败，参数键名已存在");
