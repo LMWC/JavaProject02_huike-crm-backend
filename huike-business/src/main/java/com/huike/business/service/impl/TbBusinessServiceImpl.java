@@ -208,7 +208,7 @@ public class TbBusinessServiceImpl implements ITbBusinessService {
         // 统计当前分配人所有线索
         int assignRecords = tbAssignRecordMapper.countAssignBusinessByUser(userId);
         if(assignRecords>=rulePool.getMaxNunmber()){
-            throw  new CustomException("捞取失败！最大保有量("+rulePool.getMaxNunmber()+")，剩余可以捞取"+(rulePool.getMaxNunmber()-assignRecords)+"条线索");
+            throw  new CustomException("捞取失败！最大保有量("+rulePool.getMaxNunmber()+")，剩余可以捞取"+(rulePool.getMaxNunmber()-assignRecords)+"条商机");
         }
         for (int i = 0; i < businessIds.length; i++) {
             Long businessId = businessIds[i];

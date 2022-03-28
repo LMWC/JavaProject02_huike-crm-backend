@@ -1,6 +1,6 @@
 /*
 SQLyog Community v13.1.6 (64 bit)
-MySQL - 5.7.3-m13 : Database - huike
+MySQL - 8.0.20 : Database - huike
 *********************************************************************
 */
 
@@ -12,7 +12,7 @@ MySQL - 5.7.3-m13 : Database - huike
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`huike` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`huike` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 
 USE `huike`;
 
@@ -21,16 +21,16 @@ USE `huike`;
 DROP TABLE IF EXISTS `sys_config`;
 
 CREATE TABLE `sys_config` (
-  `config_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '参数主键',
-  `config_name` varchar(100) COLLATE utf8_bin DEFAULT '' COMMENT '参数名称',
-  `config_key` varchar(100) COLLATE utf8_bin DEFAULT '' COMMENT '参数键名',
-  `config_value` varchar(500) COLLATE utf8_bin DEFAULT '' COMMENT '参数键值',
-  `config_type` char(1) COLLATE utf8_bin DEFAULT 'N' COMMENT '系统内置（Y是 N否）',
-  `create_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '创建者',
+  `config_id` int NOT NULL AUTO_INCREMENT COMMENT '参数主键',
+  `config_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '参数名称',
+  `config_key` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '参数键名',
+  `config_value` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '参数键值',
+  `config_type` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT 'N' COMMENT '系统内置（Y是 N否）',
+  `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '创建者',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `update_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '更新者',
+  `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '更新者',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  `remark` varchar(500) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
+  `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`config_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='参数配置表';
 
@@ -46,19 +46,19 @@ insert  into `sys_config`(`config_id`,`config_name`,`config_key`,`config_value`,
 DROP TABLE IF EXISTS `sys_dept`;
 
 CREATE TABLE `sys_dept` (
-  `dept_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '部门id',
-  `parent_id` bigint(20) DEFAULT '0' COMMENT '父部门id',
-  `ancestors` varchar(50) COLLATE utf8_bin DEFAULT '' COMMENT '祖级列表',
-  `dept_name` varchar(30) COLLATE utf8_bin DEFAULT '' COMMENT '部门名称',
-  `order_num` int(11) DEFAULT '0' COMMENT '显示顺序',
-  `leader` varchar(20) COLLATE utf8_bin DEFAULT NULL COMMENT '负责人',
-  `phone` varchar(11) COLLATE utf8_bin DEFAULT NULL COMMENT '联系电话',
-  `email` varchar(50) COLLATE utf8_bin DEFAULT NULL COMMENT '邮箱',
-  `status` char(1) COLLATE utf8_bin DEFAULT '0' COMMENT '部门状态（0正常 1停用）',
-  `del_flag` char(1) COLLATE utf8_bin DEFAULT '0' COMMENT '删除标志（0代表存在 2代表删除）',
-  `create_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '创建者',
+  `dept_id` bigint NOT NULL AUTO_INCREMENT COMMENT '部门id',
+  `parent_id` bigint DEFAULT '0' COMMENT '父部门id',
+  `ancestors` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '祖级列表',
+  `dept_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '部门名称',
+  `order_num` int DEFAULT '0' COMMENT '显示顺序',
+  `leader` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '负责人',
+  `phone` varchar(11) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '联系电话',
+  `email` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '邮箱',
+  `status` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '0' COMMENT '部门状态（0正常 1停用）',
+  `del_flag` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '0' COMMENT '删除标志（0代表存在 2代表删除）',
+  `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '创建者',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `update_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '更新者',
+  `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '更新者',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`dept_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=215 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='部门表';
@@ -96,20 +96,20 @@ insert  into `sys_dept`(`dept_id`,`parent_id`,`ancestors`,`dept_name`,`order_num
 DROP TABLE IF EXISTS `sys_dict_data`;
 
 CREATE TABLE `sys_dict_data` (
-  `dict_code` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '字典编码',
-  `dict_sort` int(11) DEFAULT '0' COMMENT '字典排序',
-  `dict_label` varchar(100) COLLATE utf8_bin DEFAULT '' COMMENT '字典标签',
-  `dict_value` varchar(100) COLLATE utf8_bin DEFAULT '' COMMENT '字典键值',
-  `dict_type` varchar(100) COLLATE utf8_bin DEFAULT '' COMMENT '字典类型',
-  `css_class` varchar(100) COLLATE utf8_bin DEFAULT NULL COMMENT '样式属性（其他样式扩展）',
-  `list_class` varchar(100) COLLATE utf8_bin DEFAULT NULL COMMENT '表格回显样式',
-  `is_default` char(1) COLLATE utf8_bin DEFAULT 'N' COMMENT '是否默认（Y是 N否）',
-  `status` char(1) COLLATE utf8_bin DEFAULT '0' COMMENT '状态（0正常 1停用）',
-  `create_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '创建者',
+  `dict_code` bigint NOT NULL AUTO_INCREMENT COMMENT '字典编码',
+  `dict_sort` int DEFAULT '0' COMMENT '字典排序',
+  `dict_label` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '字典标签',
+  `dict_value` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '字典键值',
+  `dict_type` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '字典类型',
+  `css_class` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '样式属性（其他样式扩展）',
+  `list_class` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '表格回显样式',
+  `is_default` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT 'N' COMMENT '是否默认（Y是 N否）',
+  `status` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '0' COMMENT '状态（0正常 1停用）',
+  `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '创建者',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `update_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '更新者',
+  `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '更新者',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  `remark` varchar(500) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
+  `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`dict_code`)
 ) ENGINE=InnoDB AUTO_INCREMENT=234 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='字典数据表';
 
@@ -279,15 +279,15 @@ insert  into `sys_dict_data`(`dict_code`,`dict_sort`,`dict_label`,`dict_value`,`
 DROP TABLE IF EXISTS `sys_dict_type`;
 
 CREATE TABLE `sys_dict_type` (
-  `dict_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '字典主键',
-  `dict_name` varchar(100) COLLATE utf8_bin DEFAULT '' COMMENT '字典名称',
-  `dict_type` varchar(100) COLLATE utf8_bin DEFAULT '' COMMENT '字典类型',
-  `status` char(1) COLLATE utf8_bin DEFAULT '0' COMMENT '状态（0正常 1停用）',
-  `create_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '创建者',
+  `dict_id` bigint NOT NULL AUTO_INCREMENT COMMENT '字典主键',
+  `dict_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '字典名称',
+  `dict_type` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '字典类型',
+  `status` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '0' COMMENT '状态（0正常 1停用）',
+  `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '创建者',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `update_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '更新者',
+  `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '更新者',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  `remark` varchar(500) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
+  `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`dict_id`),
   UNIQUE KEY `dict_type` (`dict_type`)
 ) ENGINE=InnoDB AUTO_INCREMENT=125 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='字典类型表';
@@ -336,17 +336,17 @@ insert  into `sys_dict_type`(`dict_id`,`dict_name`,`dict_type`,`status`,`create_
 DROP TABLE IF EXISTS `sys_logininfor`;
 
 CREATE TABLE `sys_logininfor` (
-  `info_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '访问ID',
-  `user_name` varchar(50) COLLATE utf8_bin DEFAULT '' COMMENT '用户账号',
-  `ipaddr` varchar(128) COLLATE utf8_bin DEFAULT '' COMMENT '登录IP地址',
-  `login_location` varchar(255) COLLATE utf8_bin DEFAULT '' COMMENT '登录地点',
-  `browser` varchar(50) COLLATE utf8_bin DEFAULT '' COMMENT '浏览器类型',
-  `os` varchar(50) COLLATE utf8_bin DEFAULT '' COMMENT '操作系统',
-  `status` char(1) COLLATE utf8_bin DEFAULT '0' COMMENT '登录状态（0成功 1失败）',
-  `msg` varchar(255) COLLATE utf8_bin DEFAULT '' COMMENT '提示消息',
+  `info_id` bigint NOT NULL AUTO_INCREMENT COMMENT '访问ID',
+  `user_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '用户账号',
+  `ipaddr` varchar(128) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '登录IP地址',
+  `login_location` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '登录地点',
+  `browser` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '浏览器类型',
+  `os` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '操作系统',
+  `status` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '0' COMMENT '登录状态（0成功 1失败）',
+  `msg` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '提示消息',
   `login_time` datetime DEFAULT NULL COMMENT '访问时间',
   PRIMARY KEY (`info_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4026 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='系统访问记录';
+) ENGINE=InnoDB AUTO_INCREMENT=4053 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='系统访问记录';
 
 /*Data for the table `sys_logininfor` */
 
@@ -1715,31 +1715,58 @@ insert  into `sys_logininfor`(`info_id`,`user_name`,`ipaddr`,`login_location`,`b
 (4022,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','0','登录成功','2022-03-17 13:58:54'),
 (4023,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','1','验证码错误','2022-03-17 15:13:32'),
 (4024,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','0','登录成功','2022-03-17 15:13:34'),
-(4025,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','1','验证码已失效','2022-03-23 21:31:36');
+(4025,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','1','验证码已失效','2022-03-23 21:31:36'),
+(4026,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','0','登录成功','2022-03-25 14:01:44'),
+(4027,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','1','验证码错误','2022-03-25 14:02:47'),
+(4028,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','1','验证码错误','2022-03-25 14:02:50'),
+(4029,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','0','登录成功','2022-03-25 14:03:29'),
+(4030,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','1','验证码错误','2022-03-26 22:59:05'),
+(4031,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','0','登录成功','2022-03-26 22:59:09'),
+(4032,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','1','验证码错误','2022-03-26 23:01:06'),
+(4033,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','0','登录成功','2022-03-26 23:01:09'),
+(4034,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','1','验证码错误','2022-03-27 00:11:43'),
+(4035,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','1','验证码错误','2022-03-27 00:11:49'),
+(4036,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','1','验证码错误','2022-03-27 00:11:55'),
+(4037,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','0','登录成功','2022-03-27 00:11:58'),
+(4038,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','0','登录成功','2022-03-27 16:04:28'),
+(4039,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','1','验证码错误','2022-03-27 23:51:27'),
+(4040,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','0','登录成功','2022-03-27 23:51:32'),
+(4041,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','0','登录成功','2022-03-28 08:32:32'),
+(4042,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','1','验证码错误','2022-03-28 09:09:52'),
+(4043,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','0','登录成功','2022-03-28 09:09:55'),
+(4044,'admin','127.0.0.1','内网IP','Chrome 8','Windows 10','0','登录成功','2022-03-28 09:19:40'),
+(4045,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','0','登录成功','2022-03-28 09:44:13'),
+(4046,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','1','验证码错误','2022-03-28 10:52:20'),
+(4047,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','0','登录成功','2022-03-28 10:52:22'),
+(4048,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','0','登录成功','2022-03-28 11:53:53'),
+(4049,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','0','登录成功','2022-03-28 14:52:55'),
+(4050,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','0','登录成功','2022-03-28 15:58:39'),
+(4051,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','0','登录成功','2022-03-28 20:23:44'),
+(4052,'admin','127.0.0.1','内网IP','Chrome 9','Windows 10','0','登录成功','2022-03-28 20:24:00');
 
 /*Table structure for table `sys_menu` */
 
 DROP TABLE IF EXISTS `sys_menu`;
 
 CREATE TABLE `sys_menu` (
-  `menu_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '菜单ID',
-  `menu_name` varchar(50) COLLATE utf8_bin NOT NULL COMMENT '菜单名称',
-  `parent_id` bigint(20) DEFAULT '0' COMMENT '父菜单ID',
-  `order_num` int(11) DEFAULT '0' COMMENT '显示顺序',
-  `path` varchar(200) COLLATE utf8_bin DEFAULT '' COMMENT '路由地址',
-  `component` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '组件路径',
-  `is_frame` int(11) DEFAULT '1' COMMENT '是否为外链（0是 1否）',
-  `is_cache` int(11) DEFAULT '0' COMMENT '是否缓存（0缓存 1不缓存）',
-  `menu_type` char(1) COLLATE utf8_bin DEFAULT '' COMMENT '菜单类型（M目录 C菜单 F按钮）',
-  `visible` char(1) COLLATE utf8_bin DEFAULT '0' COMMENT '菜单状态（0显示 1隐藏）',
-  `status` char(1) COLLATE utf8_bin DEFAULT '0' COMMENT '菜单状态（0正常 1停用）',
-  `perms` varchar(100) COLLATE utf8_bin DEFAULT NULL COMMENT '权限标识',
-  `icon` varchar(100) COLLATE utf8_bin DEFAULT '#' COMMENT '菜单图标',
-  `create_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '创建者',
+  `menu_id` bigint NOT NULL AUTO_INCREMENT COMMENT '菜单ID',
+  `menu_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '菜单名称',
+  `parent_id` bigint DEFAULT '0' COMMENT '父菜单ID',
+  `order_num` int DEFAULT '0' COMMENT '显示顺序',
+  `path` varchar(200) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '路由地址',
+  `component` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '组件路径',
+  `is_frame` int DEFAULT '1' COMMENT '是否为外链（0是 1否）',
+  `is_cache` int DEFAULT '0' COMMENT '是否缓存（0缓存 1不缓存）',
+  `menu_type` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '菜单类型（M目录 C菜单 F按钮）',
+  `visible` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '0' COMMENT '菜单状态（0显示 1隐藏）',
+  `status` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '0' COMMENT '菜单状态（0正常 1停用）',
+  `perms` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '权限标识',
+  `icon` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '#' COMMENT '菜单图标',
+  `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '创建者',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `update_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '更新者',
+  `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '更新者',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  `remark` varchar(500) COLLATE utf8_bin DEFAULT '' COMMENT '备注',
+  `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '备注',
   PRIMARY KEY (`menu_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2077 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='菜单权限表';
 
@@ -1859,17 +1886,17 @@ insert  into `sys_menu`(`menu_id`,`menu_name`,`parent_id`,`order_num`,`path`,`co
 DROP TABLE IF EXISTS `sys_notice`;
 
 CREATE TABLE `sys_notice` (
-  `notice_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '公告ID',
-  `notice_title` varchar(50) COLLATE utf8_bin NOT NULL COMMENT '公告标题',
-  `notice_type` char(1) COLLATE utf8_bin NOT NULL COMMENT '公告类型（1通知 2公告）',
+  `notice_id` int NOT NULL AUTO_INCREMENT COMMENT '公告ID',
+  `notice_title` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '公告标题',
+  `notice_type` char(1) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '公告类型（1通知 2公告）',
   `notice_content` longblob COMMENT '公告内容',
-  `status` char(1) COLLATE utf8_bin DEFAULT '0' COMMENT '公告状态（0正常 1关闭）',
-  `create_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '创建者',
+  `status` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '0' COMMENT '公告状态（0正常 1关闭）',
+  `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '创建者',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `update_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '更新者',
+  `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '更新者',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  `remark` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
-  `notice_user_id` bigint(20) DEFAULT NULL,
+  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
+  `notice_user_id` bigint DEFAULT NULL,
   PRIMARY KEY (`notice_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='通知公告表';
 
@@ -1885,24 +1912,24 @@ insert  into `sys_notice`(`notice_id`,`notice_title`,`notice_type`,`notice_conte
 DROP TABLE IF EXISTS `sys_oper_log`;
 
 CREATE TABLE `sys_oper_log` (
-  `oper_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '日志主键',
-  `title` varchar(50) COLLATE utf8_bin DEFAULT '' COMMENT '模块标题',
-  `business_type` int(11) DEFAULT '0' COMMENT '业务类型（0其它 1新增 2修改 3删除）',
-  `method` varchar(100) COLLATE utf8_bin DEFAULT '' COMMENT '方法名称',
-  `request_method` varchar(10) COLLATE utf8_bin DEFAULT '' COMMENT '请求方式',
-  `operator_type` int(11) DEFAULT '0' COMMENT '操作类别（0其它 1后台用户 2手机端用户）',
-  `oper_name` varchar(50) COLLATE utf8_bin DEFAULT '' COMMENT '操作人员',
-  `dept_name` varchar(50) COLLATE utf8_bin DEFAULT '' COMMENT '部门名称',
-  `oper_url` varchar(255) COLLATE utf8_bin DEFAULT '' COMMENT '请求URL',
-  `oper_ip` varchar(128) COLLATE utf8_bin DEFAULT '' COMMENT '主机地址',
-  `oper_location` varchar(255) COLLATE utf8_bin DEFAULT '' COMMENT '操作地点',
-  `oper_param` varchar(2000) COLLATE utf8_bin DEFAULT '' COMMENT '请求参数',
-  `json_result` varchar(2000) COLLATE utf8_bin DEFAULT '' COMMENT '返回参数',
-  `status` int(11) DEFAULT '0' COMMENT '操作状态（0正常 1异常）',
-  `error_msg` varchar(2000) COLLATE utf8_bin DEFAULT '' COMMENT '错误消息',
+  `oper_id` bigint NOT NULL AUTO_INCREMENT COMMENT '日志主键',
+  `title` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '模块标题',
+  `business_type` int DEFAULT '0' COMMENT '业务类型（0其它 1新增 2修改 3删除）',
+  `method` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '方法名称',
+  `request_method` varchar(10) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '请求方式',
+  `operator_type` int DEFAULT '0' COMMENT '操作类别（0其它 1后台用户 2手机端用户）',
+  `oper_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '操作人员',
+  `dept_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '部门名称',
+  `oper_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '请求URL',
+  `oper_ip` varchar(128) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '主机地址',
+  `oper_location` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '操作地点',
+  `oper_param` varchar(2000) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '请求参数',
+  `json_result` varchar(2000) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '返回参数',
+  `status` int DEFAULT '0' COMMENT '操作状态（0正常 1异常）',
+  `error_msg` varchar(2000) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '错误消息',
   `oper_time` datetime DEFAULT NULL COMMENT '操作时间',
   PRIMARY KEY (`oper_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21052 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='操作日志记录';
+) ENGINE=InnoDB AUTO_INCREMENT=21060 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='操作日志记录';
 
 /*Data for the table `sys_oper_log` */
 
@@ -5945,23 +5972,31 @@ insert  into `sys_oper_log`(`oper_id`,`title`,`business_type`,`method`,`request_
 (21048,'活动管理',1,'com.huike.web.controller.clues.TbActivityController.add()','POST',1,'admin',NULL,'/clues/activity','127.0.0.1','内网IP','{\"code\":\"o8d7sau4\",\"channel\":\"0\",\"params\":{},\"type\":\"2\",\"vouchers\":1,\"createTime\":1645515159606,\"name\":\"435354\",\"beginTime\":1645804800000,\"endTime\":1647532740000,\"id\":114,\"info\":\"435\",\"status\":\"2\"}','{\"msg\":\"操作成功\",\"code\":200}',0,NULL,'2022-02-22 15:32:39'),
 (21049,'线索管理',1,'com.huike.web.controller.clues.TbClueController.add()','POST',1,'admin',NULL,'/clues/clue','127.0.0.1','内网IP','{\"channel\":\"0\",\"activityId\":111,\"id\":9087,\"createTimeStr\":\"2022-02-24\",\"qq\":\"506233321\",\"sex\":\"0\",\"params\":{},\"createBy\":\"admin\",\"weixin\":\"wx1212121\",\"createTime\":1645655121931,\"phone\":\"15011112121\",\"falseCount\":0,\"name\":\"张三\",\"age\":22}','{\"msg\":\"操作成功\",\"code\":200}',0,NULL,'2022-02-24 06:25:22'),
 (21050,'合同',1,'com.huike.web.controller.contract.TbContractController.add()','POST',1,'admin',NULL,'/contract','127.0.0.1','内网IP','{\"fileName\":\"/huike-crm/2022/03/11/46aba7e8401749c5bf19ae58e7ac241c.pdf\",\"contractNo\":\"HT11120\",\"subject\":\"1\",\"channel\":\"0\",\"deptId\":103,\"params\":{},\"activityId\":113,\"createBy\":\"admin\",\"createTime\":1646987003514,\"phone\":\"15120132111\",\"coursePrice\":1888.0,\"name\":\"李师师\",\"discountType\":\"课程折扣\",\"id\":\"161660455985000\",\"courseId\":47,\"order\":188.8,\"status\":\"4\"}','{\"msg\":\"操作成功\",\"code\":200}',0,NULL,'2022-03-11 16:23:23'),
-(21051,'活动管理',1,'com.huike.web.controller.clues.TbActivityController.add()','POST',1,'admin',NULL,'/clues/activity','127.0.0.1','内网IP','{\"code\":\"vuletn7q\",\"channel\":\"0\",\"discount\":8.0,\"params\":{},\"type\":\"1\",\"createTime\":1647336949804,\"name\":\"测试活动编号\",\"beginTime\":1647273600000,\"endTime\":1649865540000,\"id\":115,\"info\":\"用于查看活动编号\",\"status\":\"2\"}','{\"msg\":\"操作成功\",\"code\":200}',0,NULL,'2022-03-15 17:35:49');
+(21051,'活动管理',1,'com.huike.web.controller.clues.TbActivityController.add()','POST',1,'admin',NULL,'/clues/activity','127.0.0.1','内网IP','{\"code\":\"vuletn7q\",\"channel\":\"0\",\"discount\":8.0,\"params\":{},\"type\":\"1\",\"createTime\":1647336949804,\"name\":\"测试活动编号\",\"beginTime\":1647273600000,\"endTime\":1649865540000,\"id\":115,\"info\":\"用于查看活动编号\",\"status\":\"2\"}','{\"msg\":\"操作成功\",\"code\":200}',0,NULL,'2022-03-15 17:35:49'),
+(21052,'批量捞取',2,'com.huike.web.controller.clues.TbClueController.gain()','PUT',1,'admin',NULL,'/clues/clue/gain','127.0.0.1','内网IP','{\"ids\":[8335],\"userId\":1}','null',1,'捞取失败！最大保有量(20)，剩余可以捞取0条线索','2022-03-28 09:45:14'),
+(21053,'批量捞取',2,'com.huike.web.controller.clues.TbClueController.gain()','PUT',1,'admin',NULL,'/clues/clue/gain','127.0.0.1','内网IP','{\"ids\":[8336],\"userId\":1}','null',1,'捞取失败！最大保有量(20)，剩余可以捞取0条线索','2022-03-28 09:45:33'),
+(21054,'批量捞取',2,'com.huike.web.controller.clues.TbClueController.gain()','PUT',1,'admin',NULL,'/clues/clue/gain','127.0.0.1','内网IP','{\"ids\":[8337],\"userId\":1}','null',1,'捞取失败！最大保有量(20)，剩余可以捞取0条线索','2022-03-28 09:45:35'),
+(21055,'批量捞取',2,'com.huike.web.controller.clues.TbClueController.gain()','PUT',1,'admin',NULL,'/clues/clue/gain','127.0.0.1','内网IP','{\"ids\":[8338],\"userId\":1}','null',1,'捞取失败！最大保有量(20)，剩余可以捞取0条线索','2022-03-28 09:45:37'),
+(21056,'批量捞取',2,'com.huike.web.controller.clues.TbClueController.gain()','PUT',1,'admin',NULL,'/clues/clue/gain','127.0.0.1','内网IP','{\"ids\":[8335],\"userId\":1}','null',1,'捞取失败！最大保有量(20)，剩余可以捞取0条线索','2022-03-28 09:45:47'),
+(21057,'批量捞取',2,'com.huike.web.controller.clues.TbClueController.gain()','PUT',1,'admin',NULL,'/clues/clue/gain','127.0.0.1','内网IP','{\"ids\":[8335],\"userId\":1}','null',1,'捞取失败！最大保有量(20)，剩余可以捞取0条线索','2022-03-28 09:56:36'),
+(21058,'批量捞取',2,'com.huike.web.controller.clues.TbClueController.gain()','PUT',1,'admin',NULL,'/clues/clue/gain','127.0.0.1','内网IP','{\"ids\":[8335],\"userId\":1}','null',1,'捞取失败！最大保有量(20)，剩余可以捞取0条线索','2022-03-28 09:56:52'),
+(21059,'批量捞取',2,'com.huike.web.controller.clues.TbClueController.gain()','PUT',1,'admin',NULL,'/clues/clue/gain','127.0.0.1','内网IP','{\"ids\":[8335],\"userId\":1}','null',1,'捞取失败！最大保有量(20)，剩余可以捞取0条线索','2022-03-28 09:57:11');
 
 /*Table structure for table `sys_post` */
 
 DROP TABLE IF EXISTS `sys_post`;
 
 CREATE TABLE `sys_post` (
-  `post_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '岗位ID',
-  `post_code` varchar(64) COLLATE utf8_bin NOT NULL COMMENT '岗位编码',
-  `post_name` varchar(50) COLLATE utf8_bin NOT NULL COMMENT '岗位名称',
-  `post_sort` int(11) NOT NULL COMMENT '显示顺序',
-  `status` char(1) COLLATE utf8_bin NOT NULL COMMENT '状态（0正常 1停用）',
-  `create_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '创建者',
+  `post_id` bigint NOT NULL AUTO_INCREMENT COMMENT '岗位ID',
+  `post_code` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '岗位编码',
+  `post_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '岗位名称',
+  `post_sort` int NOT NULL COMMENT '显示顺序',
+  `status` char(1) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '状态（0正常 1停用）',
+  `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '创建者',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `update_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '更新者',
+  `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '更新者',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  `remark` varchar(500) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
+  `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`post_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='岗位信息表';
 
@@ -5981,20 +6016,20 @@ insert  into `sys_post`(`post_id`,`post_code`,`post_name`,`post_sort`,`status`,`
 DROP TABLE IF EXISTS `sys_role`;
 
 CREATE TABLE `sys_role` (
-  `role_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '角色ID',
-  `role_name` varchar(30) COLLATE utf8_bin NOT NULL COMMENT '角色名称',
-  `role_key` varchar(100) COLLATE utf8_bin NOT NULL COMMENT '角色权限字符串',
-  `role_sort` int(11) NOT NULL COMMENT '显示顺序',
-  `data_scope` char(1) COLLATE utf8_bin DEFAULT '1' COMMENT '数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限）',
+  `role_id` bigint NOT NULL AUTO_INCREMENT COMMENT '角色ID',
+  `role_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '角色名称',
+  `role_key` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '角色权限字符串',
+  `role_sort` int NOT NULL COMMENT '显示顺序',
+  `data_scope` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '1' COMMENT '数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限）',
   `menu_check_strictly` tinyint(1) DEFAULT '1' COMMENT '菜单树选择项是否关联显示',
   `dept_check_strictly` tinyint(1) DEFAULT '1' COMMENT '部门树选择项是否关联显示',
-  `status` char(1) COLLATE utf8_bin NOT NULL COMMENT '角色状态（0正常 1停用）',
-  `del_flag` char(1) COLLATE utf8_bin DEFAULT '0' COMMENT '删除标志（0代表存在 2代表删除）',
-  `create_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '创建者',
+  `status` char(1) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '角色状态（0正常 1停用）',
+  `del_flag` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '0' COMMENT '删除标志（0代表存在 2代表删除）',
+  `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '创建者',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `update_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '更新者',
+  `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '更新者',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  `remark` varchar(500) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
+  `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`role_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=120 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='角色信息表';
 
@@ -6028,8 +6063,8 @@ insert  into `sys_role`(`role_id`,`role_name`,`role_key`,`role_sort`,`data_scope
 DROP TABLE IF EXISTS `sys_role_dept`;
 
 CREATE TABLE `sys_role_dept` (
-  `role_id` bigint(20) NOT NULL COMMENT '角色ID',
-  `dept_id` bigint(20) NOT NULL COMMENT '部门ID',
+  `role_id` bigint NOT NULL COMMENT '角色ID',
+  `dept_id` bigint NOT NULL COMMENT '部门ID',
   PRIMARY KEY (`role_id`,`dept_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='角色和部门关联表';
 
@@ -6040,8 +6075,8 @@ CREATE TABLE `sys_role_dept` (
 DROP TABLE IF EXISTS `sys_role_menu`;
 
 CREATE TABLE `sys_role_menu` (
-  `role_id` bigint(20) NOT NULL COMMENT '角色ID',
-  `menu_id` bigint(20) NOT NULL COMMENT '菜单ID',
+  `role_id` bigint NOT NULL COMMENT '角色ID',
+  `menu_id` bigint NOT NULL COMMENT '菜单ID',
   PRIMARY KEY (`role_id`,`menu_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='角色和菜单关联表';
 
@@ -6540,25 +6575,25 @@ insert  into `sys_role_menu`(`role_id`,`menu_id`) values
 DROP TABLE IF EXISTS `sys_user`;
 
 CREATE TABLE `sys_user` (
-  `user_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '用户ID',
-  `dept_id` bigint(20) DEFAULT NULL COMMENT '部门ID',
-  `user_name` varchar(30) COLLATE utf8_bin NOT NULL COMMENT '用户账号',
-  `nick_name` varchar(30) COLLATE utf8_bin NOT NULL COMMENT '用户昵称',
-  `user_type` varchar(2) COLLATE utf8_bin DEFAULT '00' COMMENT '用户类型（00系统用户）',
-  `email` varchar(50) COLLATE utf8_bin DEFAULT '' COMMENT '用户邮箱',
-  `phonenumber` varchar(11) COLLATE utf8_bin DEFAULT '' COMMENT '手机号码',
-  `sex` char(1) COLLATE utf8_bin DEFAULT '0' COMMENT '用户性别（0男 1女 2未知）',
-  `avatar` varchar(100) COLLATE utf8_bin DEFAULT '' COMMENT '头像地址',
-  `password` varchar(100) COLLATE utf8_bin DEFAULT '' COMMENT '密码',
-  `status` char(1) COLLATE utf8_bin DEFAULT '0' COMMENT '帐号状态（0正常 1停用）',
-  `del_flag` char(1) COLLATE utf8_bin DEFAULT '0' COMMENT '删除标志（0代表存在 2代表删除）',
-  `login_ip` varchar(128) COLLATE utf8_bin DEFAULT '' COMMENT '最后登录IP',
+  `user_id` bigint NOT NULL AUTO_INCREMENT COMMENT '用户ID',
+  `dept_id` bigint DEFAULT NULL COMMENT '部门ID',
+  `user_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '用户账号',
+  `nick_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '用户昵称',
+  `user_type` varchar(2) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '00' COMMENT '用户类型（00系统用户）',
+  `email` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '用户邮箱',
+  `phonenumber` varchar(11) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '手机号码',
+  `sex` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '0' COMMENT '用户性别（0男 1女 2未知）',
+  `avatar` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '头像地址',
+  `password` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '密码',
+  `status` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '0' COMMENT '帐号状态（0正常 1停用）',
+  `del_flag` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '0' COMMENT '删除标志（0代表存在 2代表删除）',
+  `login_ip` varchar(128) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '最后登录IP',
   `login_date` datetime DEFAULT NULL COMMENT '最后登录时间',
-  `create_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '创建者',
+  `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '创建者',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `update_by` varchar(64) COLLATE utf8_bin DEFAULT '' COMMENT '更新者',
+  `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '' COMMENT '更新者',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
-  `remark` varchar(500) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
+  `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1022 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='用户信息表';
 
@@ -6606,8 +6641,8 @@ insert  into `sys_user`(`user_id`,`dept_id`,`user_name`,`nick_name`,`user_type`,
 DROP TABLE IF EXISTS `sys_user_post`;
 
 CREATE TABLE `sys_user_post` (
-  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
-  `post_id` bigint(20) NOT NULL COMMENT '岗位ID',
+  `user_id` bigint NOT NULL COMMENT '用户ID',
+  `post_id` bigint NOT NULL COMMENT '岗位ID',
   PRIMARY KEY (`user_id`,`post_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='用户与岗位关联表';
 
@@ -6722,8 +6757,8 @@ insert  into `sys_user_post`(`user_id`,`post_id`) values
 DROP TABLE IF EXISTS `sys_user_role`;
 
 CREATE TABLE `sys_user_role` (
-  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
-  `role_id` bigint(20) NOT NULL COMMENT '角色ID',
+  `user_id` bigint NOT NULL COMMENT '用户ID',
+  `role_id` bigint NOT NULL COMMENT '角色ID',
   PRIMARY KEY (`user_id`,`role_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='用户和角色关联表';
 
@@ -6850,18 +6885,18 @@ insert  into `sys_user_role`(`user_id`,`role_id`) values
 DROP TABLE IF EXISTS `tb_activity`;
 
 CREATE TABLE `tb_activity` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `name` varchar(512) COLLATE utf8_bin DEFAULT NULL COMMENT '活动名称',
-  `channel` char(1) COLLATE utf8_bin DEFAULT NULL COMMENT '渠道来源',
-  `info` varchar(512) COLLATE utf8_bin NOT NULL COMMENT '活动简介',
-  `type` char(1) COLLATE utf8_bin DEFAULT NULL COMMENT '活动类型',
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `name` varchar(512) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '活动名称',
+  `channel` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '渠道来源',
+  `info` varchar(512) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '活动简介',
+  `type` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '活动类型',
   `discount` float DEFAULT NULL COMMENT '璇剧▼鎶樻墸',
-  `vouchers` int(11) DEFAULT NULL COMMENT '课程代金券',
-  `status` char(1) COLLATE utf8_bin DEFAULT '1' COMMENT '状态',
+  `vouchers` int DEFAULT NULL COMMENT '课程代金券',
+  `status` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '1' COMMENT '状态',
   `begin_time` timestamp NULL DEFAULT NULL COMMENT '开始时间',
   `end_time` timestamp NULL DEFAULT NULL COMMENT '结束时间',
   `create_time` timestamp NULL DEFAULT NULL,
-  `code` varchar(32) COLLATE utf8_bin DEFAULT NULL,
+  `code` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=116 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='活动管理';
 
@@ -6898,15 +6933,15 @@ insert  into `tb_activity`(`id`,`name`,`channel`,`info`,`type`,`discount`,`vouch
 DROP TABLE IF EXISTS `tb_assign_record`;
 
 CREATE TABLE `tb_assign_record` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
-  `assign_id` bigint(20) DEFAULT NULL COMMENT '关联id',
-  `user_id` bigint(20) DEFAULT NULL COMMENT '所属人用户id',
-  `user_name` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '所属人名称',
-  `dept_id` bigint(20) DEFAULT NULL COMMENT '所属人所属组织',
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `assign_id` bigint DEFAULT NULL COMMENT '关联id',
+  `user_id` bigint DEFAULT NULL COMMENT '所属人用户id',
+  `user_name` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '所属人名称',
+  `dept_id` bigint DEFAULT NULL COMMENT '所属人所属组织',
   `create_time` timestamp NULL DEFAULT NULL COMMENT '分配时间',
-  `create_by` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '分配人',
-  `latest` char(1) COLLATE utf8_bin DEFAULT '1' COMMENT '是否当前最新分配人',
-  `type` char(1) COLLATE utf8_bin DEFAULT '0' COMMENT '类型0 线索 1 商机',
+  `create_by` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '分配人',
+  `latest` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '1' COMMENT '是否当前最新分配人',
+  `type` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '0' COMMENT '类型0 线索 1 商机',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=19017 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='分配记录表';
 
@@ -8699,38 +8734,38 @@ insert  into `tb_assign_record`(`id`,`assign_id`,`user_id`,`user_name`,`dept_id`
 DROP TABLE IF EXISTS `tb_business`;
 
 CREATE TABLE `tb_business` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '商机id',
-  `name` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '客户姓名',
-  `phone` varchar(11) COLLATE utf8_bin DEFAULT NULL COMMENT '手机号',
-  `channel` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '渠道',
-  `activity_id` bigint(20) DEFAULT NULL COMMENT '活动id',
-  `provinces` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '省',
-  `city` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '区',
-  `sex` char(1) COLLATE utf8_bin DEFAULT '0' COMMENT '性別',
-  `age` int(11) DEFAULT NULL COMMENT '年龄',
-  `weixin` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '微信',
-  `qq` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT 'qq',
-  `level` char(1) COLLATE utf8_bin DEFAULT NULL COMMENT '意向等级',
-  `subject` char(1) COLLATE utf8_bin DEFAULT NULL COMMENT '意向学科',
-  `course_id` bigint(20) DEFAULT NULL COMMENT '课程',
-  `create_by` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '创建人',
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '商机id',
+  `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '客户姓名',
+  `phone` varchar(11) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '手机号',
+  `channel` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '渠道',
+  `activity_id` bigint DEFAULT NULL COMMENT '活动id',
+  `provinces` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '省',
+  `city` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '区',
+  `sex` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '0' COMMENT '性別',
+  `age` int DEFAULT NULL COMMENT '年龄',
+  `weixin` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '微信',
+  `qq` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT 'qq',
+  `level` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '意向等级',
+  `subject` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '意向学科',
+  `course_id` bigint DEFAULT NULL COMMENT '课程',
+  `create_by` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '创建人',
   `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
-  `occupation` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '职业',
-  `education` char(1) COLLATE utf8_bin DEFAULT NULL COMMENT '学历',
-  `job` char(1) COLLATE utf8_bin DEFAULT NULL COMMENT '在职情况',
-  `salary` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '薪资',
-  `major` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '专业',
-  `expected_salary` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '希望薪资',
-  `reasons` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '学习原因',
-  `plan` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '职业计划',
+  `occupation` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '职业',
+  `education` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '学历',
+  `job` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '在职情况',
+  `salary` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '薪资',
+  `major` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '专业',
+  `expected_salary` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '希望薪资',
+  `reasons` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '学习原因',
+  `plan` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '职业计划',
   `plan_time` timestamp NULL DEFAULT NULL COMMENT '计划时间',
-  `other_intention` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '其他意向',
-  `status` char(1) COLLATE utf8_bin DEFAULT '1' COMMENT '状态(已分配1  进行中2  回收3)',
+  `other_intention` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '其他意向',
+  `status` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '1' COMMENT '状态(已分配1  进行中2  回收3)',
   `next_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `last_update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `clue_id` bigint(20) DEFAULT NULL,
-  `transfer` char(1) COLLATE utf8_bin DEFAULT '0' COMMENT '是否转派',
-  `remark` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
+  `clue_id` bigint DEFAULT NULL,
+  `transfer` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '0' COMMENT '是否转派',
+  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '备注',
   `end_time` timestamp NULL DEFAULT NULL COMMENT '回收时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3419 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='商机';
@@ -9055,162 +9090,29 @@ insert  into `tb_business`(`id`,`name`,`phone`,`channel`,`activity_id`,`province
 (3417,'李四一','13254687512','0',112,NULL,NULL,'0',22,NULL,NULL,'0','0',NULL,'admin','2022-01-29 16:21:49',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'3',NULL,'2022-01-29 22:02:20',9085,'0',NULL,'2022-01-29 19:21:49'),
 (3418,'张一轮','15011191007','0',NULL,NULL,NULL,'0',NULL,'wgl506238957','506238957','0','1',NULL,'admin','2022-02-09 16:50:06',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'1',NULL,NULL,9076,'0',NULL,NULL);
 
-/*Table structure for table `tb_business_track_record` */
-
-DROP TABLE IF EXISTS `tb_business_track_record`;
-
-CREATE TABLE `tb_business_track_record` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '任务id',
-  `business_id` varchar(32) COLLATE utf8_bin NOT NULL COMMENT '商机id',
-  `create_by` varchar(32) COLLATE utf8_bin NOT NULL COMMENT '跟进人',
-  `key_items` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '沟通重点',
-  `record` varchar(512) COLLATE utf8_bin DEFAULT NULL COMMENT '沟通纪要',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '跟进时间',
-  `track_status` char(1) COLLATE utf8_bin DEFAULT NULL COMMENT '跟进状态',
-  `next_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8440 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='商机跟进记录';
-
-/*Data for the table `tb_business_track_record` */
-
-insert  into `tb_business_track_record`(`id`,`business_id`,`create_by`,`key_items`,`record`,`create_time`,`track_status`,`next_time`) values 
-(8327,'3103','zhangkai','6','我第一次跟进','2021-11-16 15:22:32','1','2021-12-08 12:00:00'),
-(8328,'3104','zhangkai','6','我第一次跟进','2021-11-16 15:22:32','1','2021-12-08 12:00:00'),
-(8329,'3105','zhangkai','6','我第一次跟进','2021-11-16 15:22:32','1','2021-12-08 12:00:00'),
-(8330,'3106','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8331,'3107','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8332,'3108','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8333,'3109','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8334,'3110','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8335,'3111','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8336,'3112','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8337,'3113','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8338,'3114','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8339,'3115','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8340,'3116','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8341,'3117','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8342,'3118','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8343,'3119','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8344,'3120','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8345,'3121','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8346,'3122','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8347,'3123','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8348,'3124','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8349,'3125','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8350,'3126','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8351,'3127','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8352,'3128','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8353,'3129','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8354,'3130','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8355,'3131','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8356,'3132','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8357,'3133','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8358,'3134','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8359,'3135','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8360,'3136','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8361,'3137','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8362,'3138','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8363,'3139','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8364,'3140','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8365,'3141','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8366,'3142','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8367,'3143','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8368,'3144','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8369,'3145','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8370,'3146','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8371,'3147','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8372,'3148','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8373,'3149','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8374,'3150','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8375,'3151','zhangkai','6','我第一次跟进','2021-11-16 15:22:33','1','2021-12-08 12:00:00'),
-(8376,'3152','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8377,'3153','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8378,'3154','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8379,'3155','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8380,'3156','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8381,'3157','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8382,'3158','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8383,'3159','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8384,'3160','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8385,'3161','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8386,'3162','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8387,'3163','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8388,'3164','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8389,'3165','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8390,'3166','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8391,'3167','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8392,'3168','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8393,'3169','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8394,'3170','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8395,'3171','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8396,'3172','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8397,'3173','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8398,'3174','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8399,'3175','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8400,'3176','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8401,'3177','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8402,'3178','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8403,'3179','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8404,'3180','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8405,'3181','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8406,'3182','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8407,'3183','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8408,'3184','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8409,'3185','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8410,'3186','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8411,'3187','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8412,'3188','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8413,'3189','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8414,'3190','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8415,'3191','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8416,'3192','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8417,'3193','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8418,'3194','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8419,'3195','zhangkai','6','我第一次跟进','2021-11-16 15:22:34','1','2021-12-08 12:00:00'),
-(8420,'3196','zhangkai','6','我第一次跟进','2021-11-16 15:22:35','1','2021-12-08 12:00:00'),
-(8421,'3197','zhangkai','6','我第一次跟进','2021-11-16 15:22:35','1','2021-12-08 12:00:00'),
-(8422,'3198','zhangkai','6','我第一次跟进','2021-11-16 15:22:35','1','2021-12-08 12:00:00'),
-(8423,'3199','zhangkai','6','我第一次跟进','2021-11-16 15:22:35','1','2021-12-08 12:00:00'),
-(8424,'3200','zhangkai','6','我第一次跟进','2021-11-16 15:22:35','1','2021-12-08 12:00:00'),
-(8425,'3201','zhangkai','6','我第一次跟进','2021-11-16 15:22:35','1','2021-12-08 12:00:00'),
-(8426,'3202','zhangkai','6','我第一次跟进','2021-11-16 15:22:35','1','2021-12-08 12:00:00'),
-(8427,'3402','admin','1','123','2021-11-16 15:59:42','1','2021-11-18 12:00:00'),
-(8428,'3396','admin','1','23','2021-11-16 16:02:18','1','2021-11-17 12:00:00'),
-(8429,'3397','admin','1','asdfasdf','2021-11-16 16:07:22','1','2021-11-23 12:00:00'),
-(8430,'3398','admin','1','1','2021-11-16 16:16:34','1','2021-11-17 12:00:00'),
-(8431,'3399','admin','6','13811111407','2021-11-16 16:17:16','1','2021-11-30 12:00:00'),
-(8432,'3400','admin','4','13811111408','2021-11-16 16:17:50','1','2021-11-17 12:00:00'),
-(8433,'3401','admin','5,4,3','13811111409','2021-11-16 16:18:43','1','2021-11-24 12:00:00'),
-(8434,'3389','admin','1','13811111397','2021-11-16 16:19:50','1','2021-11-17 12:00:00'),
-(8435,'3390','admin','2,3,5','13811111398','2021-11-16 16:20:33','1','2021-11-17 12:00:00'),
-(8436,'3391','admin','5','没问题','2021-11-19 11:17:57','1','2021-11-24 12:00:00'),
-(8437,'3392','admin','5,3','1','2021-11-19 17:21:14','1','2021-11-27 12:00:00'),
-(8438,'3403','shangji','4,1,2,3,7','需要鼓励','2021-11-22 10:39:39','1','2021-11-23 12:00:00'),
-(8439,'3412','shangji1','2,7,4,5,3,1','客户打算学习','2021-11-24 11:01:28','1','2021-11-25 12:00:00');
-
 /*Table structure for table `tb_clue` */
 
 DROP TABLE IF EXISTS `tb_clue`;
 
 CREATE TABLE `tb_clue` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '线索id',
-  `name` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '客户姓名',
-  `phone` varchar(11) COLLATE utf8_bin DEFAULT NULL COMMENT '手机号',
-  `channel` char(1) COLLATE utf8_bin DEFAULT NULL COMMENT '渠道',
-  `activity_id` bigint(20) DEFAULT NULL COMMENT '活动id',
-  `sex` char(1) COLLATE utf8_bin DEFAULT NULL COMMENT '1 男 0 女',
-  `age` int(11) DEFAULT NULL COMMENT '年龄',
-  `weixin` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '微信',
-  `qq` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT 'qq',
-  `level` char(1) COLLATE utf8_bin DEFAULT NULL COMMENT '意向等级',
-  `subject` char(1) COLLATE utf8_bin DEFAULT NULL COMMENT '意向学科',
-  `status` char(1) COLLATE utf8_bin DEFAULT '1' COMMENT '状态(已分配1  进行中2  回收3  伪线索4)',
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '线索id',
+  `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '客户姓名',
+  `phone` varchar(11) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '手机号',
+  `channel` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '渠道',
+  `activity_id` bigint DEFAULT NULL COMMENT '活动id',
+  `sex` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '1 男 0 女',
+  `age` int DEFAULT NULL COMMENT '年龄',
+  `weixin` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '微信',
+  `qq` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT 'qq',
+  `level` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '意向等级',
+  `subject` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '意向学科',
+  `status` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '1' COMMENT '状态(已分配1  进行中2  回收3  伪线索4)',
   `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
-  `create_by` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '创建人',
-  `false_count` int(11) DEFAULT '0' COMMENT '伪线索失败次数(最大数3次)',
+  `create_by` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '创建人',
+  `false_count` int DEFAULT '0' COMMENT '伪线索失败次数(最大数3次)',
   `next_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `update_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `transfer` char(1) COLLATE utf8_bin DEFAULT '0' COMMENT '是否转派',
+  `transfer` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '0' COMMENT '是否转派',
   `end_time` timestamp NULL DEFAULT NULL COMMENT '线索失效时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9088 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='线索';
@@ -9971,75 +9873,31 @@ insert  into `tb_clue`(`id`,`name`,`phone`,`channel`,`activity_id`,`sex`,`age`,`
 (9086,'李志明','13574286123','0',112,'0',22,NULL,NULL,NULL,NULL,'3','2022-01-29 22:07:52','admin',0,NULL,'2022-02-09 09:43:30','0','2022-02-01 22:07:52'),
 (9087,'张三','15011112121','0',111,'0',22,'wx1212121','506233321',NULL,NULL,'3','2022-02-24 06:25:22','admin',0,NULL,'2022-02-28 01:01:30','0','2022-02-27 06:25:22');
 
-/*Table structure for table `tb_clue_track_record` */
-
-DROP TABLE IF EXISTS `tb_clue_track_record`;
-
-CREATE TABLE `tb_clue_track_record` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '任务id',
-  `clue_id` varchar(32) COLLATE utf8_bin NOT NULL COMMENT '线索id',
-  `create_by` varchar(32) COLLATE utf8_bin NOT NULL COMMENT '跟进人',
-  `subject` char(1) COLLATE utf8_bin DEFAULT NULL COMMENT '意向等级',
-  `record` varchar(512) COLLATE utf8_bin DEFAULT NULL COMMENT '跟进记录',
-  `level` char(1) COLLATE utf8_bin DEFAULT NULL COMMENT '意向等级',
-  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '跟进时间',
-  `type` char(1) COLLATE utf8_bin DEFAULT '0' COMMENT '0 正常跟进记录 1 伪线索',
-  `false_reason` char(1) COLLATE utf8_bin DEFAULT NULL COMMENT '原因',
-  `next_time` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=259 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='线索跟进记录';
-
-/*Data for the table `tb_clue_track_record` */
-
-insert  into `tb_clue_track_record`(`id`,`clue_id`,`create_by`,`subject`,`record`,`level`,`create_time`,`type`,`false_reason`,`next_time`) values 
-(237,'9009','admin','6','下次继续跟进','0','2021-11-20 16:30:05','0',NULL,'2021-11-25 12:00:00'),
-(238,'9005','xiansuo','0','客户想学','1','2021-11-22 10:29:42','0',NULL,'2021-11-22 12:00:00'),
-(239,'9006','admin',NULL,'1',NULL,'2021-11-22 10:50:14','1','1',NULL),
-(240,'9005','xiansuo','0','1','0','2021-11-22 17:13:50','0',NULL,'2021-11-24 12:00:00'),
-(241,'8445','xiansuo','0','11','0','2021-11-22 17:14:35','0',NULL,'2021-11-23 12:00:00'),
-(242,'9036','xiansuo','0','1','0','2021-11-22 17:17:17','0',NULL,'2021-11-25 12:00:00'),
-(243,'9037','xiansuo','0','1','0','2021-11-22 17:21:08','0',NULL,'2021-11-23 12:00:00'),
-(244,'9007','admin','1','123123','0','2021-11-22 17:24:35','0',NULL,'2021-11-24 12:00:00'),
-(245,'9038','admin','0','12','0','2021-11-22 17:25:38','0',NULL,'2021-11-25 12:00:00'),
-(246,'9039','admin','0','1111','0','2021-11-22 17:27:52','0',NULL,'2021-11-24 17:27:00'),
-(247,'9004','admin','0','asdfa','0','2021-11-22 17:28:06','0',NULL,'2021-11-24 12:00:00'),
-(248,'9008','admin','0','123123','0','2021-11-22 17:29:10','0',NULL,'2021-11-24 12:00:00'),
-(249,'9040','xiansuo01','0','由于工作导致能够学习的时间太少，所以没有报名学习','0','2021-11-24 09:48:26','0',NULL,'2021-11-25 12:00:00'),
-(250,'9041','xiansuo01','9','想要学习UI设计','0','2021-11-24 10:45:36','0',NULL,'2021-11-25 12:00:00'),
-(251,'8518','xiansuo01',NULL,NULL,NULL,'2021-11-24 14:40:50','1','5',NULL),
-(252,'9006','admin',NULL,NULL,NULL,'2021-11-24 14:55:26','1','5',NULL),
-(253,'9044','xiansuo01',NULL,'用户挂机',NULL,'2021-11-24 16:25:16','1','5',NULL),
-(254,'9056','admin','0','有点想要学习 但是没钱','0','2022-01-20 15:49:26','0',NULL,'2022-01-21 12:00:00'),
-(255,'9056','admin',NULL,'停机了',NULL,'2022-01-20 15:49:44','1','2',NULL),
-(256,'9057','admin','2','愿意学习','1','2022-01-20 17:05:46','0',NULL,'2022-01-21 12:00:00'),
-(257,'9085','admin','0','想要学习','0','2022-01-29 16:21:46','0',NULL,'2022-01-30 12:00:00'),
-(258,'9076','admin','1','很喜欢 没钱','0','2022-02-09 16:50:03','0',NULL,'2022-02-10 12:00:00');
-
 /*Table structure for table `tb_contract` */
 
 DROP TABLE IF EXISTS `tb_contract`;
 
 CREATE TABLE `tb_contract` (
-  `id` varchar(64) COLLATE utf8_bin NOT NULL COMMENT '合同id',
-  `phone` varchar(13) COLLATE utf8_bin DEFAULT NULL COMMENT '手机号',
-  `contract_no` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '合同编号',
-  `name` varchar(64) COLLATE utf8_bin NOT NULL COMMENT '客户姓名',
-  `subject` char(1) COLLATE utf8_bin DEFAULT NULL COMMENT '意向学科',
-  `activity_id` bigint(20) DEFAULT NULL COMMENT '活动id',
-  `activity_name` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '活动名称',
-  `course_id` bigint(20) DEFAULT NULL COMMENT '课程id',
-  `course_name` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '课程名称',
-  `channel` char(1) COLLATE utf8_bin DEFAULT NULL,
-  `status` char(1) COLLATE utf8_bin DEFAULT '1' COMMENT '状态(待审核1，已通过2，已驳回3 全部完成4)',
-  `create_by` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '创建人',
-  `dept_id` bigint(20) DEFAULT NULL,
+  `id` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '合同id',
+  `phone` varchar(13) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '手机号',
+  `contract_no` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '合同编号',
+  `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '客户姓名',
+  `subject` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '意向学科',
+  `activity_id` bigint DEFAULT NULL COMMENT '活动id',
+  `activity_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '活动名称',
+  `course_id` bigint DEFAULT NULL COMMENT '课程id',
+  `course_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '课程名称',
+  `channel` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `status` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '1' COMMENT '状态(待审核1，已通过2，已驳回3 全部完成4)',
+  `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '创建人',
+  `dept_id` bigint DEFAULT NULL,
   `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
-  `file_name` varchar(512) COLLATE utf8_bin DEFAULT NULL COMMENT '文件名称',
+  `file_name` varchar(512) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '文件名称',
   `contract_order` float DEFAULT NULL COMMENT '订单价格',
-  `discount_type` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '折扣类型',
+  `discount_type` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '折扣类型',
   `course_price` float DEFAULT NULL COMMENT '课程价格',
-  `process_instance_id` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `business_id` bigint(20) DEFAULT NULL,
+  `process_instance_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `business_id` bigint DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='合同';
 
@@ -10164,15 +10022,15 @@ insert  into `tb_contract`(`id`,`phone`,`contract_no`,`name`,`subject`,`activity
 DROP TABLE IF EXISTS `tb_course`;
 
 CREATE TABLE `tb_course` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '课程id',
-  `code` varchar(32) COLLATE utf8_bin DEFAULT NULL,
-  `name` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '名称',
-  `subject` char(1) COLLATE utf8_bin DEFAULT NULL COMMENT '学科',
-  `price` int(11) DEFAULT NULL COMMENT '浠锋牸',
-  `applicable_person` char(1) COLLATE utf8_bin DEFAULT NULL,
-  `info` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '课程描述信息',
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '课程id',
+  `code` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `name` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '名称',
+  `subject` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '学科',
+  `price` int DEFAULT NULL COMMENT '浠锋牸',
+  `applicable_person` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `info` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '课程描述信息',
   `create_time` timestamp NULL DEFAULT NULL,
-  `is_delete` int(11) NOT NULL DEFAULT '0' COMMENT '是否删除 1 是',
+  `is_delete` int NOT NULL DEFAULT '0' COMMENT '是否删除 1 是',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='课程管理';
 
@@ -10213,15 +10071,15 @@ insert  into `tb_course`(`id`,`code`,`name`,`subject`,`price`,`applicable_person
 DROP TABLE IF EXISTS `tb_rule_assign`;
 
 CREATE TABLE `tb_rule_assign` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '线索id',
-  `rule_condition` varchar(1024) COLLATE utf8_bin DEFAULT NULL COMMENT '规则集合',
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '线索id',
+  `rule_condition` varchar(1024) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '规则集合',
   `rule_expression` blob COMMENT '规则表达式',
-  `assign_object` varchar(1024) COLLATE utf8_bin DEFAULT NULL COMMENT '分配对象',
-  `assign_type` char(1) COLLATE utf8_bin DEFAULT NULL COMMENT '分配类型',
-  `rule_order` bigint(20) DEFAULT NULL COMMENT '规则排序',
-  `create_by` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '创建人',
+  `assign_object` varchar(1024) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '分配对象',
+  `assign_type` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '分配类型',
+  `rule_order` bigint DEFAULT NULL COMMENT '规则排序',
+  `create_by` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '创建人',
   `create_time` timestamp NULL DEFAULT NULL COMMENT '创建时间',
-  `type` char(1) COLLATE utf8_bin DEFAULT '0',
+  `type` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=31960474993706 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='自动分配规则';
 
@@ -10237,12 +10095,12 @@ insert  into `tb_rule_assign`(`id`,`rule_condition`,`rule_expression`,`assign_ob
 DROP TABLE IF EXISTS `tb_rule_expression`;
 
 CREATE TABLE `tb_rule_expression` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '规则表达式id',
-  `rule_key` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '规则key',
-  `expression` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '表达式（=，!=, 包含，不包含) ',
-  `rule_value` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '规则值',
-  `number` int(11) DEFAULT NULL COMMENT '顺序',
-  `rule_id` bigint(20) DEFAULT NULL COMMENT '规则id',
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '规则表达式id',
+  `rule_key` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '规则key',
+  `expression` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '表达式（=，!=, 包含，不包含) ',
+  `rule_value` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '规则值',
+  `number` int DEFAULT NULL COMMENT '顺序',
+  `rule_id` bigint DEFAULT NULL COMMENT '规则id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=451 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='规则表达式';
 
@@ -10258,15 +10116,15 @@ insert  into `tb_rule_expression`(`id`,`rule_key`,`expression`,`rule_value`,`num
 DROP TABLE IF EXISTS `tb_rule_pool`;
 
 CREATE TABLE `tb_rule_pool` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '线程池规则',
-  `limit_time` int(11) DEFAULT NULL COMMENT '回收时限',
-  `limit_time_type` char(1) COLLATE utf8_bin DEFAULT NULL COMMENT '回收时限字典',
-  `warn_time` int(11) DEFAULT NULL COMMENT '警告时间',
-  `warn_time_type` char(1) COLLATE utf8_bin DEFAULT NULL COMMENT '警告时间字典单位类型',
-  `repeat_get_time` int(11) DEFAULT NULL COMMENT '重复捞取时间',
-  `repeat_type` char(1) COLLATE utf8_bin DEFAULT NULL COMMENT '重复捞取时间字典',
-  `max_nunmber` int(11) DEFAULT NULL COMMENT '最大保有量',
-  `type` char(1) COLLATE utf8_bin DEFAULT '0' COMMENT '0 线索 1 商机',
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '线程池规则',
+  `limit_time` int DEFAULT NULL COMMENT '回收时限',
+  `limit_time_type` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '回收时限字典',
+  `warn_time` int DEFAULT NULL COMMENT '警告时间',
+  `warn_time_type` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '警告时间字典单位类型',
+  `repeat_get_time` int DEFAULT NULL COMMENT '重复捞取时间',
+  `repeat_type` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL COMMENT '重复捞取时间字典',
+  `max_nunmber` int DEFAULT NULL COMMENT '最大保有量',
+  `type` char(1) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '0' COMMENT '0 线索 1 商机',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='线索池规则';
 
