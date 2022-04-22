@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.huike.business.domain.TbBusiness;
 import com.huike.business.mapper.TbBusinessMapper;
+import com.huike.business.mapper.TbBusinessTrackRecordMapper;
 import com.huike.business.service.ITbBusinessService;
 import com.huike.clues.domain.TbAssignRecord;
 import com.huike.clues.domain.TbClue;
@@ -44,6 +45,9 @@ public class TbBusinessServiceImpl implements ITbBusinessService {
 
     @Autowired
     private TbAssignRecordMapper tbAssignRecordMapper;
+
+    @Autowired
+    private TbBusinessTrackRecordMapper tbBusinessTrackRecordMapper;
 
     @Autowired
     private SysUserMapper userMapper;
@@ -208,7 +212,7 @@ public class TbBusinessServiceImpl implements ITbBusinessService {
         // 统计当前分配人所有线索
         int assignRecords = tbAssignRecordMapper.countAssignBusinessByUser(userId);
         if(assignRecords>=rulePool.getMaxNunmber()){
-            throw  new CustomException("捞取失败！最大保有量("+rulePool.getMaxNunmber()+")，剩余可以捞取"+(rulePool.getMaxNunmber()-assignRecords)+"条商机");
+            throw new CustomException("捞取失败！最大保有量("+rulePool.getMaxNunmber()+")，剩余可以捞取"+(rulePool.getMaxNunmber()-assignRecords)+"条商机");
         }
         for (int i = 0; i < businessIds.length; i++) {
             Long businessId = businessIds[i];
@@ -241,27 +245,30 @@ public class TbBusinessServiceImpl implements ITbBusinessService {
         return "全部捞取成功";
     }
 
-    @Override
-    public int backPool(Long busniessId,String backReason) {
-       TbBusiness business = selectTbBusinessById(busniessId);
-       return updateStatus(business.getId(),"3");
-    }
 
-
+    /**
+     * 转商机的方法
+     * @param clueId
+     * @return
+     */
     @Override
     public int changeBusiness(Long clueId) {
+        //查询出线索对应的数据
         TbClue tbClue = tbClueMapper.selectTbClueById(clueId);
-
+        //重置状态为转商机
         tbClueMapper.resetNextTimeAndStatus(clueId, TbClue.StatusType.TOBUSINESS.getValue());
-
+        //构建商机对象
         TbBusiness tbBusiness = new TbBusiness();
         BeanUtils.copyProperties(tbClue, tbBusiness);
         tbBusiness.setStatus(TbBusiness.StatusType.UNFOLLOWED.getValue());
         tbBusiness.setClueId(clueId);
         tbBusiness.setNextTime(null);
-        int rows = this.insertTbBusiness(tbBusiness);
-
-        //默认分配给管理员
+        tbBusiness.setCreateBy(SecurityUtils.getUsername());
+        Date now=DateUtils.getNowDate();
+        tbBusiness.setCreateTime(now);
+        //添加商机数据
+        int rows = tbBusinessMapper.insertTbBusiness(tbBusiness);
+        //基于规则来进行分配
         Integer transForBusiness = rule.transforBusiness(tbBusiness);
         if (transForBusiness != 0) {
             return transForBusiness;
@@ -270,7 +277,12 @@ public class TbBusinessServiceImpl implements ITbBusinessService {
         }
     }
 
-
+    /**
+     * 修改商机的状态
+     * @param clueId
+     * @param status
+     * @return
+     */
     @Override
     public int updateStatus(Long clueId,String status){
         return tbBusinessMapper.resetNextTimeAndStatus(clueId,status);

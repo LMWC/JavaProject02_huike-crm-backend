@@ -6,7 +6,7 @@ import com.huike.clues.domain.TbRuleAssign;
 /**
  * 规则分配Mapper接口
  * 
- * @author ruoyi
+ * @author wgl
  * @date 2021-04-08
  */
 public interface TbRuleAssignMapper 

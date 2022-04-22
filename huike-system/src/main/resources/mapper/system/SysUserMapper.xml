@@ -75,7 +75,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			AND (u.dept_id = #{deptId} OR u.dept_id IN ( SELECT t.dept_id FROM sys_dept t WHERE find_in_set(#{deptId}, ancestors) ))
 		</if>
 		<!-- 数据范围过滤 -->
-		${params.dataScope}
+		<!-- 数据范围过滤 -->
+		<if test="params.dataScope != null and params.dataScope != ''">
+			AND (${params.dataScope})
+		</if>
 	</select>
 	
 	<select id="selectUserByUserName" parameterType="String" resultMap="SysUserResult">
@@ -177,36 +180,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  	</delete>
 
 
-	<select id="selectUserListByPostIds" parameterType="Long" resultType="Long">
-		select distinct(u.user_id)
-		from sys_user u
-		left join sys_user_post up on up.user_id = u.user_id
-		left join sys_post p on p.post_id = up.post_id
-		where p.post_id in
-		<foreach collection="array" item="postId" open="(" separator="," close=")">
-			#{postId}
-		</foreach>
-	</select>
-
-	<select id="selectUserListByDeptIds" parameterType="Long" resultType="Long">
-		select distinct(u.user_id)
-		from sys_user u
-		left join sys_dept d on d.dept_id = u.dept_id
-		where d.dept_id in
-		<foreach collection="array" item="deptId" open="(" separator="," close=")">
-			#{deptId}
-		</foreach>
-	</select>
-
-
-	<select id="selectUserListByRoleIds" parameterType="Long" resultType="Long">
-		select distinct(u.user_id)
-		from sys_user u
-		left join sys_user_role ur on ur.user_id = u.user_id
-		left join sys_role r on r.role_id = ur.role_id
-		where r.role_id in
-		<foreach collection="array" item="roleId" open="(" separator="," close=")">
-			#{roleId}
-		</foreach>
+	<select id="selectUserByName" parameterType="com.huike.common.core.domain.entity.SysUser" resultMap="SysUserResult">
+		<include refid="selectUserVo"/>
+		where u.user_name = #{name}
 	</select>
 </mapper> 

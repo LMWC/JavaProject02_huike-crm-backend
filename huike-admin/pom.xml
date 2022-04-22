@@ -46,31 +46,14 @@
                     <artifactId>mybatis</artifactId>
                     <groupId>org.mybatis</groupId>
                 </exclusion>
-<!--                <exclusion>-->
-<!--                    <artifactId>pagehelper</artifactId>-->
-<!--                    <groupId>com.github.pagehelper</groupId>-->
-<!--                </exclusion>-->
             </exclusions>
         </dependency>
 
-
-<!--        <dependency>-->
-<!--            <groupId>com.github.pagehelper</groupId>-->
-<!--            <artifactId>pagehelper</artifactId>-->
-<!--            <version>5.0.0</version>-->
-<!--        </dependency>-->
 
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
             <version>3.5.7</version>
-        </dependency>
-
-
-        <!-- 代码生成-->
-        <dependency>
-            <groupId>com.huike</groupId>
-            <artifactId>huike-generator</artifactId>
         </dependency>
 
         <!-- 线索管理-->
@@ -105,6 +88,13 @@
         <dependency>
             <groupId>com.huike</groupId>
             <artifactId>huike-task</artifactId>
+            <version>3.4.0</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.huike</groupId>
+            <artifactId>huike-mybatis-review</artifactId>
             <version>3.4.0</version>
             <scope>compile</scope>
         </dependency>

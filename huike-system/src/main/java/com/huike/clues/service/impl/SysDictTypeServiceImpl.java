@@ -3,6 +3,8 @@ package com.huike.clues.service.impl;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.huike.common.constant.UserConstants;
@@ -73,13 +75,16 @@ public class SysDictTypeServiceImpl implements ISysDictTypeService
      * @return 字典数据集合信息
      */
     @Override
-    public List<SysDictData> selectDictDataByType(String dictType) {
+    public List<SysDictData> selectDictDataByType(String dictType)
+    {
         List<SysDictData> dictDatas = DictUtils.getDictCache(dictType);
-        if (StringUtils.isNotEmpty(dictDatas)) {
+        if (StringUtils.isNotEmpty(dictDatas))
+        {
             return dictDatas;
         }
         dictDatas = dictDataMapper.selectDictDataByType(dictType);
-        if (StringUtils.isNotEmpty(dictDatas)) {
+        if (StringUtils.isNotEmpty(dictDatas))
+        {
             DictUtils.setDictCache(dictType, dictDatas);
             return dictDatas;
         }

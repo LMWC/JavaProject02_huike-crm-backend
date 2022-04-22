@@ -8,7 +8,7 @@ import com.huike.common.core.domain.BaseEntity;
 /**
  * 课程管理对象 tb_course
  *
- * @author ruoyi
+ * @author wgl
  * @date 2021-04-02
  */
 public class TbCourse extends BaseEntity

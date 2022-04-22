@@ -18,8 +18,7 @@ import com.huike.common.utils.StringUtils;
 
 /**
  * 全局异常处理器
- * 
- * 
+ * @author  wgl
  */
 @RestControllerAdvice
 public class GlobalExceptionHandler {

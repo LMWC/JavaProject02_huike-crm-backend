@@ -15,11 +15,6 @@ import java.util.List;
 public interface Rule {
 
     /**
-     * 批量导入线索的方法
-     */
-    public Integer importClue(List<TbRuleAssign> list);
-
-    /**
      * 单条线索添加的规则
      */
     public Boolean loadRule(TbClue clue);

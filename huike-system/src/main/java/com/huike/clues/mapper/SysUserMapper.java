@@ -101,30 +101,6 @@ public interface SysUserMapper{
      */
     public SysUser checkPhoneUnique(String phonenumber);
 
-    /**
-     * 校验email是否唯一
-     *
-     * @param email 用户邮箱
-     * @return 结果
-     */
-    public SysUser checkEmailUnique(String email);
 
-
-    /**
-     * 根据岗位id获取相关用户id集合
-     * @param postIds
-     * @return
-     */
-    public List<Long> selectUserListByPostIds(Long[] postIds);
-
-
-    /**
-     * 根据部门id获取相关用户id集合
-     * @param deptIds
-     * @return
-     */
-    public List<Long> selectUserListByDeptIds(Long[] deptIds);
-
-
-    public List<Long> selectUserListByRoleIds(Long[] roleIds);
+    SysUser selectUserByName(@Param("name") String name);
 }

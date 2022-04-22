@@ -8,8 +8,7 @@ import com.huike.common.core.domain.entity.SysUser;
  * 
  * 
  */
-public interface ISysUserService
-{
+public interface ISysUserService {
     /**
      * 根据条件分页查询用户列表
      * 
@@ -58,13 +57,6 @@ public interface ISysUserService
      */
     public String checkPhoneUnique(SysUser user);
 
-    /**
-     * 校验email是否唯一
-     *
-     * @param user 用户信息
-     * @return 结果
-     */
-    public String checkEmailUnique(SysUser user);
 
     /**
      * 校验用户是否允许操作

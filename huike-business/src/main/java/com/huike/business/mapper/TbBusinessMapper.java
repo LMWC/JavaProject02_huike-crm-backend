@@ -15,18 +15,16 @@ import org.apache.ibatis.annotations.Param;
 public interface TbBusinessMapper {
     /**
      * 查询商机
-     * 
+     *
      * @param id 商机ID
      * @return 商机
      */
     public TbBusiness selectTbBusinessById(Long id);
-    
 
-    public int countAllBusinessForIndex(IndexStatisticsVo vo);
 
     /**
      * 查询商机列表
-     * 
+     *
      * @param tbBusiness 商机
      * @return 商机集合
      */
@@ -38,7 +36,7 @@ public interface TbBusinessMapper {
 
     /**
      * 新增商机
-     * 
+     *
      * @param tbBusiness 商机
      * @return 结果
      */
@@ -46,17 +44,15 @@ public interface TbBusinessMapper {
 
     /**
      * 修改商机
-     * 
+     *
      * @param tbBusiness 商机
      * @return 结果
      */
     public int updateTbBusiness(TbBusiness tbBusiness);
 
-    public int  resetBusiness(@Param("id") Long id, @Param("status") String status);
-
     /**
      * 删除商机
-     * 
+     *
      * @param id 商机ID
      * @return 结果
      */
@@ -64,17 +60,23 @@ public interface TbBusinessMapper {
 
     /**
      * 批量删除商机
-     * 
+     *
      * @param ids 需要删除的数据ID
      * @return 结果
      */
     public int deleteTbBusinessByIds(Long[] ids);
 
+    /**
+     * 重新分配商机的状态
+     * @param id
+     * @param status
+     * @return
+     */
     public int resetNextTimeAndStatus(@Param("id") Long id, @Param("status") String status);
 
 
     public int setTransfer(@Param("id") Long id, @Param("status") String status);
 
-	public void updateBusinessEndTimeById(@Param("id")Long id, @Param("endTime")Date endTime);
+    public void updateBusinessEndTimeById(@Param("id")Long id, @Param("endTime")Date endTime);
 
 }

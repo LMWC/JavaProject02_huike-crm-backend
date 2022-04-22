@@ -13,6 +13,14 @@ import com.huike.contract.domain.TbContract;
 
 public interface IReportService {
 
+    /**
+     *新增客户统计
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
+    public LineChartVO contractStatistics(String beginCreateTime, String endCreateTime);
+
 
     /**
      * 客户统计报表
@@ -20,6 +28,14 @@ public interface IReportService {
      * @return
      */
     public  List<TbContract> contractReportList(TbContract tbContract);
+
+    /**
+     * 销售统计
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
+    public LineChartVO salesStatistics(String beginCreateTime, String endCreateTime);
 
 
 
@@ -77,8 +93,10 @@ public interface IReportService {
     public List<ActivityStatisticsVo> activityStatisticsList(TbActivity activity);
 
 
-
     public IndexVo getIndex(IndexStatisticsVo request);
+
+
+    public List<Map<String,Object>> salesStatisticsForIndex(IndexStatisticsVo request);
 
 
     /**

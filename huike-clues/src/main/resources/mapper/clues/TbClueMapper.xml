@@ -83,14 +83,14 @@
         select clue.id, clue.name, clue.phone, clue.channel, clue.activity_id, clue.sex, clue.age, clue.weixin, clue.qq,
                clue.level, clue.subject, clue.status, clue.create_time,
                clue.create_by, clue.next_time,r.create_by as assign_by, r.user_name as owner,r.create_time as owner_time from tb_clue clue
-            left join tb_assign_record r on clue.id=r.assign_id
+               left join tb_assign_record r on clue.id=r.assign_id
     </sql>
 
 
     <select id="selectTbClueList" parameterType="TbClue" resultMap="TbClueAssignResult">
         <include refid="selectTbClueAssignVo"/>
         <where>
-            <if test="id != null  and id != ''"> and clue.id = #{id} </if>
+            <if test="id != null  and id != ''"> and clue.id = #{id}</if>
             <if test="name != null  and name != ''"> and clue.name like concat('%', #{name}, '%')</if>
             <if test="phone != null  and phone != ''"> and clue.phone = #{phone}</if>
             <if test="channel != null  and channel != ''"> and clue.channel = #{channel}</if>
@@ -109,14 +109,16 @@
             </if>
             <if test="nextTime != null "> and clue.next_time = #{nextTime}</if>
             <if test="owner != null  and owner != ''"> and r.user_name like concat('%', #{owner}, '%')</if>
-            and r.latest = '1' and r.type='0' 
-
             <!-- 线索状态没有被查询，这里去掉状态转而添加if -->
-			<if test="status != null and status !=''"> and clue.status = #{status}</if>
-			<if test="status == null or status == ''"> and clue.status in ('1','2')</if>
-            <!-- and clue.status in ('1','2') -->
-            
+            <if test="status != null and status !=''"> and clue.status = #{status}</if>
+            <if test="status == null or status == ''"> and clue.status in ('1','2')</if>
+            AND (r.latest = '1' OR r.id IS NULL)
+            AND (r.type = '0' OR r.id IS NULL)
         </where>
+        <!-- 数据范围过滤 -->
+        <if test="params.dataScope != null and params.dataScope != ''">
+            AND (${params.dataScope} OR r.id IS NULL)
+        </if>
         order by clue.create_time desc
     </select>
 
@@ -176,16 +178,14 @@
 
 
     <!--    <select id="selectTbClueById" parameterType="Long" resultMap="TbClueAssignResult">-->
-<!--        <include refid="selectTbClueAssignVo"/>-->
-<!--        where clue.id = #{id}  and r.latest = '1'-->
-<!--    </select>-->
+    <!--        <include refid="selectTbClueAssignVo"/>-->
+    <!--        where clue.id = #{id}  and r.latest = '1'-->
+    <!--    </select>-->
 
     <select id="selectTbClueById" parameterType="Long" resultMap="TbClueResult">
         <include refid="selectTbClueVo"/>
         where id = #{id}
     </select>
-
-
 
     <select id="selectClueByIds" parameterType="String" resultMap="TbClueResult">
         <include refid="selectTbClueVo"/>
@@ -290,6 +290,8 @@
     </delete>
 
 
+
+
     <select id="countByActivity" parameterType="TbClue"  resultType="java.util.Map">
         SELECT
         sum(case when t.`status`='4' THEN 1 ELSE 0 END ) AS falseClues,
@@ -308,23 +310,208 @@
 
     <select id="countAllContractByUser" parameterType="com.huike.clues.domain.vo.IndexStatisticsVo"  resultType="java.util.Map">
         select clue.create_by, r.dept_id, count(clue.id) as num from tb_clue clue
-            left join tb_assign_record r
-            on r.assign_id = clue.id
-            and r.latest='1' and r.type ='0'
-            <if test="indexVo.beginCreateTime != null and indexVo.beginCreateTime != ''"><!-- 开始创建时间 -->
-            	where r.`create_time` BETWEEN #{indexVo.beginCreateTime} AND #{indexVo.endCreateTime} 
-            </if>
+        left join tb_assign_record r
+        on r.assign_id = clue.id
+        and r.latest='1' and r.type ='0'
+        <if test="indexVo.beginCreateTime != null and indexVo.beginCreateTime != ''"><!-- 开始创建时间 -->
+            where r.`create_time` BETWEEN #{indexVo.beginCreateTime} AND #{indexVo.endCreateTime}
+        </if>
         GROUP BY clue.create_by limit 10
     </select>
-	
-	<update id="updateClueEndTimeById">
+
+    <update id="updateClueEndTimeById">
         update tb_clue set end_time=#{endTime},next_time = null where id = #{id}
     </update>
-    
+
 
     <select id="getCluesNum" resultType="int">
         SELECT
-        IFNULL(COUNT(id), 0)
+            IFNULL(COUNT(id), 0)
+        FROM
+            `tb_clue`
+        WHERE id IN
+              (SELECT
+                   assign_id
+               FROM
+                   `tb_assign_record`
+               WHERE `create_time` BETWEEN #{indexVo.beginCreateTime}
+                   AND #{indexVo.endCreateTime}
+                 AND `type` = 0
+                 AND `latest` = 1
+                 AND `user_name` = #{username})
+          AND `status` IN (1, 2)
+    </select>
+
+    <select id="getcontractsBasicInfo"   resultType="java.util.Map">
+        SELECT
+        IFNULL(COUNT(id), 0) AS cluesNum, <!-- 线索数量 -->
+        IFNULL(
+        (SELECT
+        COUNT(DISTINCT (id))
+        FROM
+        `tb_business`
+        WHERE id IN
+        (SELECT
+        assign_id
+        FROM
+        `tb_assign_record`
+        WHERE `create_time` BETWEEN #{indexVo.beginCreateTime}
+        AND #{indexVo.endCreateTime}
+        AND `type` = 1
+        AND `latest` = 1
+        AND `user_name` = #{username}) AND `status` IN (1,2)),
+        0
+        ) AS businessNum, <!-- 商机数量 -->
+        IFNULL(
+        (SELECT
+        COUNT(DISTINCT (id))
+        FROM
+        `tb_contract`
+        WHERE `create_time` BETWEEN #{indexVo.beginCreateTime}
+        AND #{indexVo.endCreateTime}
+        AND create_by = #{username}
+        AND `status` = 4),
+        0
+        ) AS contractNum, <!-- 客户数量 -->
+        IFNULL(
+        (SELECT
+        CAST(
+        SUM(h.`contract_order`) AS DECIMAL (30, 0)
+        )
+        FROM
+        `tb_contract` h
+        WHERE h.create_by = #{username}
+        AND h.create_time BETWEEN #{indexVo.beginCreateTime}
+        AND #{indexVo.endCreateTime}),
+        0
+        ) AS salesAmount, <!-- 销售金额 -->
+        IFNULL(
+        (SELECT
+        COUNT(DISTINCT (id))
+        FROM
+        `tb_clue`
+        WHERE id IN
+        (SELECT
+        assign_id
+        FROM
+        `tb_assign_record`
+        WHERE user_name = #{username}
+        AND DATE_FORMAT(create_time, '%Y-%m-%d') = #{now}
+        AND latest = 1
+        AND `type` = 0)),
+        0
+        ) AS todayCluesNum, <!-- 今日新增线索 -->
+        IFNULL(
+        (SELECT
+        COUNT(DISTINCT (id))
+        FROM
+        `tb_business`
+        WHERE id IN
+        (SELECT
+        assign_id
+        FROM
+        `tb_assign_record`
+        WHERE user_name = #{username}
+        AND DATE_FORMAT(create_time, '%Y-%m-%d') = #{now}
+        AND latest = 1
+        AND `type` = 1)),
+        0
+        ) AS todayBusinessNum, <!-- 今日新增商机数量 -->
+        IFNULL(
+        (SELECT
+        COUNT(id)
+        FROM
+        `tb_contract`
+        WHERE create_by = #{username}
+        AND DATE_FORMAT(create_time, '%Y-%m-%d') = #{now}
+        AND `status` = 4),
+        0
+        ) AS todayContractNum, <!-- 今日新增客户数 -->
+        IFNULL(
+        (SELECT
+        CAST(
+        SUM(`contract_order`) AS DECIMAL (30, 0)
+        )
+        FROM
+        `tb_contract`
+        WHERE create_by = #{username}
+        AND DATE_FORMAT(create_time, '%Y-%m-%d') = #{now}),
+        0
+        ) AS todaySalesAmount, <!-- 今日销售额 -->
+        IFNULL(
+        (SELECT
+        COUNT(DISTINCT (id))
+        FROM
+        `tb_clue`
+        WHERE id IN
+        (SELECT
+        assign_id
+        FROM
+        `tb_assign_record`
+        WHERE user_name = #{username}
+        AND create_time BETWEEN #{indexVo.beginCreateTime}
+        AND #{indexVo.endCreateTime}
+        AND latest = 1
+        AND `type` = 0)
+        AND `status` = 1),
+        0
+        ) AS tofollowedCluesNum, <!-- 待跟进线索 -->
+        IFNULL(
+        (SELECT
+        COUNT(DISTINCT (id))
+        FROM
+        `tb_business`
+        WHERE id IN
+        (SELECT
+        assign_id
+        FROM
+        `tb_assign_record`
+        WHERE user_name = #{username}
+        AND create_time BETWEEN #{indexVo.beginCreateTime}
+        AND #{indexVo.endCreateTime}
+        AND latest = 1
+        AND `type` = 1)
+        AND `status` = 1),
+        0
+        ) AS tofollowedBusinessNum <!-- 待跟进商机 -->
+        <if test="username == 'admin'">
+            ,IFNULL(
+            (SELECT
+            COUNT(DISTINCT (id))
+            FROM
+            `tb_clue`
+            WHERE id NOT IN
+            (SELECT
+            assign_id
+            FROM
+            `tb_assign_record`
+            WHERE create_time BETWEEN #{indexVo.beginCreateTime}
+            AND #{indexVo.endCreateTime}
+            AND latest = 1
+            AND `type` = 0)
+            AND create_time BETWEEN #{indexVo.beginCreateTime}
+            AND #{indexVo.endCreateTime}),
+            0
+            ) AS toallocatedCluesNum, <!-- 待分配线索 -->
+            IFNULL(
+            (SELECT
+            COUNT(DISTINCT (id))
+            FROM
+            `tb_business`
+            WHERE id NOT IN
+            (SELECT
+            assign_id
+            FROM
+            `tb_assign_record`
+            WHERE create_time BETWEEN #{indexVo.beginCreateTime}
+            AND #{indexVo.endCreateTime}
+            AND latest = 1
+            AND `type` = 1)
+            AND create_time BETWEEN #{indexVo.beginCreateTime}
+            AND #{indexVo.endCreateTime}),
+            0
+            ) AS toallocatedBusinessNum <!-- 待分配商机 -->
+        </if>
         FROM
         `tb_clue`
         WHERE id IN
@@ -333,199 +520,11 @@
         FROM
         `tb_assign_record`
         WHERE `create_time` BETWEEN #{indexVo.beginCreateTime}
-            AND #{indexVo.endCreateTime}
-          AND `type` = 0
+        AND #{indexVo.endCreateTime}
+        AND `type` = 0
         AND `latest` = 1
         AND `user_name` = #{username})
-        AND `status` IN (1, 2)
+        AND `status` IN (1,2)
     </select>
-    
-    <select id="getcontractsBasicInfo"   resultType="java.util.Map">
-		    SELECT 
-			  IFNULL(COUNT(id), 0) AS cluesNum, <!-- 线索数量 -->
-			  IFNULL(
-			    (SELECT 
-			      COUNT(DISTINCT (id)) 
-			    FROM
-			      `tb_business` 
-			    WHERE id IN 
-			      (SELECT 
-			        assign_id 
-			      FROM
-			        `tb_assign_record` 
-			      WHERE `create_time` BETWEEN #{indexVo.beginCreateTime} 
-			        AND #{indexVo.endCreateTime} 
-			        AND `type` = 1 
-			        AND `latest` = 1 
-			        AND `user_name` = #{username}) AND `status` IN (1,2)),
-			    0
-			  ) AS businessNum, <!-- 商机数量 -->
-			  IFNULL(
-			    (SELECT 
-			      COUNT(DISTINCT (id)) 
-			    FROM
-			      `tb_contract` 
-			    WHERE `create_time` BETWEEN #{indexVo.beginCreateTime} 
-			      AND #{indexVo.endCreateTime} 
-			      AND create_by = #{username} 
-			      AND `status` = 4),
-			    0
-			  ) AS contractNum, <!-- 客户数量 -->
-			  IFNULL(
-			    (SELECT 
-			      CAST(
-			        SUM(h.`contract_order`) AS DECIMAL (30, 0)
-			      ) 
-			    FROM
-			      `tb_contract` h 
-			    WHERE h.create_by = #{username} 
-			      AND h.create_time BETWEEN #{indexVo.beginCreateTime} 
-			      AND #{indexVo.endCreateTime}),
-			    0
-			  ) AS salesAmount, <!-- 销售金额 -->
-			  IFNULL(
-			    (SELECT 
-			      COUNT(DISTINCT (id)) 
-			    FROM
-			      `tb_clue` 
-			    WHERE id IN 
-			      (SELECT 
-			        assign_id 
-			      FROM
-			        `tb_assign_record` 
-			      WHERE user_name = #{username} 
-			        AND DATE_FORMAT(create_time, '%Y-%m-%d') = #{now} 
-			        AND latest = 1 
-			        AND `type` = 0)),
-			    0
-			  ) AS todayCluesNum, <!-- 今日新增线索 -->
-			  IFNULL(
-			    (SELECT 
-			      COUNT(DISTINCT (id)) 
-			    FROM
-			      `tb_business` 
-			    WHERE id IN 
-			      (SELECT 
-			        assign_id 
-			      FROM
-			        `tb_assign_record` 
-			      WHERE user_name = #{username} 
-			        AND DATE_FORMAT(create_time, '%Y-%m-%d') = #{now} 
-			        AND latest = 1 
-			        AND `type` = 1)),
-			    0
-			  ) AS todayBusinessNum, <!-- 今日新增商机数量 -->
-			  IFNULL(
-			    (SELECT 
-			      COUNT(id) 
-			    FROM
-			      `tb_contract` 
-			    WHERE create_by = #{username} 
-			      AND DATE_FORMAT(create_time, '%Y-%m-%d') = #{now} 
-			      AND `status` = 4),
-			    0
-			  ) AS todayContractNum, <!-- 今日新增客户数 -->
-			  IFNULL(
-			    (SELECT 
-			      CAST(
-			        SUM(`contract_order`) AS DECIMAL (30, 0)
-			      ) 
-			    FROM
-			      `tb_contract` 
-			    WHERE create_by = #{username} 
-			      AND DATE_FORMAT(create_time, '%Y-%m-%d') = #{now}),
-			    0
-			  ) AS todaySalesAmount, <!-- 今日销售额 -->
-			  IFNULL(
-			    (SELECT 
-			      COUNT(DISTINCT (id)) 
-			    FROM
-			      `tb_clue` 
-			    WHERE id IN 
-			      (SELECT 
-			        assign_id 
-			      FROM
-			        `tb_assign_record` 
-			      WHERE user_name = #{username} 
-			        AND create_time BETWEEN #{indexVo.beginCreateTime} 
-			        AND #{indexVo.endCreateTime} 
-			        AND latest = 1 
-			        AND `type` = 0) 
-			        AND `status` = 1),
-			    0
-			  ) AS tofollowedCluesNum, <!-- 待跟进线索 -->
-			  IFNULL(
-			    (SELECT 
-			      COUNT(DISTINCT (id)) 
-			    FROM
-			      `tb_business` 
-			    WHERE id IN 
-			      (SELECT 
-			        assign_id 
-			      FROM
-			        `tb_assign_record` 
-			      WHERE user_name = #{username} 
-			        AND create_time BETWEEN #{indexVo.beginCreateTime} 
-			        AND #{indexVo.endCreateTime} 
-			        AND latest = 1 
-			        AND `type` = 1) 
-			        AND `status` = 1),
-			    0
-			  ) AS tofollowedBusinessNum <!-- 待跟进商机 -->
-			  <if test="username == 'admin'">
-			  	,IFNULL(
-			    (SELECT 
-			      COUNT(DISTINCT (id)) 
-			    FROM
-			      `tb_clue` 
-			    WHERE id NOT IN 
-			      (SELECT 
-			        assign_id 
-			      FROM
-			        `tb_assign_record` 
-			      WHERE create_time BETWEEN #{indexVo.beginCreateTime} 
-			        AND #{indexVo.endCreateTime} 
-			        AND latest = 1 
-			        AND `type` = 0) 
-			      AND create_time BETWEEN #{indexVo.beginCreateTime} 
-			      AND #{indexVo.endCreateTime}),
-			    0
-			  ) AS toallocatedCluesNum, <!-- 待分配线索 -->
-			  IFNULL(
-			    (SELECT 
-			      COUNT(DISTINCT (id)) 
-			    FROM
-			      `tb_business` 
-			    WHERE id NOT IN 
-			      (SELECT 
-			        assign_id 
-			      FROM
-			        `tb_assign_record` 
-			      WHERE create_time BETWEEN #{indexVo.beginCreateTime} 
-			        AND #{indexVo.endCreateTime} 
-			        AND latest = 1 
-			        AND `type` = 1) 
-			      AND create_time BETWEEN #{indexVo.beginCreateTime} 
-			      AND #{indexVo.endCreateTime}),
-			    0
-			  ) AS toallocatedBusinessNum <!-- 待分配商机 -->
-			  </if>
-			FROM
-			  `tb_clue` 
-			WHERE id IN 
-			  (SELECT 
-			    assign_id 
-			  FROM
-			    `tb_assign_record` 
-			  WHERE `create_time` BETWEEN #{indexVo.beginCreateTime} 
-			    AND #{indexVo.endCreateTime} 
-			    AND `type` = 0 
-			    AND `latest` = 1 
-			    AND `user_name` = #{username}) 
-			    AND `status` IN (1,2)
-    </select>
-    
-    <delete id="removeClueByFalseClue">
-    	DELETE FROM `tb_clue` WHERE id = #{id}
-    </delete>
+
 </mapper>

@@ -8,7 +8,7 @@ import com.huike.contract.domain.TbContract;
 /**
  * 合同Service接口
  * 
- * @author ruoyi
+ * @author wgl
  * @date 2021-05-19
  */
 public interface ITbContractService 

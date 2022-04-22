@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Param;
 /**
  * 活动管理Mapper接口
  * 
- * @author ruoyi
+ * @author wgl
  * @date 2021-04-01
  */
 public interface TbActivityMapper {

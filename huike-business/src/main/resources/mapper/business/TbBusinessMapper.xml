@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.huike.business.mapper.TbBusinessMapper">
 
 
@@ -85,7 +85,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                b.course_id, b.create_by, b.create_time, b.occupation, b.education, b.job, b.salary, b.major,
                b.expected_salary, b.reasons, b.plan, b.plan_time, b.other_intention, b.next_time, b.status,
                r.create_by as assign_by, r.user_name as owner,r.create_time as owner_time from tb_business b
-             left join tb_assign_record r on b.id=r.assign_id
+               left join tb_assign_record r on b.id=r.assign_id
     </sql>
 
 
@@ -117,7 +117,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="planTime != null "> and plan_time = #{planTime}</if>
             <if test="otherIntention != null  and otherIntention != ''"> and other_intention = #{otherIntention}</if>
             <if test="nextTime != null "> and next_time = #{nextTime}</if>
-             and status = '3'
+            and status IN ('3','4')
         </where>
     </select>
 
@@ -149,11 +149,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="planTime != null "> and b.plan_time = #{planTime}</if>
             <if test="otherIntention != null  and otherIntention != ''"> and b.other_intention = #{otherIntention}</if>
             <if test="nextTime != null "> and b.next_time = #{nextTime}</if>
-            <if test="beginCreateTime != null"> and b.create_time BETWEEN #{beginCreateTime} AND #{endCreateTime}</if>
-            and r.latest = '1' and r.type='1'
+            <if test="beginCreateTime != null and endCreateTime != null "> and DATE_FORMAT(b.create_time,'%Y-%m-%d')  BETWEEN #{beginCreateTime} AND #{endCreateTime}</if>
+            AND (r.latest = '1' OR r.id IS NULL)
+            AND (r.type = '1' OR r.id IS NULL)
         </where>
         <!-- 数据范围过滤 -->
-        ${params.dataScope}
+        <if test="params.dataScope != null and params.dataScope != ''">
+            AND (${params.dataScope} OR r.id IS NULL)
+        </if>
         ORDER BY b.`create_time` DESC
     </select>
 
@@ -162,20 +165,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
 
-
-    <select id="countAllBusinessForIndex" resultType="int" parameterType="com.huike.clues.domain.vo.IndexStatisticsVo">
-        select count(1) from tb_assign_record r where r.latest='1' and r.type='1'
-        <where>
-            <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
-                and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
-            </if>
-            <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
-                and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
-            </if>
-        </where>
-        ${params.dataScope}
-    </select>
-        
     <insert id="insertTbBusiness" parameterType="TbBusiness" useGeneratedKeys="true" keyProperty="id">
         insert into tb_business
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -208,7 +197,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null">status,</if>
             <if test="clueId != null">clue_id,</if>
             <if test="transfer != null">transfer,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="name != null">#{name},</if>
             <if test="phone != null">#{phone},</if>
@@ -239,7 +228,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null">#{status},</if>
             <if test="clueId != null">#{clueId},</if>
             <if test="transfer != null">#{transfer},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateTbBusiness" parameterType="TbBusiness">
@@ -276,16 +265,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
 
-    <update id="resetBusiness">
-        update tb_business set next_time=null, status=#{status} where id = #{id}
-    </update>
-
     <delete id="deleteTbBusinessById" parameterType="Long">
         delete from tb_business where id = #{id}
     </delete>
 
     <delete id="deleteTbBusinessByIds" parameterType="String">
-        delete from tb_business where id in 
+        delete from tb_business where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
@@ -298,9 +283,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="setTransfer">
         update tb_business set next_time=null, status=#{status}, transfer='1' where id = #{id}
     </update>
-    
-     <update id="updateBusinessEndTimeById">
+
+    <update id="updateBusinessEndTimeById">
         update tb_business set end_time=#{endTime},next_time = null where id = #{id}
     </update>
+
 
 </mapper>

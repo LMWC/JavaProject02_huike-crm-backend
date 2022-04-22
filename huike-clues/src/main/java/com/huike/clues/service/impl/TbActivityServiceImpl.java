@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.huike.common.utils.uuid.UUIDUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,6 +44,8 @@ public class TbActivityServiceImpl implements ITbActivityService {
     }
 
 
+
+
     @Override
     public TbActivity selectTbActivityByCode(String code) {
         return tbActivityMapper.selectTbActivityByCode(code);
@@ -72,8 +75,10 @@ public class TbActivityServiceImpl implements ITbActivityService {
         tbActivity.setCode(getCode());
         tbActivity.setStatus("2");
         int rows= tbActivityMapper.insertTbActivity(tbActivity);
+        loadAllActivityCode();
         return rows;
     }
+
 
     /**
      * 修改活动管理
@@ -112,11 +117,9 @@ public class TbActivityServiceImpl implements ITbActivityService {
      * @return 结果
      */
     @Override
-    public int deleteTbActivityById(Long id){
+    public int deleteTbActivityById(Long id)
+    {
         TbActivity tbActivity = tbActivityMapper.selectTbActivityById(id);
-        if(tbActivity==null){
-            return 0;
-        }
         int rows=tbActivityMapper.deleteTbActivityById(id);
         return rows;
     }
@@ -126,20 +129,26 @@ public class TbActivityServiceImpl implements ITbActivityService {
         return tbActivityMapper.getCountByStatus();
     }
 
-    @Override
+    /**
+     * 加载活动编号到缓存中
+     */
     public void loadAllActivityCode() {
         List<String> codeList= tbActivityMapper.selectAllCode();
         Set<String> set= new HashSet<>(codeList);
         redisCache.setCacheSet(Constants.ACT_CODE_KEY, set);
     }
 
+    /**
+     * 生成活动编号
+     * @return
+     */
     private String getCode(){
         //随机8位编码
         String code= StringUtils.getRandom(8);
         //店铺校验
         Set<String> codeSets =  redisCache.getCacheSet(Constants.ACT_CODE_KEY);
         if(codeSets.contains(code)){
-            getCode();
+            return getCode();
         }
         return code;
     }

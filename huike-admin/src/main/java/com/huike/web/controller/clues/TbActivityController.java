@@ -25,12 +25,13 @@ import com.huike.common.enums.BusinessType;
 /**
  * 活动管理Controller
  * 
- * @author ruoyi
+ * @author wgl
  * @date 2021-04-01
  */
 @RestController
 @RequestMapping("/clues/activity")
 public class TbActivityController extends BaseController {
+
     @Autowired
     private ITbActivityService tbActivityService;
 
@@ -39,7 +40,8 @@ public class TbActivityController extends BaseController {
      */
     @PreAuthorize("@ss.hasPermi('clues:activity:list')")
     @GetMapping("/list")
-    public TableDataInfo list(TbActivity tbActivity) {
+    public TableDataInfo list(TbActivity tbActivity)
+    {
         startPage();
         List<TbActivity> list = tbActivityService.selectTbActivityList(tbActivity);
         Map<String,Object> countParms=tbActivityService.getCountByStatus();
@@ -53,7 +55,8 @@ public class TbActivityController extends BaseController {
      * @return
      */
     @GetMapping("/listselect/{channel}")
-    public AjaxResult list(@PathVariable("channel")  String channel) {
+    public AjaxResult list(@PathVariable("channel")  String channel)
+    {
         TbActivity tbActivity =new TbActivity();
         tbActivity.setChannel(channel);
         tbActivity.setStatus("2");

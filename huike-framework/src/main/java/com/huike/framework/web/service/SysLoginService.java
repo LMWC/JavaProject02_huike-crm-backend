@@ -60,6 +60,11 @@ public class SysLoginService {
         // 用户验证
         Authentication authentication = null;
         try {
+            /**
+             * ！！！看我看我看我！！！
+             * 看我少走弯路，获取用户对象的时候，会去调用下面的这个方法查询用户对象
+             * UserDetailsServiceImpl.loadUserByUsername
+             */
             // 该方法会去调用UserDetailsServiceImpl.loadUserByUsername
             System.out.println("username "+username+" -----password "+password);
             authentication = authenticationManager

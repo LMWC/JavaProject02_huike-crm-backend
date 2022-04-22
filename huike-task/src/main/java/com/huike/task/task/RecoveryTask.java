@@ -13,20 +13,20 @@ public class RecoveryTask {
 
     /**
      * 回收线索
-     * 生产环境 每天6点执行       0 0 12 * * ?
+     * 生产环境 每天6点执行
      * 测试环境 每10秒执行一次 0/10 * * * * ?
      */
-    @Scheduled(cron = "0/10 * * * * ?")
+    @Scheduled(cron = "0 0 6 * * ?")//每天早上6点执行
     public void recoveryClue() {
         recoveryService.recoveryClue();
     }
 
     /**
      * 回收商机
-     * 生产环境 每天6点执行      0 0 12 * * ?
+     * 生产环境 每天6点执行
      * 测试环境 每10秒执行一次 0/10 * * * * ?
      */
-    @Scheduled(cron = "0/10 * * * * ?")
+    @Scheduled(cron = "0 0 6 * * ?")//每天早上6点执行
     public void recoveryBusiness() {
         recoveryService.recoveryBusiness();
     }

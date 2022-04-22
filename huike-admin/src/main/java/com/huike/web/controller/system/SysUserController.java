@@ -54,7 +54,6 @@ public class SysUserController extends BaseController{
     /**
      * 获取用户列表
      */
-    //@ApiOperation("用户权限分页列表")
     @PreAuthorize("@ss.hasPermi('system:user:list')")
     @GetMapping("/list")
     public TableDataInfo list(SysUser user) {
@@ -69,7 +68,6 @@ public class SysUserController extends BaseController{
      * @param user
      * @return
      */
-    //@ApiOperation("获取用户部门下拉列表")
     @GetMapping("/listselect")
     public AjaxResult listselect(SysUser user)
     {
@@ -116,12 +114,10 @@ public class SysUserController extends BaseController{
         AjaxResult ajax = AjaxResult.success();
         List<SysRole> roles = roleService.selectRoleAll();
         ajax.put("roles", SysUser.isAdmin(userId) ? roles : roles.stream().filter(r -> !r.isAdmin()).collect(Collectors.toList()));
-        //TODO 去掉了岗位
         ajax.put("posts", null);
         if (StringUtils.isNotNull(userId))
         {
             ajax.put(AjaxResult.DATA_TAG, userService.selectUserById(userId));
-            //TODO 去掉了岗位
             ajax.put("postIds", null);
             ajax.put("roleIds", roleService.selectRoleListByUserId(userId));
         }
@@ -145,9 +141,7 @@ public class SysUserController extends BaseController{
         {
             return AjaxResult.error("新增用户'" + user.getUserName() + "'失败，手机号码已存在");
         }
-        else if (StringUtils.isNotEmpty(user.getEmail())
-                && UserConstants.NOT_UNIQUE.equals(userService.checkEmailUnique(user)))
-        {
+        else if (StringUtils.isNotEmpty(user.getEmail())) {
             return AjaxResult.error("新增用户'" + user.getUserName() + "'失败，邮箱账号已存在");
         }
         user.setCreateBy(SecurityUtils.getUsername());
@@ -169,8 +163,7 @@ public class SysUserController extends BaseController{
         {
             return AjaxResult.error("修改用户'" + user.getUserName() + "'失败，手机号码已存在");
         }
-        else if (StringUtils.isNotEmpty(user.getEmail())
-                && UserConstants.NOT_UNIQUE.equals(userService.checkEmailUnique(user)))
+        else if (StringUtils.isNotEmpty(user.getEmail()))
         {
             return AjaxResult.error("修改用户'" + user.getUserName() + "'失败，邮箱账号已存在");
         }

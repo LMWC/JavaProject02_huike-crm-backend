@@ -47,10 +47,8 @@ public class SysLoginController
      * @param loginBody 登录信息
      * @return 结果
      */
-    //@ApiOperation("登录方法")
     @PostMapping("/login")
-    public AjaxResult login(@RequestBody LoginBody loginBody)
-    {
+    public AjaxResult login(@RequestBody LoginBody loginBody) {
         AjaxResult ajax = AjaxResult.success();
         // 生成令牌
         String token = loginService.login(loginBody.getUsername(), loginBody.getPassword(), loginBody.getCode(),
@@ -64,10 +62,8 @@ public class SysLoginController
      * 
      * @return 用户信息
      */
-    //@ApiOperation("获取用户信息")
     @GetMapping("getInfo")
-    public AjaxResult getInfo()
-    {
+    public AjaxResult getInfo() {
         LoginUser loginUser = tokenService.getLoginUser(ServletUtils.getRequest());
         SysUser user = loginUser.getUser();
         // 角色集合

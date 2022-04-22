@@ -133,6 +133,20 @@
     </delete>
 
 
+    <!--合同统计-->
+    <select id="contractStatistics"
+            resultType="java.util.Map">
+        SELECT count(1) as num,DATE_FORMAT(create_time,'%Y-%m-%d') dd from tb_contract
+        <where>
+            <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
+                and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
+            </if>
+            <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
+                and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
+            </if>
+        </where>
+        GROUP BY dd;
+    </select>
 
     <select id="contractStatisticsByUser"  parameterType="com.huike.clues.domain.vo.IndexStatisticsVo"
             resultType="java.util.Map">
@@ -144,24 +158,40 @@
             <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
                 and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
             </if>
-<!--            <if test="deptId != null and deptId != ''">-->
-<!--                and dept_id = #{deptId}-->
-<!--            </if>-->
+            <!--            <if test="deptId != null and deptId != ''">-->
+            <!--                and dept_id = #{deptId}-->
+            <!--            </if>-->
             GROUP BY c.create_by,c.dept_id LIMIT 10
         </where>
     </select>
+
+    <!--销售统计日期统计-->
+    <select id="salesStatistics"
+            resultType="java.util.Map">
+        SELECT ROUND(sum(contract_order),2) as sales, DATE_FORMAT(create_time,'%Y-%m-%d') dd from tb_contract
+        <where>
+            <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
+                and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
+            </if>
+            <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
+                and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
+            </if>
+        </where>
+        GROUP BY dd;
+    </select>
+
 
 
     <select id="chanelStatistics"
             resultType="java.util.Map">
         SELECT count(1) as num, channel from tb_contract
         <where>
-        <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
-            and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
-        </if>
-        <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
-            and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
-        </if>
+            <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
+                and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
+            </if>
+            <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
+                and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
+            </if>
         </where>
         GROUP BY channel;
     </select>
@@ -170,12 +200,12 @@
             resultType="java.util.Map">
         SELECT count(1) as num,activity_id from tb_contract
         <where>
-        <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
-            and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
-        </if>
-        <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
-            and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
-        </if>
+            <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
+                and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
+            </if>
+            <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
+                and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
+            </if>
         </where>
         GROUP BY activity_id;
     </select>
@@ -183,7 +213,7 @@
 
 
     <select id="deptStatistics"
-             resultType="java.util.Map">
+            resultType="java.util.Map">
         select dept_id, count(id) as num, round(SUM(contract_order),2) as total_amount from tb_contract
         <where>
             <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
@@ -238,39 +268,5 @@
             and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{params.endCreateTime},'%y-%m-%d')
         </if>
     </select>
-
-
-<!--    <select id="countAllContract" resultType="int">-->
-<!--        select count(id) as num from tb_contract-->
-<!--        <where>-->
-<!--            <if test="beginCreateTime != null and beginCreateTime != ''">&lt;!&ndash; 开始创建时间 &ndash;&gt;-->
-<!--                and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')-->
-<!--            </if>-->
-<!--            <if test="endCreateTime != null and endCreateTime != ''">&lt;!&ndash;  &ndash;&gt;-->
-<!--                and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')-->
-<!--            </if>-->
-<!--        </where>-->
-<!--    </select>-->
-
-
-<!--    <select id="countAllContractByUser" resultType="java.util.Map">-->
-<!--        select clue.create_by, clue.dept_id, count(clue.id) as num from tb_clue clue where clue.status='5'-->
-<!--        <where>-->
-<!--            <if test="beginCreateTime != null and beginCreateTime != ''">&lt;!&ndash; 开始创建时间 &ndash;&gt;-->
-<!--                and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')-->
-<!--            </if>-->
-<!--            <if test="endCreateTime != null and endCreateTime != ''">&lt;!&ndash;  &ndash;&gt;-->
-<!--                and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')-->
-<!--            </if>-->
-<!--            <if test="deptIds != null and deptIds != ''">-->
-<!--                and dept_id in-->
-<!--                <foreach item="id" collection="array" open="(" separator="," close=")">-->
-<!--                    #{id}-->
-<!--                </foreach>-->
-<!--            </if>-->
-<!--        </where>-->
-<!--        GROUP BY clue.create_by,clue.dept_id-->
-<!--    </select>-->
-
 
 </mapper>

@@ -8,7 +8,7 @@ import com.huike.business.domain.TbBusiness;
 /**
  * 商机Service接口
  * 
- * @author ruoyi
+ * @author wgl
  * @date 2021-04-25
  */
 public interface ITbBusinessService 
@@ -69,8 +69,6 @@ public interface ITbBusinessService
     public String assign(Long[] clueIds, Long userId);
 
     public String gain(Long[] clueIds, Long userId);
-
-    public int backPool(Long busniessId,String reason);
 
     public int changeBusiness(Long clueId);
 

@@ -18,7 +18,7 @@ public interface TbContractMapper {
 
     /**
      * 查询合同列表
-     * 
+     *
      * @param tbContract 合同
      * @return 合同集合
      */
@@ -26,7 +26,7 @@ public interface TbContractMapper {
 
     /**
      * 新增合同
-     * 
+     *
      * @param tbContract 合同
      * @return 结果
      */
@@ -34,7 +34,7 @@ public interface TbContractMapper {
 
     /**
      * 修改合同
-     * 
+     *
      * @param tbContract 合同
      * @return 结果
      */
@@ -42,7 +42,7 @@ public interface TbContractMapper {
 
     /**
      * 删除合同
-     * 
+     *
      * @param id 合同ID
      * @return 结果
      */
@@ -50,7 +50,7 @@ public interface TbContractMapper {
 
     /**
      * 批量删除合同
-     * 
+     *
      * @param ids 需要删除的数据ID
      * @return 结果
      */
@@ -63,8 +63,15 @@ public interface TbContractMapper {
      * @return
      */
     public List<Map<String,Object>> contractStatistics(@Param("beginCreateTime") String beginCreateTime, @Param("endCreateTime") String endCreateTime);
-    
 
+
+    /**
+     * 销售统计
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
+    public List<Map<String,Object>> salesStatistics(@Param("beginCreateTime") String beginCreateTime, @Param("endCreateTime") String endCreateTime);
 
     /**
      * 渠道统计
@@ -73,7 +80,7 @@ public interface TbContractMapper {
      * @return
      */
     public List<Map<String,Object>> chanelStatistics(@Param("beginCreateTime") String beginCreateTime, @Param("endCreateTime") String endCreateTime);
-    
+
     /**
      * 活动统计
      * @param beginCreateTime
@@ -89,10 +96,7 @@ public interface TbContractMapper {
 
     public List<Map<String,Object>> ownerShipStatistics(@Param("beginCreateTime") String beginCreateTime, @Param("endCreateTime") String endCreateTime);
 
-
     public Map<String,Object> countByActivity(TbContract tbContract);
-
-   // public int countAllContract(@Param("beginCreateTime") String beginCreateTime, @Param("endCreateTime") String endCreateTime);
 
 
     public List<Map<String,Object>> contractStatisticsByUser(IndexStatisticsVo query);

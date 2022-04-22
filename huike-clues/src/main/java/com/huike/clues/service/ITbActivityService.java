@@ -65,9 +65,5 @@ public interface ITbActivityService
 
     public Map getCountByStatus();
 
-
-    /**
-     * 预加载活动编号
-     */
     void loadAllActivityCode();
 }

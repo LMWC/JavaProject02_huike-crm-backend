@@ -12,7 +12,7 @@ import com.huike.clues.service.ITbRulePoolService;
 /**
  * 线索池规则Service业务层处理
  * 
- * @author ruoyi
+ * @author wgl
  * @date 2021-04-16
  */
 @Service

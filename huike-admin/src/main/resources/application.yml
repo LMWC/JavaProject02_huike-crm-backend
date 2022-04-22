@@ -8,7 +8,6 @@ huike:
   copyrightYear: 2021
   # 实例演示开关
   demoEnabled: true
-  # 文件路径 示例（ Windows配置D:/ruoyi/uploadPath，Linux配置 /home/ruoyi/uploadPath）
   #profile: /root/soft/uploadPath
   profile: D:\root\soft\uploadPath
   # 获取ip地址开关
@@ -54,30 +53,16 @@ spring:
        max-request-size:  20MB
   main:
     allow-bean-definition-overriding: true
-  activiti:
-    #1.false： 默认值。activiti在启动时，会对比数据库表中保存的版本，如果没有表或者版本不匹配，将抛出异常
-    #2.true： activiti会对数据库中所有表进行更新操作。如果表不存在，则自动创建
-    #3.create_drop： 在activiti启动时创建表，在关闭时删除表（必须手动关闭引擎，才能删除表）
-    #4.drop-create： 在activiti启动时删除原来的旧表，然后在创建新表（不需要手动关闭引擎）
-    database-schema-update: true
-    #检测历史表是否存在 activiti7默认没有开启数据库历史记录 启动数据库历史记录
-    db-history-used: true
-    #记录历史等级 可配置的历史级别有none, activity, audit, full
-    history-level: full
-    #校验流程文件，默认校验resources下的processes文件夹里的流程文件
-    check-process-definitions: false
   # redis 配置
   redis:
     # 地址
     host: 127.0.0.1
-    #host: 172.17.2.65
-    #host: 192.168.200.132
     # 端口，默认为6379
     port: 6379
     # 数据库索引
     database: 0
     # 密码
-    #password: 02afbc26a84dd058
+    #password: 123456
     # 连接超时时间
     timeout: 10s
     lettuce:
@@ -126,16 +111,7 @@ minio:
   secure: false
   bucketName: "huike-crm"
   configDir: "/data/excel"
-# xxl Job 配置
-xxl:
-  job:
-    admin:
-      addresses: http://127.0.0.1:18080/xxl-job-admin
-    executor:
-      appname: executorDemo
-      logpath: /server/xxlJob/log
-      #logpath: D:\work\xxl-job-2.1.0\log
-      logretentiondays: -1
+
 # 防止XSS攻击
 xss: 
   # 过滤开关
@@ -148,6 +124,6 @@ xss:
 #admin策略 导入和转换全部交由admin来处理，由admin来分配线索和规则
 #rule策略 交由规则引擎来处理，项目一阶段不处理，单讲admin模式
 rule:
-  transfor: admin
+  transfor: rule #转商机时的自动分配方式--rule基于规则来分配 admin先分配给管理员再进行二次分配
   clue:
-    import: admin
+    import: rule #导入时的自动分配方式--rule基于规则来分配 admin先分配给管理员再进行二次分配

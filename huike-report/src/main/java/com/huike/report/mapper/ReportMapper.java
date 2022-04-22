@@ -20,7 +20,7 @@ public interface ReportMapper {
 	 * @param username			用户名
 	 * @return
 	 */
-    Integer getCluesNum(@Param("startTime") String beginCreateTime,
+	Integer getCluesNum(@Param("startTime") String beginCreateTime,
 						@Param("endTime") String endCreateTime,
 						@Param("username") String username);
 
@@ -58,6 +58,8 @@ public interface ReportMapper {
 						  @Param("username") String username);
 
 	/**=========================================今日简报========================================*/
+
+
 
 	/**=========================================待办========================================*/
 

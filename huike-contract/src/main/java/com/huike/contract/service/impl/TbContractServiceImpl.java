@@ -66,8 +66,13 @@ public class TbContractServiceImpl implements ITbContractService
      */
     @Override
     public List<TbContract> selectTbContract(TbContract queryConditon){
-    	String userName = SecurityUtils.getUsername();
-    	queryConditon.setCreateBy(userName);
+        /**
+         * admin不根据创建人查看，即admin查看所有的合同
+         */
+        if(!SecurityUtils.getAdmin().equals(SecurityUtils.getUserId())){
+            //当前用户是admin不设置查询条件
+            queryConditon.setCreateBy(SecurityUtils.getUsername());
+        }
         List<TbContract> list= tbContractMapper.selectTbContractList(queryConditon);
         return list;
     }

@@ -145,7 +145,7 @@ public class DataScopeAspect {
             if (StringUtils.isNotNull(params) && params instanceof BaseEntity)
             {
                 BaseEntity baseEntity = (BaseEntity) params;
-                baseEntity.getParams().put(DATA_SCOPE, " AND (" + sqlString.substring(4) + ")");
+                baseEntity.getParams().put(DATA_SCOPE, sqlString.substring(4) );
             }
         }
     }

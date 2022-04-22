@@ -12,7 +12,7 @@ import com.huike.clues.service.ITbCourseService;
 /**
  * 课程管理Service业务层处理
  * 
- * @author ruoyi
+ * @author wgl
  * @date 2021-04-01
  */
 @Service

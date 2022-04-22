@@ -96,8 +96,7 @@ public class TokenService {
      * @param loginUser 用户信息
      * @return 令牌
      */
-    public String createToken(LoginUser loginUser)
-    {
+    public String createToken(LoginUser loginUser) {
         String token = IdUtils.fastUUID();
         loginUser.setToken(token);
         setUserAgent(loginUser);
@@ -105,6 +104,10 @@ public class TokenService {
 
         Map<String, Object> claims = new HashMap<>();
         claims.put(Constants.LOGIN_USER_KEY, token);
+        //存放非敏感信息
+        claims.put("username",loginUser.getUsername());
+        claims.put("nickName",loginUser.getUser().getNickName());
+        claims.put("createTime",loginUser.getUser().getCreateTime());
         return createToken(claims);
     }
 

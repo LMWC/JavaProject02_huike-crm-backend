@@ -140,23 +140,6 @@ public class SysUserServiceImpl implements ISysUserService
         return UserConstants.UNIQUE;
     }
 
-    /**
-     * 校验email是否唯一
-     *
-     * @param user 用户信息
-     * @return
-     */
-    @Override
-    public String checkEmailUnique(SysUser user)
-    {
-        Long userId = StringUtils.isNull(user.getUserId()) ? -1L : user.getUserId();
-        SysUser info = userMapper.checkEmailUnique(user.getEmail());
-        if (StringUtils.isNotNull(info) && info.getUserId().longValue() != userId.longValue())
-        {
-            return UserConstants.NOT_UNIQUE;
-        }
-        return UserConstants.UNIQUE;
-    }
 
     /**
      * 校验用户是否允许操作

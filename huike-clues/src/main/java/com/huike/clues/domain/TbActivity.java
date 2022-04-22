@@ -10,7 +10,7 @@ import com.huike.common.core.domain.BaseEntity;
 /**
  * 活动管理对象 tb_activity
  *
- * @author ruoyi
+ * @author wgl
  * @date 2021-04-02
  */
 public class TbActivity extends BaseEntity

@@ -1,9 +1,6 @@
 package com.huike.web.controller.report;
 
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,5 +29,4 @@ public class IndexController {
                                   @RequestParam("endCreateTime") String endCreateTime){
         return AjaxResult.success(reportService.getBaseInfo(beginCreateTime,endCreateTime));
     }
-
 }

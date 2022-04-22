@@ -6,7 +6,7 @@ import com.huike.clues.domain.TbCourse;
 /**
  * 课程管理Mapper接口
  * 
- * @author ruoyi
+ * @author wgl
  * @date 2021-04-01
  */
 public interface TbCourseMapper 

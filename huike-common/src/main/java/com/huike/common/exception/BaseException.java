@@ -8,8 +8,8 @@ import com.huike.common.utils.StringUtils;
  * 
  * 
  */
-public class BaseException extends RuntimeException
-{
+public class BaseException extends RuntimeException {
+
     private static final long serialVersionUID = 1L;
 
     /**

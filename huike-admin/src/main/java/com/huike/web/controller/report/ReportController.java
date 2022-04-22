@@ -3,6 +3,7 @@ package com.huike.web.controller.report;
 import java.util.List;
 import java.util.Map;
 
+import com.huike.report.domain.vo.LineChartVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,8 +25,29 @@ import com.huike.report.service.IReportService;
 public class ReportController extends BaseController {
 
     @Autowired
-   private IReportService reportService;
+    private IReportService reportService;
 
+    /**
+     * 客户统计
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
+    @GetMapping("/contractStatistics/{beginCreateTime}/{endCreateTime}")
+    public LineChartVO contractStatistics(@PathVariable String beginCreateTime, @PathVariable String endCreateTime){
+        return reportService.contractStatistics(beginCreateTime,endCreateTime);
+    }
+
+    /**
+     * 销售统计
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
+    @GetMapping("/salesStatistics/{beginCreateTime}/{endCreateTime}")
+    public LineChartVO salesStatistics(@PathVariable String beginCreateTime, @PathVariable String endCreateTime){
+        return reportService.salesStatistics(beginCreateTime,endCreateTime);
+    }
 
 
 
@@ -55,7 +77,6 @@ public class ReportController extends BaseController {
     /**
      * 查询活动管理列表
      */
-    //@ApiOperation("客户统计报表")
     @GetMapping("/contractStatisticsList")
     public TableDataInfo contractStatisticsList(TbContract contract){
         startPage();
@@ -89,13 +110,13 @@ public class ReportController extends BaseController {
         List<Map<String, Object>> list= reportService.channelStatisticsList(beginCreateTime,endCreateTime);
         return getDataTablePage(list);
     }
-    
-	/**
-	 * 销售统计归属人报表
-	 * @param beginCreateTime
-	 * @param endCreateTime
-	 * @return
-	 */
+
+    /**
+     * 销售统计归属人报表
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
     @GetMapping("/ownerShipStatisticsList/{beginCreateTime}/{endCreateTime}")
     public TableDataInfo ownerShipStatisticsList(@PathVariable String beginCreateTime, @PathVariable String endCreateTime){
         startPage();
@@ -116,8 +137,6 @@ public class ReportController extends BaseController {
         return getDataTable(list);
     }
 
-
-
     /**
      * 活动渠道统计
      * @param activity
@@ -128,5 +147,6 @@ public class ReportController extends BaseController {
         List<ActivityStatisticsVo> list= reportService.activityStatisticsList(activity);
         return getDataTablePage(list);
     }
+
 
 }
