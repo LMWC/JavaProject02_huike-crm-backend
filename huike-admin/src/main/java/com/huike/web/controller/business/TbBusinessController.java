@@ -133,7 +133,8 @@ public class TbBusinessController extends BaseController {
     /**
      * 批量捞取
      */
-    @PreAuthorize("@ss.hasPermi('business:business:gainbussiness')")
+    //@PreAuthorize("@ss.hasPermi('business:business:gainbussiness')")
+    @PreAuthorize("@ss.hasPermi('business:business:gain')")
     @Log(title = "批量捞取", businessType = BusinessType.UPDATE)
     @PutMapping("/gain")
     public AjaxResult gain(@RequestBody AssignmentVo assignmentVo) {

@@ -72,10 +72,11 @@ public class TbActivityServiceImpl implements ITbActivityService {
     @Transactional
     public int insertTbActivity(TbActivity tbActivity){
         tbActivity.setCreateTime(DateUtils.getNowDate());
-        tbActivity.setCode(getCode());
+        //tbActivity.setCode(getCode());
+        tbActivity.setCode(UUIDUtils.getUUID());
         tbActivity.setStatus("2");
         int rows= tbActivityMapper.insertTbActivity(tbActivity);
-        loadAllActivityCode();
+        //loadAllActivityCode();
         return rows;
     }
 
@@ -132,11 +133,11 @@ public class TbActivityServiceImpl implements ITbActivityService {
     /**
      * 加载活动编号到缓存中
      */
-    public void loadAllActivityCode() {
+    /*public void loadAllActivityCode() {
         List<String> codeList= tbActivityMapper.selectAllCode();
         Set<String> set= new HashSet<>(codeList);
         redisCache.setCacheSet(Constants.ACT_CODE_KEY, set);
-    }
+    }*/
 
     /**
      * 生成活动编号

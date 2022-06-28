@@ -90,9 +90,11 @@
     <select id="selectTbClueList" parameterType="TbClue" resultMap="TbClueAssignResult">
         <include refid="selectTbClueAssignVo"/>
         <where>
-            <if test="id != null  and id != ''"> and clue.id = #{id}</if>
+            <!--<if test="id != null  and id != ''"> and clue.id = #{id}</if>-->
+            <if test="id != null  and id != ''"> and clue.id like concat('%', #{id}, '%')</if>
             <if test="name != null  and name != ''"> and clue.name like concat('%', #{name}, '%')</if>
-            <if test="phone != null  and phone != ''"> and clue.phone = #{phone}</if>
+            <!--<if test="phone != null  and phone != ''"> and clue.phone = #{phone}</if>-->
+            <if test="phone != null  and phone != ''"> and clue.phone like concat('%', #{phone}, '%')</if>
             <if test="channel != null  and channel != ''"> and clue.channel = #{channel}</if>
             <if test="activityId != null  and activityId != ''"> and clue.activity_id = #{activityId}</if>
             <if test="sex != null  and sex != ''"> and clue.sex = #{sex}</if>

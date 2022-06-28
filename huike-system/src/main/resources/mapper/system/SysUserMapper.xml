@@ -79,6 +79,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="params.dataScope != null and params.dataScope != ''">
 			AND (${params.dataScope})
 		</if>
+		<if test="phonenumber != null and phonenumber != ''">
+			AND u.phonenumber like concat('%', #{phonenumber}, '%')
+		</if>
 	</select>
 	
 	<select id="selectUserByUserName" parameterType="String" resultMap="SysUserResult">

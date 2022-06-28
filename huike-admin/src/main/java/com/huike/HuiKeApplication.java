@@ -18,16 +18,17 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  */
 @SpringBootApplication(exclude = { DataSourceAutoConfiguration.class})
 @EnableScheduling
-public class HuiKeApplication implements CommandLineRunner {
+//public class HuiKeApplication implements CommandLineRunner {
+public class HuiKeApplication {
 
-    @Autowired
-    private ITbActivityService activityService;
+    /*@Autowired
+    private ITbActivityService activityService;*/
 
     public static void main(String[] args){
         SpringApplication.run(HuiKeApplication.class, args);
     }
 
-    @Override
+    /*@Override
     public void run(String... args)  {
         try{
             //加载所有活动code到缓存
@@ -35,6 +36,6 @@ public class HuiKeApplication implements CommandLineRunner {
         }catch (Exception ex){
             ex.printStackTrace();
         }
-    }
+    }*/
 }
 

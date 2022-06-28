@@ -294,7 +294,8 @@ public class TbClueServiceImpl implements ITbClueService {
 		// 统计当前分配人所有线索
 		int asignRecords = assignRecordMapper.countAssignCluesByUser(userId);
 		if (asignRecords >= rulePool.getMaxNunmber()) {
-			throw new CustomException("捞取失败！最大保有量(" + rulePool.getMaxNunmber() + ")，剩余可以捞取"+(rulePool.getMaxNunmber()-asignRecords)+"条线索");
+			//throw new CustomException("捞取失败！最大保有量(" + rulePool.getMaxNunmber() + ")，剩余可以捞取"+(rulePool.getMaxNunmber()-asignRecords)+"条线索");
+			throw new CustomException("捞取失败！最大保有量(" + rulePool.getMaxNunmber() + ")，剩余可以捞取0条线索");
 		}
 		for (int i = 0; i < clueIds.length; i++) {
 			Long clueId = clueIds[i];

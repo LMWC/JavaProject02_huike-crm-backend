@@ -1,5 +1,8 @@
 package com.huike.web.controller.clues;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -60,6 +63,11 @@ public class TbActivityController extends BaseController {
         TbActivity tbActivity =new TbActivity();
         tbActivity.setChannel(channel);
         tbActivity.setStatus("2");
+        tbActivity.setParams(new HashMap(){
+            {
+                put("now",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+            }
+        });
         return AjaxResult.success(tbActivityService.selectTbActivityList(tbActivity));
     }
 
