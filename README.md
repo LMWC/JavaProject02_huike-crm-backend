@@ -1,14 +1,10 @@
 # crm
-沉浸式项目实战-CRM：汇客CRM-基于SSM传统行业单体架构及技术演进的初级项目课程  
-[产品原型线上地址(选择汇客CRM实战版)](https://app.mockplus.cn/s/hvKXEoWW3g2l)  
-[项目基板](https://github.com/LMWC/crm/tree/master)  
-[day52_初出茅庐](https://github.com/LMWC/crm/tree/day52_%E5%88%9D%E5%87%BA%E8%8C%85%E5%BA%90)  
-[day53_牛刀小试](https://github.com/LMWC/crm/tree/day53_%E7%89%9B%E5%88%80%E5%B0%8F%E8%AF%95)  
-![](https://pip.itcast.cn/uploads/5e0583b1d715498c9ea637fe5ed94697.png)
-
-- [后端Gitee地址](https://gitee.com/itcastopen/itcast-authority.git)
-- [前端Gitee地址](https://gitee.com/itcastopen/huike-ui)
-
+![](https://pip.itcast.cn/uploads/5e0583b1d715498c9ea637fe5ed94697.png)  
+**沉浸式项目实战-CRM：汇客CRM-基于SSM传统行业单体架构及技术演进的初级项目课程**  
+[**产品原型线上地址(选择汇客CRM实战版)**](https://app.mockplus.cn/s/hvKXEoWW3g2l)  
+[**项目基板**](https://github.com/LMWC/crm/tree/master)  
+[**day52_初出茅庐**](https://github.com/LMWC/crm/tree/day52_%E5%88%9D%E5%87%BA%E8%8C%85%E5%BA%90)  
+[**day53_牛刀小试**](https://github.com/LMWC/crm/tree/day53_%E7%89%9B%E5%88%80%E5%B0%8F%E8%AF%95)  
 
 **在线演示**
 =========================
@@ -89,20 +85,3 @@
 ![](docs/img/页面/统计分析.png)
 
 
-
-
-新的惊喜
-=========================
-想进步、要关注。关注老铁抖音号，成为'铁丝' ：）
-
-<img src="docs/img/douyin.jpeg" width="300"  alt="抖音号" />
-<br><br>
-加微信、加入Java开源技术交流群
-<br>
-<img src="docs/img/weixin.jpeg" width="300"  alt="微信交流群" />
-<br><br>
-
-更多福利
-=========================
-
-[了解更多项目](https://pip.itcast.cn/home)
