@@ -18,11 +18,10 @@
 
 **环境要求**
 =========================
-- IntelliJ IDEA 2020.1.3 (Ultimate Edition)   
+- IntelliJ IDEA 2020.1.3 (Ultimate Edition)  
   Non-Bundled Plugins: JBLJavaToWeb, Lombook Plugin, mobi.hsz.idea.gitignore, MavenRunHelper,        com.baomidou.plugin.idea.mybatisx
-- Node： 14.15+（集成npm）
-  https://nodejs.org/en/download
-- jdk 1.8+
-- mysql 8.0+
-- redis 5.6+
-- docs
+- node-v14.18.3-x64
+- maven-3.5.3
+- jdk 1.8.0_162
+- mysql-5.7.29-winx64
+- redis-x64-3.2.100
