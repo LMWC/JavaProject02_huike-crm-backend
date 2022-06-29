@@ -16,7 +16,7 @@
 
 
 
-**环境要求**
+**参考环境**
 =========================
 - IntelliJ IDEA 2020.1.3 (Ultimate Edition)  
   Non-Bundled Plugins: JBLJavaToWeb, Lombook Plugin, mobi.hsz.idea.gitignore, MavenRunHelper,        com.baomidou.plugin.idea.mybatisx
