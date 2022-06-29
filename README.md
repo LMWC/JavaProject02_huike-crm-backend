@@ -1,6 +1,6 @@
 # crm
 ![](https://pip.itcast.cn/uploads/5e0583b1d715498c9ea637fe5ed94697.png)  
-**沉浸式项目实战-CRM：汇客CRM-基于SSM传统行业单体架构及技术演进的初级项目课程**
+**沉浸式项目实战-CRM：汇客CRM(客达管家)-基于SSM传统行业单体架构及技术演进的初级项目课程**
 =========================
 [**产品原型线上地址(选择汇客CRM实战版)**](https://app.mockplus.cn/s/hvKXEoWW3g2l)  
 [**项目基板**](https://github.com/LMWC/crm/tree/master)  
@@ -18,6 +18,8 @@
 
 **环境要求**
 =========================
+- IntelliJ IDEA 2020.1.3 (Ultimate Edition) 
+  Non-Bundled Plugins: JBLJavaToWeb, Lombook Plugin, mobi.hsz.idea.gitignore, MavenRunHelper,        com.baomidou.plugin.idea.mybatisx
 - Node： 14.15+（集成npm）
   https://nodejs.org/en/download
 - jdk 1.8+
