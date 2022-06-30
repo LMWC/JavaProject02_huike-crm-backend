@@ -79,4 +79,30 @@ public interface TbBusinessMapper {
 
     public void updateBusinessEndTimeById(@Param("id")Long id, @Param("endTime")Date endTime);
 
+    /**
+     * 统计商机数
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
+    public int businessNumsFromClue(@Param("beginCreateTime") String beginCreateTime, @Param("endCreateTime") String endCreateTime);
+
+    /**
+     * 统计商机
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
+    public int countAllBusiness(@Param("beginCreateTime") String beginCreateTime, @Param("endCreateTime") String endCreateTime);
+
+    /**
+     *统计职员签约合同数
+     * @param request
+     * @return
+     */
+    public List<Map<String,Object>> countAllContractByUser(@Param("indexVo") IndexStatisticsVo request);
+
+
+
+
 }

@@ -107,5 +107,57 @@ public interface IReportService {
      */
     IndexBaseInfoVO getBaseInfo(String beginCreateTime, String endCreateTime);
 
+    /**
+     * 获取今日简报数据
+     * @param today
+     * @return
+     */
+    IndexTodayInfoVO getTodayInfo(String today);
+
+    /**
+     * 获取待办数据
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
+    IndexTodoInfoVO getTodoInfo(String beginCreateTime,String endCreateTime);
+
+    /**
+     * 线索统计
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
+    public LineChartVO cluesStatistics(String beginCreateTime, String endCreateTime);
+
+    /**
+     * 学科分布统计
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
+    public List<Map<String, Object>> subjectStatistics(String beginCreateTime, String endCreateTime);
+
+    /**
+     * 漏斗统计
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
+    public VulnerabilityMapVo getVulnerabilityMap(String beginCreateTime, String endCreateTime);
+
+    /**
+     * 商机转换龙虎榜
+     * @param request
+     * @return
+     */
+    public List<Map<String,Object>> businessChangeStatisticsForIndex(IndexStatisticsVo request);
+
+    /**
+     * 线索转化龙虎榜
+     * @param request
+     * @return
+     */
+    public List<Map<String, Object>> clueChangeStatisticsForIndex(IndexStatisticsVo request);
 
 }

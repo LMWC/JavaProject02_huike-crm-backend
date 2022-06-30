@@ -291,5 +291,44 @@
         update tb_business set end_time=#{endTime},next_time = null where id = #{id}
     </update>
 
+    <select id="businessNumsFromClue"  resultType="int">
+        SELECT COUNT(DISTINCT id)
+        FROM `tb_business`
+        WHERE clue_id IN (
+        SELECT id
+        FROM `tb_clue`
+        WHERE `status` IN ('1', '2', '6', '7')
+        <if test="beginCreateTime != null and beginCreateTime != ''">
+            and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
+        </if>
+        <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
+            and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
+        </if>
+        )
+    </select>
+
+    <select id="countAllBusiness" resultType="int">
+        select count(distinct id) from tb_business
+        <where>
+            <if test="beginCreateTime != null and beginCreateTime != ''">
+                and date_format(create_time,'%Y-%m-%d') &gt;= date_format(#{beginCreateTime},'%Y-%m-%d')
+            </if>
+            <if test="endCreateTime != null and endCreateTime != ''">
+                and date_format(create_time,'%Y-%m-%d') &lt;= date_format(#{endCreateTime},'%Y-%m-%d')
+            </if>
+        </where>
+    </select>
+
+    <select id="countAllContractByUser" parameterType="com.huike.clues.domain.vo.IndexStatisticsVo"  resultType="java.util.Map">
+        select c.create_by, count(c.id) as num ,d.`dept_name` as deptName from `tb_contract` c
+        LEFT JOIN `sys_dept` d
+        ON c.`dept_id`   = d.`dept_id`
+        <if test="indexVo.beginCreateTime != null and indexVo.beginCreateTime != ''">
+            where c.`create_time` BETWEEN #{indexVo.beginCreateTime} AND #{indexVo.endCreateTime}
+        </if>
+        GROUP BY c.create_by, d.`dept_name`
+        ORDER BY num DESC
+        LIMIT 10
+    </select>
 
 </mapper>

@@ -113,4 +113,35 @@ public interface TbClueMapper {
      */
     public int getCluesNum(@Param("indexVo")IndexStatisticsVo request,@Param("now")String now,@Param("username")String username);
 
+    /**
+     * 统计分析--线索统计--新增线索数量折线图
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
+    public List<Map<String,Object>> cluesStatistics(@Param("beginCreateTime") String beginCreateTime, @Param("endCreateTime") String endCreateTime);
+
+    /**
+     * 统计所有的线索
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
+    public int countAllClues(@Param("beginCreateTime") String beginCreateTime, @Param("endCreateTime") String endCreateTime);
+
+    /**
+     * 统计有效线索
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
+    public int effectiveCluesNums(@Param("beginCreateTime") String beginCreateTime, @Param("endCreateTime") String endCreateTime);
+
+    /**
+     * 统计职员对应线索
+     * @param vo
+     * @return
+     */
+    public List<Map<String, Object>> countAllClueByUser(@Param("indexVo")IndexStatisticsVo vo);
+
 }

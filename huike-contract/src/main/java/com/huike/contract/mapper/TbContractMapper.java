@@ -98,6 +98,22 @@ public interface TbContractMapper {
 
     public Map<String,Object> countByActivity(TbContract tbContract);
 
-
     public List<Map<String,Object>> contractStatisticsByUser(IndexStatisticsVo query);
+
+    /**
+     * 学科统计
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
+    public List<Map<String,Object>> subjectStatistics(@Param("beginCreateTime") String beginCreateTime, @Param("endCreateTime") String endCreateTime);
+
+    /**
+     * 统计商机转化的合同数
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
+    public int contractNumsFromBusiness(@Param("beginCreateTime") String beginCreateTime, @Param("endCreateTime") String endCreateTime);
+
 }

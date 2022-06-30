@@ -65,4 +65,99 @@
 			AND #{endTime}
 	</select>
 
+	<select id="getTodayCluesNum"   resultType="Integer">
+		SELECT COUNT(DISTINCT (id)) AS todayCluesNum
+		FROM `tb_clue`
+		WHERE id IN
+			  (SELECT  assign_id FROM `tb_assign_record`
+			   WHERE user_name =  #{username}
+				 AND DATE_FORMAT(create_time, '%Y-%m-%d') = #{now}
+				 AND latest = 1
+				 AND `type` = 0)
+	</select>
+
+	<select id="getTodayBusinessNum"   resultType="Integer">
+		SELECT COUNT(DISTINCT (id)) AS todayBusinessNum
+		FROM  `tb_business`
+		WHERE id IN
+			  ( SELECT
+					assign_id
+				FROM
+					`tb_assign_record`
+				WHERE user_name =  #{username}
+				  AND DATE_FORMAT(create_time, '%Y-%m-%d') = #{now}
+				  AND latest = 1
+				  AND `type` = 1 )
+	</select>
+
+	<select id="getTodayContractNum"   resultType="Integer">
+		SELECT   COUNT(id) AS todayContractNum
+		FROM `tb_contract`
+		WHERE create_by =  #{username}
+		  AND DATE_FORMAT(create_time, '%Y-%m-%d') = #{now}
+	</select>
+
+	<select id="getTodaySalesAmount"   resultType="Double">
+		SELECT CAST(  IFNULL(SUM(`contract_order`),0) AS DECIMAL (30, 0) ) AS todaySalesAmount
+		FROM
+			`tb_contract`
+		WHERE create_by =  #{username}
+		  AND DATE_FORMAT(create_time, '%Y-%m-%d') = #{now}
+	</select>
+
+	<select id="getToallocatedCluesNum"   resultType="Integer">
+		SELECT COUNT(DISTINCT(id)) AS toallocatedCluesNum
+		FROM `tb_clue`
+		WHERE id NOT IN (
+			SELECT assign_id FROM `tb_assign_record`
+			WHERE
+			   latest = 1 AND `type` = 0
+		)
+		AND create_time BETWEEN #{startTime}
+			AND #{endTime}
+	</select>
+
+	<select id="getToallocatedBusinessNum"   resultType="Integer">
+		SELECT COUNT(DISTINCT(id)) AS toallocatedBusinessNum
+		FROM `tb_business`
+		WHERE id NOT IN (
+			SELECT assign_id FROM `tb_assign_record`
+			WHERE create_time BETWEEN #{startTime}
+				AND #{endTime}
+			  AND latest = 1
+			  AND `type` = 1
+		)
+		  AND create_time BETWEEN #{startTime}
+			AND #{endTime}
+	</select>
+
+	<select id="getTofollowedCluesNum"   resultType="Integer">
+		SELECT COUNT(DISTINCT (id)) AS tofollowedCluesNum
+		FROM `tb_clue`
+		WHERE id IN
+			  (
+				  SELECT assign_id FROM `tb_assign_record`
+				  WHERE user_name = #{username}
+					AND create_time BETWEEN #{startTime}
+					  AND #{endTime}
+					AND latest = 1
+					AND `type` = 0
+			  )
+		  AND `status` = 1
+	</select>
+
+	<select id="getTofollowedBusinessNum"   resultType="Integer">
+		SELECT COUNT(DISTINCT(id)) AS tofollowedBusinessNum
+		FROM `tb_business`
+		WHERE id IN (
+			SELECT assign_id FROM `tb_assign_record`
+			WHERE user_name = #{username}
+			  AND create_time BETWEEN #{startTime}
+				AND #{endTime}
+			  AND latest = 1
+			  AND `type` = 1
+		)
+		  AND `status` = 1
+	</select>
+
 </mapper>

@@ -347,7 +347,7 @@ public class ReportServiceImpl implements IReportService {
      * @param endCreateTime
      * @return
      */
-    @Override
+    /*@Override
     public IndexBaseInfoVO getBaseInfo(String beginCreateTime, String endCreateTime) {
         //1）构建一个空的结果集对象
         IndexBaseInfoVO result = new IndexBaseInfoVO();
@@ -366,6 +366,197 @@ public class ReportServiceImpl implements IReportService {
         }
         //4 返回结果集对象
         return result;
+    }*/
+    //首页基本数据展示优化--使用并发编程
+    @Override
+    public IndexBaseInfoVO getBaseInfo(String beginCreateTime, String endCreateTime) {
+        //1）构建一个空的结果集对象
+        IndexBaseInfoVO result = new IndexBaseInfoVO();
+        //2 封装结果集属性
+        // 2.1 由于查询需要用到用户名 调用工具类获取用户名
+        String username = SecurityUtils.getUsername();
+        try {
+            CompletableFuture<Integer> clueNums = CompletableFuture.supplyAsync(()->{
+                // 2.2 开始查询第一个属性 线索数量
+                return reportMpper.getCluesNum(beginCreateTime, endCreateTime, username);
+            });
+            CompletableFuture<Integer> bussinessNum = CompletableFuture.supplyAsync(()->{
+                // 2.3 开始查询第一个属性 商机数量
+                return reportMpper.getBusinessNum(beginCreateTime, endCreateTime, username);
+            });
+
+            CompletableFuture<Integer> contractNum = CompletableFuture.supplyAsync(()->{
+                // 2.4 开始查询第一个属性 合同数量
+                return reportMpper.getContractNum(beginCreateTime, endCreateTime, username);
+            });
+            CompletableFuture<Double> saleAmount = CompletableFuture.supplyAsync(()->{
+                // 2.5 开始查询第一个属性 销售金额数量
+                return reportMpper.getSalesAmount(beginCreateTime, endCreateTime, username);
+            });
+            //3 join等待所有线程全部执行完成
+            CompletableFuture
+                    .allOf(clueNums,
+                            bussinessNum,
+                            contractNum,
+                            saleAmount)
+                    .join();
+            //4 封装结果集对象
+            result.setCluesNum(clueNums.get());
+            result.setBusinessNum(bussinessNum.get());
+            result.setContractNum(contractNum.get());
+            result.setSalesAmount(saleAmount.get());
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        //5 返回结果集对象
+        return result;
+    }
+
+    /**
+     * 获取今日简报
+     * @param today 今日
+     * @return
+     */
+    @Override
+    public IndexTodayInfoVO getTodayInfo(String today) {
+        //1）构建一个空的结果集对象
+        IndexTodayInfoVO result = new IndexTodayInfoVO();
+        //2 封装结果集属性
+        // 2.1 由于查询需要用到用户名 调用工具类获取用户名
+        String username = SecurityUtils.getUsername();
+        // 2.2 封装第一个属性 今日线索数量
+        result.setTodayCluesNum(reportMpper.getTodayCluesNum(today,username));
+        // 2.3 封装第二个属性 今日商机数量
+        result.setTodayBusinessNum(reportMpper.getTodayBusinessNum(today,username));
+        // 2.4 封装第三个属性 今日合同数量
+        result.setTodayContractNum(reportMpper.getTodayContractNum(today,username));
+        // 2.5 封装第四个属性 今日合同金额
+        result.setTodaySalesAmount(reportMpper.getTodaySalesAmount(today,username));
+        //3属性封装完成后，返回结果集
+        return result;
+    }
+
+    @Override
+    public IndexTodoInfoVO getTodoInfo(String beginCreateTime,String endCreateTime){
+        IndexTodoInfoVO result = new IndexTodoInfoVO();
+        //2 封装结果集属性
+        // 2.1 由于查询需要用到用户名 调用工具类获取用户名
+        String username = SecurityUtils.getUsername();
+        // 2.2 封装第一个属性 待分配线索数量
+        result.setToallocatedCluesNum(reportMpper.getToallocatedCluesNum(beginCreateTime,endCreateTime,username));
+        // 2.3 封装第二个属性 待分配商机数量
+        result.setToallocatedBusinessNum(reportMpper.getToallocatedBusinessNum(beginCreateTime,endCreateTime,username));
+        // 2.4 封装第三个属性 待跟进线索数量
+        result.setTofollowedCluesNum(reportMpper.getTofollowedCluesNum(beginCreateTime,endCreateTime,username));
+        // 2.5 封装第四个属性 待跟进商机
+        result.setTofollowedBusinessNum(reportMpper.getTofollowedBusinessNum(beginCreateTime,endCreateTime,username));
+        //3 属性封装完成后，返回结果集
+        return result;
+    }
+
+
+    /**
+     * 统计分析--线索统计--新增线索数量折线图
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
+    @Override
+    public LineChartVO cluesStatistics(String beginCreateTime, String endCreateTime) {
+        LineChartVO lineChartVo =new LineChartVO();
+        try {
+            List<String> timeList= findDates(beginCreateTime,endCreateTime);
+            lineChartVo.setxAxis(timeList);
+            List<LineSeriesVO> series = new ArrayList<>();
+            List<Map<String,Object>>  statistics = clueMapper.cluesStatistics(beginCreateTime,endCreateTime);
+            LineSeriesVO lineSeriesVo1=new LineSeriesVO();
+            lineSeriesVo1.setName("新增线索数量");
+            LineSeriesVO lineSeriesVo2=new LineSeriesVO();
+            lineSeriesVo2.setName("线索总数量");
+            int sum = 0;
+            for (String s : timeList) {
+                Optional optional=  statistics.stream().filter(d->d.get("dd").equals(s)).findFirst();
+                if(optional.isPresent()){
+                    Map<String,Object> cuurentData=  (Map<String,Object>)optional.get();
+                    lineSeriesVo1.getData().add(cuurentData.get("num"));
+                    sum += Integer.parseInt(cuurentData.get("num").toString());
+                }else{
+                    lineSeriesVo1.getData().add(0);
+                }
+                lineSeriesVo2.getData().add(sum);
+            }
+            series.add(lineSeriesVo1);
+            series.add(lineSeriesVo2);
+            lineChartVo.setSeries(series);
+        } catch (ParseException e) {
+            // e.printStackTrace();
+        }
+        return  lineChartVo;
+    }
+
+    /**
+     * 学科分布统计
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
+    @Override
+    public  List<Map<String, Object>> subjectStatistics(String beginCreateTime, String endCreateTime) {
+        List<Map<String, Object>> data= contractMapper.subjectStatistics(beginCreateTime,endCreateTime);
+        for (Map<String, Object> datum : data) {
+            String subjectValue= (String) datum.get("subject");
+            String lable=  sysDictDataMapper.selectDictLabel("course_subject",subjectValue);
+            datum.put("subject",lable);
+        }
+        return data;
+    }
+
+    @Override
+    public VulnerabilityMapVo getVulnerabilityMap(String beginCreateTime, String endCreateTime) {
+        VulnerabilityMapVo vulnerabilityMapDTO =new VulnerabilityMapVo();
+        //线索数
+        vulnerabilityMapDTO.setCluesNums(clueMapper.countAllClues(beginCreateTime,endCreateTime));
+        //有效线索数
+        vulnerabilityMapDTO.setEffectiveCluesNums(clueMapper.effectiveCluesNums(beginCreateTime,endCreateTime));
+        //商机数
+        vulnerabilityMapDTO.setBusinessNums(businessMapper.businessNumsFromClue(beginCreateTime,endCreateTime));
+        //合同数
+        vulnerabilityMapDTO.setContractNums(contractMapper.contractNumsFromBusiness(beginCreateTime,endCreateTime));
+        return vulnerabilityMapDTO;
+    }
+
+    /**
+     * 商机转换龙虎榜
+     * @param request
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> businessChangeStatisticsForIndex(IndexStatisticsVo request) {
+        int allBusiness=  businessMapper.countAllBusiness(request.getBeginCreateTime(),request.getEndCreateTime());
+        List<Map<String,Object>> list= businessMapper.countAllContractByUser(request);
+        for (Map<String, Object> datum : list) {
+            Long num= (Long) datum.get("num");
+            datum.put("radio",getRadio(allBusiness,num));
+        }
+        return list;
+    }
+
+    /**
+     * 线索转化龙虎榜
+     * @param request
+     * @return
+     */
+    @Override
+    public List<Map<String, Object>> clueChangeStatisticsForIndex(IndexStatisticsVo request) {
+        int allclues=  clueMapper.countAllClues(request.getBeginCreateTime(),request.getEndCreateTime());
+        List<Map<String,Object>> list= clueMapper.countAllClueByUser(request);
+        //计算转换率
+        for (Map<String, Object> datum : list) {
+            Long num= (Long) datum.get("num");
+            datum.put("radio",getRadio(allclues,num));
+        }
+        return list;
     }
 
 }

@@ -269,4 +269,40 @@
         </if>
     </select>
 
+    <!--学科统计-->
+    <select id="subjectStatistics" resultType="java.util.Map">
+        SELECT count(1) as num,subject from tb_contract
+        <where>
+            <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
+                and date_format(create_time,'%Y-%m-%d') &gt;= date_format(#{beginCreateTime},'%Y-%m-%d')
+            </if>
+            <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
+                and date_format(create_time,'%Y-%m-%d') &lt;= date_format(#{endCreateTime},'%Y-%m-%d')
+            </if>
+        </where>
+        GROUP BY subject;
+    </select>
+
+    <!--合同统计-->
+    <select id="contractNumsFromBusiness"
+            resultType="int">
+        SELECT COUNT(DISTINCT id)
+        FROM `tb_contract`
+        WHERE `business_id` IN (
+        SELECT id
+        FROM `tb_business`
+        WHERE clue_id IN (
+        SELECT id
+        FROM `tb_clue`
+        WHERE `status` IN ('1', '2', '6', '7')
+        <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
+            and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
+        </if>
+        <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
+            and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
+        </if>
+        )
+        )
+    </select>
+
 </mapper>

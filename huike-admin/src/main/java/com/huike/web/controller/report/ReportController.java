@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.huike.report.domain.vo.LineChartVO;
+import com.huike.report.domain.vo.VulnerabilityMapVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -148,5 +149,38 @@ public class ReportController extends BaseController {
         return getDataTablePage(list);
     }
 
+    /**
+     * 线索统计
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
+    @GetMapping("/cluesStatistics/{beginCreateTime}/{endCreateTime}")
+    public LineChartVO cluesStatistics(@PathVariable String beginCreateTime, @PathVariable String endCreateTime){
+        return reportService.cluesStatistics(beginCreateTime,endCreateTime);
+    }
+
+    /**
+     * 学科分布统计
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
+    @GetMapping("/subjectStatistics/{beginCreateTime}/{endCreateTime}")
+    public AjaxResult subjectStatistics(@PathVariable String beginCreateTime, @PathVariable String endCreateTime){
+        return AjaxResult.success(reportService.subjectStatistics(beginCreateTime,endCreateTime));
+    }
+
+    /**
+     * 漏斗图数据
+     * @param beginCreateTime
+     * @param endCreateTime
+     * @return
+     */
+    @GetMapping("/getVulnerabilityMap/{beginCreateTime}/{endCreateTime}")
+    public AjaxResult getVulnerabilityMap(@PathVariable String beginCreateTime, @PathVariable String endCreateTime){
+        VulnerabilityMapVo vulnerabilityMapDTO= reportService.getVulnerabilityMap(beginCreateTime,endCreateTime);
+        return AjaxResult.success(vulnerabilityMapDTO);
+    }
 
 }

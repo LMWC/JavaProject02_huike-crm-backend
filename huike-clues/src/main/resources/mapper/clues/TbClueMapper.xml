@@ -529,4 +529,59 @@
         AND `status` IN (1,2)
     </select>
 
+    <select id="cluesStatistics" resultType="java.util.Map">
+        SELECT count(1) as num,DATE_FORMAT(create_time,'%Y-%m-%d') dd from tb_clue
+        <where>
+            <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
+                and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
+            </if>
+            <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
+                and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
+            </if>
+        </where>
+        GROUP BY dd;
+    </select>
+
+    <select id="countAllClues" resultType="int">
+        select count(id) from tb_clue
+        <where>
+            <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
+                and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
+            </if>
+            <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
+                and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
+            </if>
+        </where>
+    </select>
+
+    <select id="effectiveCluesNums" resultType="int">
+        select count(id) from tb_clue where status in ('1','2','6','7')
+        <if test="beginCreateTime != null and beginCreateTime != ''"><!-- 开始创建时间 -->
+            and date_format(create_time,'%y-%m-%d') &gt;= date_format(#{beginCreateTime},'%y-%m-%d')
+        </if>
+        <if test="endCreateTime != null and endCreateTime != ''"><!--  -->
+            and date_format(create_time,'%y-%m-%d') &lt;= date_format(#{endCreateTime},'%y-%m-%d')
+        </if>
+    </select>
+
+    <select id="countAllClueByUser"   resultType="java.util.Map">
+        SELECT DISTINCT
+        (a.user_name) AS create_by,
+        COUNT(DISTINCT(a.assign_id)) AS num,
+        c.`dept_name` AS  deptName
+        FROM
+        `tb_assign_record` a
+        LEFT JOIN `sys_user` b
+        ON a.`user_name` = b.`user_name`
+        LEFT JOIN `sys_dept` c
+        ON b.`dept_id`   = c.`dept_id`
+        WHERE a.`type` = 0
+        <if test="indexVo.beginCreateTime != null and indexVo.beginCreateTime != ''"><!-- 开始创建时间 -->
+            AND a.create_time BETWEEN #{indexVo.beginCreateTime} AND #{indexVo.endCreateTime}
+        </if>
+        GROUP BY a.user_name,c.`dept_name`
+        ORDER BY num DESC
+        LIMIT 10
+    </select>
+
 </mapper>
