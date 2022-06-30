@@ -144,4 +144,11 @@ public interface TbClueMapper {
      */
     public List<Map<String, Object>> countAllClueByUser(@Param("indexVo")IndexStatisticsVo vo);
 
+    /**
+     * 删除伪线索
+     * @param id
+     * @return
+     */
+    public int removeClueByFalseClue(@Param("id") Long id);
+
 }

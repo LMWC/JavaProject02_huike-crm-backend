@@ -17,4 +17,41 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="nextTime"    column="next_time"    />
     </resultMap>
 
+    <sql id="selectTbClueTrackRecordVo">
+        select id, clue_id, create_by, subject, record, level, create_time, type, false_reason, next_time from tb_clue_track_record
+    </sql>
+
+    <select id="selectTbClueTrackRecordListByClueId" parameterType="Long" resultMap="TbClueTrackRecordResult">
+        <include refid="selectTbClueTrackRecordVo"/>
+        <where>
+            <if test="clueId != null  and clueId != ''"> and clue_id = #{clueId}</if>
+        </where>
+    </select>
+
+    <insert id="insertTbClueTrackRecord" parameterType="TbClueTrackRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_clue_track_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="clueId != null and clueId != ''">clue_id,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="subject != null">subject,</if>
+            <if test="record != null">record,</if>
+            <if test="level != null">level,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="type != null">type,</if>
+            <if test="falseReason != null">false_reason,</if>
+            <if test="nextTime != null">next_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="clueId != null and clueId != ''">#{clueId},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="subject != null">#{subject},</if>
+            <if test="record != null">#{record},</if>
+            <if test="level != null">#{level},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="type != null">#{type},</if>
+            <if test="falseReason != null">#{falseReason},</if>
+            <if test="nextTime != null">#{nextTime},</if>
+        </trim>
+    </insert>
+
 </mapper>

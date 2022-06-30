@@ -141,6 +141,18 @@ public class TbBusinessController extends BaseController {
         return AjaxResult.success(tbBusinessService.gain(assignmentVo.getIds(),assignmentVo.getUserId()));
     }
 
-
+    /**
+     * 退回公海
+     * @param id
+     * @param reason
+     * @return
+     */
+    @PreAuthorize("@ss.hasPermi('business:business:back')")
+    @Log(title = "退回公海", businessType = BusinessType.UPDATE)
+    @PutMapping("/back/{id}/{reason}")
+    public AjaxResult back(@PathVariable("id") Long id, @PathVariable("reason")String reason)
+    {
+        return AjaxResult.success(tbBusinessService.backPool(id,reason));
+    }
 
 }

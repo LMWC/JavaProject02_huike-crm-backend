@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.huike.clues.domain.dto.ImportResultDTO;
+import com.huike.clues.mapper.*;
 import com.huike.clues.strategy.Rule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,11 +20,6 @@ import com.huike.clues.domain.TbClue;
 import com.huike.clues.domain.TbClueTrackRecord;
 import com.huike.clues.domain.TbRulePool;
 import com.huike.clues.domain.vo.TbClueExcelVo;
-import com.huike.clues.mapper.SysDictDataMapper;
-import com.huike.clues.mapper.SysUserMapper;
-import com.huike.clues.mapper.TbActivityMapper;
-import com.huike.clues.mapper.TbAssignRecordMapper;
-import com.huike.clues.mapper.TbClueMapper;
 import com.huike.clues.service.ITbActivityService;
 import com.huike.clues.service.ITbClueService;
 import com.huike.clues.service.ITbRulePoolService;
@@ -72,6 +68,9 @@ public class TbClueServiceImpl implements ITbClueService {
 
 	@Autowired
 	private ITbClueService tbClueService;
+
+	@Autowired
+	TbClueTrackRecordMapper tbClueTrackRecordMapper;
 
 	/**
 	 * 查询线索管理
@@ -443,6 +442,39 @@ public class TbClueServiceImpl implements ITbClueService {
 		 * 这个方法免费提供
 		 */
 		return ImportResultDTO.success();
-
 	}
+
+	/**
+	 * 伪线索
+	 * @param id
+	 * @param reason
+	 * @param remark
+	 * @return
+	 */
+	@Override
+	@Transactional
+	public int falseClue(Long id, String reason, String remark) {
+		TbClue tbClue = tbClueMapper.selectTbClueById(id);
+		int falseCount = tbClue.getFalseCount();
+		// 上报超过三次删除
+		if (falseCount >= 2) {
+			// 删除这条线索
+			return tbClueMapper.removeClueByFalseClue(id);
+		}
+		// 少于三次入线索池
+		tbClue.setFalseCount(tbClue.getFalseCount() + 1);
+		tbClue.setStatus(TbClue.StatusType.FALSE.getValue());
+		updateTbClue(tbClue);
+		updateStatus(tbClue.getId(), TbClue.StatusType.FALSE.getValue());
+		// 伪线索原因
+		TbClueTrackRecord trackRecord = new TbClueTrackRecord();
+		trackRecord.setCreateBy(SecurityUtils.getUsername());
+		trackRecord.setFalseReason(reason);
+		trackRecord.setRecord(remark);
+		trackRecord.setClueId(id);
+		trackRecord.setType("1");
+		trackRecord.setCreateTime(DateUtils.getNowDate());
+		return tbClueTrackRecordMapper.insertTbClueTrackRecord(trackRecord);
+	}
+
 }

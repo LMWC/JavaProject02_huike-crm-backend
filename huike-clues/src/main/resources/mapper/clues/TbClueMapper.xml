@@ -584,4 +584,8 @@
         LIMIT 10
     </select>
 
+    <delete id="removeClueByFalseClue">
+    DELETE FROM `tb_clue` WHERE id = #{id}
+</delete>
+
 </mapper>

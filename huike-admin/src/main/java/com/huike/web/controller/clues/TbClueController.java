@@ -2,6 +2,7 @@ package com.huike.web.controller.clues;
 
 import java.util.List;
 
+import com.huike.clues.domain.vo.FalseClueVo;
 import com.huike.common.annotation.DataScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -147,6 +148,19 @@ public class TbClueController extends BaseController {
 		ExcelListener excelListener = new ExcelListener(tbClueService);
 		EasyExcel.read(file.getInputStream(), TbClueExcelVo.class, excelListener).sheet().doRead();
 		return AjaxResult.success(excelListener.getResult());
+	}
+
+	/**
+	 * 伪线索
+	 * @param id
+	 * @param falseClueVo
+	 * @return
+	 */
+	@PreAuthorize("@ss.hasPermi('clues:clue:false')")
+	@Log(title = "伪线索", businessType = BusinessType.UPDATE)
+	@PutMapping("/false/{id}")
+	public AjaxResult cluesFalse(@PathVariable Long id, @RequestBody FalseClueVo falseClueVo) {
+		return toAjax(tbClueService.falseClue(id, falseClueVo.getReason(), falseClueVo.getRemark()));
 	}
 
 }

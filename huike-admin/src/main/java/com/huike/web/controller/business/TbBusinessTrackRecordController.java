@@ -47,7 +47,16 @@ public class TbBusinessTrackRecordController extends BaseController {
     @GetMapping("/list")
     public  AjaxResult list(@RequestParam("businessId")Long id){
 
-        return null;
+        List<TbBusinessTrackRecord> list= tbBusinessTrackRecordService.selectTbBusinessTrackRecordList(id);
+        for (TbBusinessTrackRecord businessTrackRecord : list) {
+            String[] items= businessTrackRecord.getKeyItems().split(",");
+            for (String item : items) {
+                String dictLable= sysDictDataService.selectDictLabel("communication_point",item);
+                businessTrackRecord.getKeys().add(dictLable);
+            }
+        }
+        return AjaxResult.success(list);
+
     }
 
     /**
@@ -57,6 +66,15 @@ public class TbBusinessTrackRecordController extends BaseController {
     @Log(title = "商机跟进记录", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody BusinessTrackVo businessTrackVo){
-        return null;
+        System.out.println("-------"+businessTrackVo);
+        TbBusinessTrackRecord trackRecord=new TbBusinessTrackRecord();
+        BeanUtils.copyProperties(businessTrackVo,trackRecord);
+        trackRecord.setCreateTime(DateUtils.getNowDate());
+        trackRecord.setCreateBy(SecurityUtils.getUsername());
+        TbBusiness business=new TbBusiness();
+        BeanUtils.copyProperties(businessTrackVo,business);
+        business.setStatus(TbBusiness.StatusType.FOLLOWING.getValue());
+        business.setId(businessTrackVo.getBusinessId());
+        return toAjax(tbBusinessTrackRecordService.insertTbBusinessTrackRecord(business,trackRecord));
     }
 }

@@ -3,7 +3,9 @@ package com.huike.business.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import com.huike.business.domain.TbBusinessTrackRecord;
 import com.huike.business.strategy.Rule;
+import com.huike.clues.mapper.SysDictDataMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,6 +65,9 @@ public class TbBusinessServiceImpl implements ITbBusinessService {
 
     @Autowired
     TbAssignRecordMapper assignRecordMapper;
+
+    @Autowired
+    private SysDictDataMapper dictDataMapper;
 
     /**
      * 查询商机
@@ -287,4 +292,24 @@ public class TbBusinessServiceImpl implements ITbBusinessService {
     public int updateStatus(Long clueId,String status){
         return tbBusinessMapper.resetNextTimeAndStatus(clueId,status);
     }
+
+    /**
+     * 退回公海
+     * @param busniessId
+     * @param backReason
+     * @return
+     */
+    @Override
+    public int backPool(Long busniessId,String backReason) {
+        TbBusiness business = selectTbBusinessById(busniessId);
+        // 退回公海原因
+        TbBusinessTrackRecord trackRecord = new TbBusinessTrackRecord();
+        trackRecord.setCreateBy(SecurityUtils.getUsername());
+        trackRecord.setRecord(dictDataMapper.selectDictLabel("reasons_for_business_reporting",backReason));
+        trackRecord.setBusinessId(busniessId);
+        trackRecord.setCreateTime(DateUtils.getNowDate());
+        tbBusinessTrackRecordMapper.insertTbBusinessTrackRecord(trackRecord);
+        return updateStatus(business.getId(),TbClue.StatusType.FALSE.getValue());
+    }
+
 }

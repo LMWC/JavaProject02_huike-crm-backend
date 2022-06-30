@@ -15,5 +15,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="nextTime"    column="next_time"    />
     </resultMap>
 
+    <sql id="selectTbBusinessTrackRecordVo">
+        select id, business_id, create_by, key_items, record, create_time, track_status,next_time from tb_business_track_record
+    </sql>
+
+    <select id="selectTbBusinessTrackRecordListByBusinessId" parameterType="Long" resultMap="TbBusinessTrackRecordResult">
+        <include refid="selectTbBusinessTrackRecordVo"/>
+        <where>
+            <if test="businessId != null  and businessId != ''"> and business_id = #{businessId}</if>
+        </where>
+    </select>
+
+    <insert id="insertTbBusinessTrackRecord" parameterType="TbBusinessTrackRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into tb_business_track_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="businessId != null and businessId != ''">business_id,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="keyItems != null">key_items,</if>
+            <if test="record != null">record,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="trackStatus != null">track_status,</if>
+            <if test="nextTime != null">next_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="businessId != null and businessId != ''">#{businessId},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="keyItems != null">#{keyItems},</if>
+            <if test="record != null">#{record},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="trackStatus != null">#{trackStatus},</if>
+            <if test="nextTime != null">#{nextTime},</if>
+        </trim>
+    </insert>
 
 </mapper>

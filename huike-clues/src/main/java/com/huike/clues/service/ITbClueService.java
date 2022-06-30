@@ -111,4 +111,14 @@ public interface ITbClueService {
      * @return
      */
     ImportResultDTO importCluesData(TbClueExcelVo data);
+
+    /**
+     * 伪线索
+     * @param id
+     * @param reason
+     * @param remark
+     * @return
+     */
+    public int falseClue(Long id, String reason,String remark);
+
 }

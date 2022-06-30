@@ -73,4 +73,13 @@ public interface ITbBusinessService
     public int changeBusiness(Long clueId);
 
     public int updateStatus(Long id, String status);
+
+    /**
+     * 退回公海
+     * @param businessId
+     * @param reason
+     * @return
+     */
+    public int backPool(Long businessId,String reason);
+
 }
