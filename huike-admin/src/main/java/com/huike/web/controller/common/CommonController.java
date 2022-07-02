@@ -36,7 +36,7 @@ public class CommonController extends BaseController {
      * 通用上传请求
      */
     @PostMapping("/common/upload")
-    public AjaxResult uploadFile(MultipartFile file){
+    public AjaxResult uploadFile(MultipartFile file) throws Exception {
         try{
             // 上传文件路径
             return fileService.upload(file);

@@ -58,10 +58,35 @@ public class SysFileServiceImpl implements ISysFileService{
 			 * 即：huike-crm/uuid.pdf
 			 */
 			//TODO 基于上述逻辑补全代码
+
+			//判断文件存储的桶是否存在
+			boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
+			if (!found) {
+				//如果桶不存在则创建通
+				minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
+			}
+			//操作文件
+			String fileName = file.getOriginalFilename();
+			String objectName = new SimpleDateFormat("yyyy/MM/dd/").format(new Date()) + UUID.randomUUID().toString().replaceAll("-", "")
+					+ fileName.substring(fileName.lastIndexOf("."));
+			//文件上传
+			//由于使用的是SpringBoot与之进行集成 上传的时候拿到的是MultipartFile 需要通过输入输出流的方式进行添加
+			PutObjectArgs objectArgs = PutObjectArgs.builder().object(objectName)
+					.bucket(bucketName)
+					.contentType(file.getContentType())
+					.stream(file.getInputStream(),file.getSize(),-1).build();
+			minioClient.putObject(objectArgs);
+			//封装访问的url给前端
+
 			/**
 			 * 构建返回结果集
 			 */
 			AjaxResult ajax = AjaxResult.success();
+
+			ajax.put("fileName", "/"+bucketName+"/"+objectName);
+			//url需要进行截取
+			ajax.put("url", "http://"+minioConfig.getEndpoint()+":"+ minioConfig.getPort()+"/"+ minioConfig.getBucketName()+"/"+fileName);
+
 			/**
 			 * 封装需要的数据进行返回
 			 */
@@ -81,6 +106,43 @@ public class SysFileServiceImpl implements ISysFileService{
 		}
 	}
 
+	/**
+	 * 文件下载
+	 * 将minio中文件的内容写入到response中
+	 * 通过InputStream读取数据
+	 * 通过OutputStream写入到response
+	 * @param fileName
+	 * @param response
+	 * @return
+	 */
+	@Override
+	public AjaxResult downloadByMinio(String fileName,HttpServletResponse response) {
+		try {
+			//获取文件的访问url
+			AjaxResult ajax = AjaxResult.success();
+			ajax.put("fileName", fileName);
+			ajax.put("url", "http://"+minioConfig.getEndpoint()+":"+ minioConfig.getPort()+"/"+ minioConfig.getBucketName()+"/"+fileName);
+			//获取Minio连接
+			MinioClient minioClient = getClient();
+			//获取文件输入流
+			InputStream file = minioClient.getObject(GetObjectArgs.builder().bucket(minioConfig.getBucketName()).object(fileName).build());
+			//设置下载的文件名
+			response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+			//由于是
+			ServletOutputStream servletOutputStream = response.getOutputStream();
+			int len;
+			byte[] buffer = new byte[1024];
+			while ((len = file.read(buffer)) > 0) {
+				servletOutputStream.write(buffer, 0, len);
+			}
+			servletOutputStream.flush();
+			file.close();
+			servletOutputStream.close();
+			return ajax;
+		}catch (Exception e) {
+			return AjaxResult.error(e.getMessage());
+		}
+	}
 
 	/**
 	 * 免费提供一个获取Minio连接的方法

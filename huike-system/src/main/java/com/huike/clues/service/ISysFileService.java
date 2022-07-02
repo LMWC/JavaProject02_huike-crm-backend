@@ -15,4 +15,15 @@ public interface ISysFileService {
 	 */
 	AjaxResult upload(MultipartFile file);
 
+	/**
+	 * 文件下载
+	 * 将minio中文件的内容写入到response中
+	 * 通过InputStream读取数据
+	 * 通过OutputStream写入到response
+	 * @param fileName
+	 * @param response
+	 * @return
+	 */
+	AjaxResult downloadByMinio(String fileName,HttpServletResponse response);
+
 }
