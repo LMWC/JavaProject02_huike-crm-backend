@@ -43,6 +43,7 @@ public class ExcelListener extends AnalysisEventListener<TbClueExcelVo> {
 	 */
 	@Override
 	public void invoke(TbClueExcelVo data, AnalysisContext context) {
+		//执行入库操作的代码
 		ImportResultDTO addTbClue = clueService.importCluesData(data);
 		resultDTO.addAll(addTbClue);
 	}
@@ -53,6 +54,8 @@ public class ExcelListener extends AnalysisEventListener<TbClueExcelVo> {
 	 */
 	@Override
 	public void doAfterAllAnalysed(AnalysisContext context) {
+		//由于在单条执行的事件里已经进行了数据的入库
+		//在所有数据都插入完成后就不用再进行插入了
 	}
 
 	/**

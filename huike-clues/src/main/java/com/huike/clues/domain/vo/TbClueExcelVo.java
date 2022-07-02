@@ -118,7 +118,15 @@ public class TbClueExcelVo{
         this.qq = qq;
     }
 
-	@Override
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    @Override
 	public String toString() {
 		return "TbClueExcelVo [phone=" + phone + ", channel=" + channel + ", activityCode=" + activityCode + ", name="
 				+ name + ", subject=" + subject + ", level=" + level + ", sex=" + sex + ", age=" + age + ", weixin="
