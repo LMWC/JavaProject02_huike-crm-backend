@@ -19,7 +19,7 @@
 - 打开并运行本地redis-server.exe
 - 启动运行crm\huike-admin\src\main\java\com\huike\HuiKeApplication.java
 - 启动运行huike-crm-web前端程序
-- 在浏览器中输入(http://localhost/)进入汇客CRM管理系统  
+- 在浏览器中输入网址进入汇客CRM管理系统http://localhost/
 
 
 
