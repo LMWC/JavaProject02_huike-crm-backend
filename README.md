@@ -13,6 +13,16 @@
 
 
 
+
+**运行方式**
+=========================
+- 打开并运行本地redis-server.exe
+- 启动运行crm\huike-admin\src\main\java\com\huike\HuiKeApplication.java
+- 启动运行huike-crm-web前端程序
+- 在浏览器中输入http://localhost/进入汇客CRM管理系统  
+
+
+
 **参考环境**
 =========================
 - IntelliJ IDEA 2020.1.3 (Ultimate Edition)  
